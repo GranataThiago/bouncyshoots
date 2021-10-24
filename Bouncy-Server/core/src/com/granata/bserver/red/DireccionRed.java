@@ -6,9 +6,11 @@ public class DireccionRed {
 
 	private InetAddress ip;
 	private int puerto;
+	private String nombre;
 	
-	public DireccionRed(InetAddress ip, int puerto) {
+	public DireccionRed(InetAddress ip, int puerto, String nombre) {
 		this.ip = ip;
+		this.nombre = nombre;
 		this.puerto = puerto;
 	}
 
@@ -20,4 +22,7 @@ public class DireccionRed {
 		return puerto;
 	}
 	
+	public String getNombre() {
+		return nombre;
+	}
 }

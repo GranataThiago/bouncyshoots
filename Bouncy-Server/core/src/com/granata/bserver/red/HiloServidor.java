@@ -10,7 +10,7 @@ public class HiloServidor extends Thread{
 
 	private DatagramSocket socket;
 	private boolean fin = false;
-	private DireccionRed[] clientes = new DireccionRed[2];
+	private DireccionRed[] clientes = new DireccionRed[4];
 	private int cantClientes = 0;
 	
 	
@@ -31,7 +31,6 @@ public class HiloServidor extends Thread{
 		try {
 			socket.send(dp);
 		} catch (IOException e) {	
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -52,17 +51,45 @@ public class HiloServidor extends Thread{
 	
 	private void procesarMensaje(DatagramPacket dp) {
 		String msg = (new String(dp.getData())).trim();
-		if(msg.equals("Conexion")) {
-			if(cantClientes <= 1) {
-				clientes[cantClientes] = new DireccionRed(dp.getAddress(), dp.getPort());
+		
+		String[] comando = msg.split("-");
+		
+		if(comando[0].equals("Conexion")) {
+			if(cantClientes <= 4) {
+				clientes[cantClientes] = new DireccionRed(dp.getAddress(), dp.getPort(), comando[1]);
 				enviarMensaje("OK", clientes[cantClientes].getIp(), clientes[cantClientes].getPuerto());
-				cantClientes++;
+				actualizarClientes(cantClientes);
+				enviarMensajeGeneral("crearCliente-" + (cantClientes++) + "-" + comando[1]);
 			}
 			if(cantClientes > 1) {
-				for(int i = 0; i < clientes.length; i++) {
-					enviarMensaje("Empieza", clientes[i].getIp(), clientes[i].getPuerto());
-				}
+				enviarMensajeGeneral("Empieza");
 			}
+		}
+		
+//		if(msg.equals("Conexion")) {
+//			if(cantClientes <= 1) {
+//				clientes[cantClientes] = new DireccionRed(dp.getAddress(), dp.getPort());
+//				enviarMensaje("OK", clientes[cantClientes].getIp(), clientes[cantClientes].getPuerto());
+//				actualizarClientes(cantClientes);
+//				enviarMensajeGeneral("crearCliente-" + (cantClientes++) + "-Thiago");
+//			}
+//			if(cantClientes > 1) {
+//				enviarMensajeGeneral("Empieza");
+//			}
+//		}
+	}
+	
+	private void actualizarClientes(int nroCliente) {
+		for(int i = 0; i < cantClientes; i++) {
+			
+			enviarMensaje("crearCliente-" + (i) + "-" + clientes[i].getNombre(), clientes[nroCliente].getIp(), clientes[nroCliente].getPuerto());
+		}
+		
+	}
+
+	private void enviarMensajeGeneral(String msj) {
+		for(int i = 0; i < cantClientes; i++) {
+			enviarMensaje(msj, clientes[i].getIp(), clientes[i].getPuerto());
 		}
 	}
 	

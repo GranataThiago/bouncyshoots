@@ -7,7 +7,9 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import com.granata.bouncy.managers.ControladorPartida;
 import com.granata.bouncy.utiles.Global;
+import com.granata.bouncy.utiles.Nombres;
 
 public class HiloCliente extends Thread{
 
@@ -24,7 +26,7 @@ public class HiloCliente extends Thread{
 		} catch (SocketException | UnknownHostException e) {
 			e.printStackTrace();
 		}
-		enviarMensaje("Conexion");
+		enviarMensaje("Conexion-" + Nombres.getNombreAleatorio());
 	}
 	
 	private void enviarMensaje(String msg) {
@@ -34,7 +36,6 @@ public class HiloCliente extends Thread{
 		try {
 			socket.send(dp);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -55,11 +56,23 @@ public class HiloCliente extends Thread{
 	
 	private void procesarMensaje(DatagramPacket dp) {
 		String msg = (new String(dp.getData())).trim();
-		if(msg.equals("OK")) {
-			ipServer = dp.getAddress();
-		}else if(msg.equals("Empieza")) {
-			Global.puedeIniciar = true;
+		
+		String[] comando = msg.split("-");
+		
+		if(comando.length > 1) {
+			if(comando[0].equals("crearCliente")) {
+				int idCliente = Integer.valueOf(comando[1]);
+				ControladorPartida.clientes[idCliente] = new Cliente(comando[2]);
+			}
+		}else {
+			if(msg.equals("OK")) {
+				ipServer = dp.getAddress();
+			}else if(msg.equals("Empieza")) {
+				Global.puedeIniciar = true;
+			}
 		}
+		
+		
 	}
 	
 }

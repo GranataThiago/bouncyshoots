@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.granata.bouncy.elementos.Personajes;
+import com.granata.bouncy.managers.ControladorPartida;
 import com.granata.bouncy.red.HiloCliente;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Global;
@@ -68,7 +69,7 @@ public class ScreenLobby implements Screen{
         Gdx.input.setInputProcessor(stage);
         stage.clear();
 
-
+        
         crearInterfaz();
 	}
 
@@ -115,9 +116,9 @@ public class ScreenLobby implements Screen{
 		
 		Render.sb.begin();
 			for(int i = 0; i < 4; i++) {
-				if(jugadores[i] != null) {
+				if(ControladorPartida.clientes[i] != null) {
 					Render.sb.draw(sprite, secciones[i].x - 20, secciones[i].y - 250, 128, 128);
-					fuente.draw(Render.sb, jugadores[i], secciones[i].x, secciones[i].y);
+					fuente.draw(Render.sb, ControladorPartida.clientes[i].getNombre(), secciones[i].x, secciones[i].y);
 				}
 				else fuente.draw(Render.sb, "Esperando jugador...", secciones[i].x, secciones[i].y);
 			}
