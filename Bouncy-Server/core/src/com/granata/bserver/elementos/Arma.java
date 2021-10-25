@@ -6,15 +6,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.World;
 import com.granata.bserver.managers.ControladorBalas;
+import com.granata.bserver.managers.ControladorBodies;
 import com.granata.bserver.utiles.Config;
 import com.granata.bserver.utiles.Render;
 
 public class Arma{
 
 	// Objetos del mundo
-	private World world;
 	private OrthographicCamera cam;
 	
 	// Crosshair
@@ -27,8 +26,7 @@ public class Arma{
 	private int rebotes = 10;
 	private float incDañoRebotes = 0;
 	
-	public Arma(World world, Vector2 pjPos, OrthographicCamera cam) {
-		this.world = world;
+	public Arma(Vector2 pjPos, OrthographicCamera cam) {
 		this.cam = cam;
 		
 		sprite.setSize(15 / Config.PPM, 15 / Config.PPM);
@@ -47,7 +45,7 @@ public class Arma{
 	public void disparar(Vector2 posDisparo) {
 
 		Bala b = ControladorBalas.bp.obtain();
-		b.crearBala(this.world, calcularPosicionDisparo(posDisparo), posMouse, rebotes, incDañoRebotes, daño);
+		b.crearBala(calcularPosicionDisparo(posDisparo), posMouse, rebotes, incDañoRebotes, daño);
 		ControladorBalas.balasActivas.add(b);
 		balas--;
 		

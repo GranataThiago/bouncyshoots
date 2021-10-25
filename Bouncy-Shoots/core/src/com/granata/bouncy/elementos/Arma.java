@@ -8,13 +8,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.granata.bouncy.managers.ControladorBalas;
+import com.granata.bouncy.managers.ControladorBodies;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Render;
 
 public class Arma{
 
 	// Objetos del mundo
-	private World world;
 	private OrthographicCamera cam;
 	
 	// Crosshair
@@ -26,30 +26,36 @@ public class Arma{
 	private int daño = 30;
 	private int rebotes = 10;
 	private float incDañoRebotes = 0;
+	private float tiempoTranscurrido = 0, tiempoEntreDisparo = 0.25f;
 	
-	public Arma(World world, Vector2 pjPos, OrthographicCamera cam) {
-		this.world = world;
+	public Arma(Vector2 pjPos, OrthographicCamera cam) {
 		this.cam = cam;
 		
 		sprite.setSize(15 / Config.PPM, 15 / Config.PPM);
 	}
 	
-	public void dibujarArma() {
+	public void update(float dt) {
 
 		posMouse = new Vector3(Gdx.input.getX(), (Gdx.input.getY()), 0);
 		cam.unproject(posMouse);
 		sprite.setPosition(posMouse.x, posMouse.y);
 		sprite.draw(Render.sb);
-
+		tiempoTranscurrido += dt;
+		
+		
 	}
 
 
 	public void disparar(Vector2 posDisparo) {
 
-		Bala b = ControladorBalas.bp.obtain();
-		b.crearBala(this.world, calcularPosicionDisparo(posDisparo), posMouse, rebotes, incDañoRebotes, daño);
-		ControladorBalas.balasActivas.add(b);
-		balas--;
+		if(tiempoTranscurrido > tiempoEntreDisparo) {
+			Bala b = ControladorBalas.bp.obtain();
+			b.crearBala(calcularPosicionDisparo(posDisparo), posMouse, rebotes, incDañoRebotes, daño);
+			ControladorBalas.balasActivas.add(b);
+			balas--;
+			tiempoTranscurrido = 0;
+		}
+		
 		
 	}
 	

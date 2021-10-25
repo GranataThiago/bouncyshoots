@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.granata.bserver.managers.ControladorBodies;
+import com.granata.bserver.managers.ControladorMundo;
 import com.granata.bserver.utiles.Config;
 
 public class MapaTiled{
@@ -23,17 +24,17 @@ public class MapaTiled{
 	private TiledMap lvl;
 	private OrthogonalTiledMapRenderer renderer;
 
-	public MapaTiled(String mapa, World world) {
+	public MapaTiled(String mapa) {
 		lvl = new TmxMapLoader().load(mapa);
 		renderer = new OrthogonalTiledMapRenderer(lvl, 1 / Config.PPM);
-		crearColisiones(world);
+		crearColisiones(ControladorBodies.world);
 	}
 	
 	private void crearColisiones(World world) {
 		
 		for(MapObject object : lvl.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)) {
 			Rectangle rect = ((RectangleMapObject) object).getRectangle();
-			ControladorBodies.crearCaja(world, (rect.getX() + rect.getWidth() / 2), (rect.getY() + rect.getHeight() / 2), rect.getWidth(), rect.getHeight(), BodyType.StaticBody, this.getClass());
+			ControladorBodies.crearCaja((rect.getX() + rect.getWidth() / 2), (rect.getY() + rect.getHeight() / 2), rect.getWidth(), rect.getHeight(), BodyType.StaticBody, this.getClass());
 		}
 		
 	}

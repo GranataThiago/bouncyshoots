@@ -52,7 +52,7 @@ public class KeyInput implements InputProcessor{
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		click = true;
+		click = false;
 		return false;
 	}
 

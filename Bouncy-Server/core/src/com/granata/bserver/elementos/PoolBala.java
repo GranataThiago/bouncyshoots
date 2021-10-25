@@ -16,7 +16,7 @@ public class PoolBala extends Pool<Bala>{
 	@Override
 	protected Bala newObject() {
 		// TODO Auto-generated method stub
-		return new Bala(null, null, null, max, max, max);
+		return new Bala(null, null, max, max, max);
 	}
 
 	

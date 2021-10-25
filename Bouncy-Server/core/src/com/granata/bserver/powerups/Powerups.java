@@ -33,7 +33,7 @@ public enum Powerups {
 	}
 
 	public Powerup getPowerup() {
-		String clase = "com.granata.powerups." + this.clase;
+		String clase = "com.granata.bserver.powerups." + this.clase;
 
 		Powerup p = null;
 		try {

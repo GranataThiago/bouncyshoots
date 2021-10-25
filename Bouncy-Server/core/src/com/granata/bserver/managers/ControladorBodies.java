@@ -14,8 +14,10 @@ import com.badlogic.gdx.physics.box2d.World;
 public class ControladorBodies {
 
 	public static ArrayList<Body> cuerposAEliminar = new ArrayList();
+	public static World world;
 	
-	public static Body crearCaja(World world, float posX, float posY, float width, float height, BodyType tipo, Class userData) {
+	
+	public static Body crearCaja(float posX, float posY, float width, float height, BodyType tipo, Class userData) {
 		Body body;
 		BodyDef bDef = new BodyDef();
 		FixtureDef fDef = new FixtureDef();
@@ -42,7 +44,7 @@ public class ControladorBodies {
 		return body;
 	}
 	
-	public static Body crearEsfera(World world, float posX, float posY, float radio, boolean isEstatico, float res, float fric) {
+	public static Body crearEsfera(float posX, float posY, float radio, boolean isEstatico, float res, float fric) {
 		Body body;
 		BodyDef bDef = new BodyDef();
 		FixtureDef fDef = new FixtureDef();
@@ -69,7 +71,7 @@ public class ControladorBodies {
 		return body;
 	}
 	
-	public static Body crearPickup(World world, float posX, float posY, float width, float height, BodyType tipo, Class userData) {
+	public static Body crearPickup(float posX, float posY, float width, float height, BodyType tipo, Class userData) {
 		Body body;
 		BodyDef bDef = new BodyDef();
 		FixtureDef fDef = new FixtureDef();

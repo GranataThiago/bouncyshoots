@@ -32,7 +32,6 @@ import com.granata.bouncy.utiles.Render;
 public class ScreenLobby implements Screen{
 	
 	// Conecto al cliente al lobby
-	private HiloCliente hc;
 
 	private Stage stage;
 	
@@ -50,8 +49,7 @@ public class ScreenLobby implements Screen{
 	private Vector2[] secciones = {new Vector2(100, Config.ALTO - 300), new Vector2(600, Config.ALTO - 300), new Vector2(1100, Config.ALTO - 300), new Vector2(1600, Config.ALTO - 300)};
 
 	public ScreenLobby() {
-		hc = new HiloCliente();
-		hc.start();
+		ControladorPartida.iniciarHilo();
 		
 		this.stage = new Stage(new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM));
 		txtJugar = new Texture("playbtn.png");
@@ -101,7 +99,10 @@ public class ScreenLobby implements Screen{
 			
         	@Override
         	public void clicked(InputEvent e, float x, float y) {
-        		if(Global.puedeIniciar) Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
+        		if(Global.puedeIniciar) {
+        			//Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
+        			ControladorPartida.hc.enviarMensaje("iniciarPartida");
+        		}
         	}
         });
 		
@@ -115,19 +116,18 @@ public class ScreenLobby implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		Render.sb.begin();
-			for(int i = 0; i < 4; i++) {
-				if(ControladorPartida.clientes[i] != null) {
+			for(int i = 0; i < ControladorPartida.clientes.size(); i++) {
 					Render.sb.draw(sprite, secciones[i].x - 20, secciones[i].y - 250, 128, 128);
-					fuente.draw(Render.sb, ControladorPartida.clientes[i].getNombre(), secciones[i].x, secciones[i].y);
-				}
-				else fuente.draw(Render.sb, "Esperando jugador...", secciones[i].x, secciones[i].y);
+					fuente.draw(Render.sb, ControladorPartida.clientes.get(i).getNombre(), secciones[i].x, secciones[i].y);
 			}
 		Render.sb.end();
 		
         stage.act();
         stage.draw();
 
-
+        if(Global.partidaIniciada) {
+			Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
+        }
         
         // SOLO PARA DEBUGEAR!
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {

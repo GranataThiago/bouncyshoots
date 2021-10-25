@@ -17,7 +17,7 @@ public class HiloServidor extends Thread{
 	public HiloServidor() {
 
 		try {
-			socket = new DatagramSocket(9696);
+			socket = new DatagramSocket(9898);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
@@ -62,26 +62,21 @@ public class HiloServidor extends Thread{
 				enviarMensajeGeneral("crearCliente-" + (cantClientes++) + "-" + comando[1]);
 			}
 			if(cantClientes > 1) {
-				enviarMensajeGeneral("Empieza");
+				enviarMensajeGeneral("puedeComenzar");
 			}
+		}else {
+			
+			if(msg.equals("iniciarPartida")) {
+				enviarMensajeGeneral("comenzar");
+			}
+			
 		}
 		
-//		if(msg.equals("Conexion")) {
-//			if(cantClientes <= 1) {
-//				clientes[cantClientes] = new DireccionRed(dp.getAddress(), dp.getPort());
-//				enviarMensaje("OK", clientes[cantClientes].getIp(), clientes[cantClientes].getPuerto());
-//				actualizarClientes(cantClientes);
-//				enviarMensajeGeneral("crearCliente-" + (cantClientes++) + "-Thiago");
-//			}
-//			if(cantClientes > 1) {
-//				enviarMensajeGeneral("Empieza");
-//			}
-//		}
+
 	}
 	
 	private void actualizarClientes(int nroCliente) {
 		for(int i = 0; i < cantClientes; i++) {
-			
 			enviarMensaje("crearCliente-" + (i) + "-" + clientes[i].getNombre(), clientes[nroCliente].getIp(), clientes[nroCliente].getPuerto());
 		}
 		

@@ -24,7 +24,7 @@ public class Bala extends Sprite implements Movible, Poolable{
 	private int rebotes;
 	private Sprite sprite = new Sprite(new Texture("Sin-título-2.png"));
 	
-	public Bala(World world, Vector2 curPos, Vector3 target, int rebotes, float incDañoRebotes, float daño) {
+	public Bala(Vector2 curPos, Vector3 target, int rebotes, float incDañoRebotes, float daño) {
 //		this.world = world;
 //		this.rebotes = rebotes;
 //		this.incDañoRebotes = incDañoRebotes;
@@ -39,13 +39,13 @@ public class Bala extends Sprite implements Movible, Poolable{
 		Render.spritesADibujar.add(sprite);
 	}
 	
-	public void crearBala(World world, Vector2 curPos, Vector3 target, int rebotes, float incDañoRebotes, float daño) {
+	public void crearBala(Vector2 curPos, Vector3 target, int rebotes, float incDañoRebotes, float daño) {
 		
 		this.rebotes = rebotes;
 		this.incDañoRebotes = incDañoRebotes;
 		this.daño = daño;
 		
-		bala = ControladorBodies.crearEsfera(world, curPos.x * Config.PPM, curPos.y  * Config.PPM, 6, false, 1, 0);
+		bala = ControladorBodies.crearEsfera(curPos.x * Config.PPM, curPos.y  * Config.PPM, 6, false, 1, 0);
 		bala.setUserData(this);
 		bala.setAngularDamping(0);
 		bala.setLinearDamping(0);

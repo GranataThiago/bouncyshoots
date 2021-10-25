@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.granata.bserver.elementos.Personaje.Estado;
 import com.granata.bserver.managers.ControladorBodies;
+import com.granata.bserver.managers.ControladorMundo;
 import com.granata.bserver.powerups.OneShot;
 import com.granata.bserver.powerups.Powerup;
 import com.granata.bserver.utiles.Config;
@@ -58,7 +59,7 @@ public class Carrera extends JuegoBase{
 		
 		for(Vector2 coords : spawners) {
 			Powerup p = new OneShot();
-			Body item = ControladorBodies.crearPickup(world, coords.x, coords.y, 32, 32, BodyType.StaticBody, null);
+			Body item = ControladorBodies.crearPickup(coords.x, coords.y, 32, 32, BodyType.StaticBody, null);
 			item.setUserData(p);
 			Render.spritesADibujar.add(p.getSprite());
 			p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));

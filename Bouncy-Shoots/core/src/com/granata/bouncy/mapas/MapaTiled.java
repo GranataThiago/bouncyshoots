@@ -21,17 +21,17 @@ public class MapaTiled{
 	private OrthogonalTiledMapRenderer renderer;
 	private ArrayList<Body> bodiesMapa = new ArrayList<Body>();
 	
-	public MapaTiled(String mapa, World world) {
+	public MapaTiled(String mapa) {
 		lvl = new TmxMapLoader().load(mapa);
 		renderer = new OrthogonalTiledMapRenderer(lvl, 1 / Config.PPM);
-		crearColisiones(world);
+		crearColisiones(ControladorBodies.world);
 	}
 	
 	private void crearColisiones(World world) {
 		
 		for(MapObject object : lvl.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)) {
 			Rectangle rect = ((RectangleMapObject) object).getRectangle();
-			ControladorBodies.crearCaja(world, (rect.getX() + rect.getWidth() / 2), (rect.getY() + rect.getHeight() / 2), rect.getWidth(), rect.getHeight(), BodyType.StaticBody, this.getClass());
+			ControladorBodies.crearCaja((rect.getX() + rect.getWidth() / 2), (rect.getY() + rect.getHeight() / 2), rect.getWidth(), rect.getHeight(), BodyType.StaticBody, this.getClass());
 		}
 		
 	}

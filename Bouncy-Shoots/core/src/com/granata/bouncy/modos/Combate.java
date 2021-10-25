@@ -82,7 +82,7 @@ public class Combate extends JuegoBase{
 		Vector2 coords = spawners[posicion];
 		ocupado[posicion] = true;
 		
-		Body pu = ControladorBodies.crearPickup(world, coords.x, coords.y, 32, 32, BodyType.StaticBody, null);
+		Body pu = ControladorBodies.crearPickup(coords.x, coords.y, 32, 32, BodyType.StaticBody, null);
 		pu.setUserData(p);
 		
 		Render.spritesADibujar.add(p.getSprite());
@@ -91,14 +91,14 @@ public class Combate extends JuegoBase{
 	
 	@Override
 	protected void borrarCuerpos() {
-		if(!world.isLocked()){
+		if(!ControladorBodies.world.isLocked()){
 			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
 
-				if(Pickupable.class.isAssignableFrom(ControladorBodies.cuerposAEliminar.get(i).getUserData().getClass()) && p.getEstadoActual() != Estado.MUERTO) {
-					ocupado[comprobarEspaciosOcupados(ControladorBodies.cuerposAEliminar.get(i).getPosition())] = false;
-
-				}
-				world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
+//				if(Pickupable.class.isAssignableFrom(ControladorBodies.cuerposAEliminar.get(i).getUserData().getClass()) && p.getEstadoActual() != Estado.MUERTO) {
+//					ocupado[comprobarEspaciosOcupados(ControladorBodies.cuerposAEliminar.get(i).getPosition())] = false;
+//
+//				}
+				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
 				ControladorBodies.cuerposAEliminar.remove(i);
 			}
 		}

@@ -26,7 +26,7 @@ public enum Mapas {
 	}
 
 	public JuegoBase getModo() {
-		String clase = "com.granata.modos." + this.modo;
+		String clase = "com.granata.bserver.modos." + this.modo;
 		
 		JuegoBase m = null;
 		try {

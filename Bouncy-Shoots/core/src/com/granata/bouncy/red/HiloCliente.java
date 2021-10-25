@@ -15,7 +15,7 @@ public class HiloCliente extends Thread{
 
 	private DatagramSocket socket;
 	private InetAddress ipServer;
-	private int puerto = 9696;
+	private int puerto = 9898;
 	private boolean fin = false;
 	
 	public HiloCliente() {
@@ -29,7 +29,7 @@ public class HiloCliente extends Thread{
 		enviarMensaje("Conexion-" + Nombres.getNombreAleatorio());
 	}
 	
-	private void enviarMensaje(String msg) {
+	public void enviarMensaje(String msg) {
 		byte[] data = msg.getBytes();
 		DatagramPacket dp = new DatagramPacket(data, data.length, ipServer, puerto);
 		
@@ -62,13 +62,15 @@ public class HiloCliente extends Thread{
 		if(comando.length > 1) {
 			if(comando[0].equals("crearCliente")) {
 				int idCliente = Integer.valueOf(comando[1]);
-				ControladorPartida.clientes[idCliente] = new Cliente(comando[2]);
+				ControladorPartida.clientes.add(new Jugador(comando[2]));
 			}
 		}else {
 			if(msg.equals("OK")) {
 				ipServer = dp.getAddress();
-			}else if(msg.equals("Empieza")) {
+			}else if(msg.equals("puedeComenzar")) {
 				Global.puedeIniciar = true;
+			}else if(msg.equals("comenzar")) {
+				Global.partidaIniciada = true;
 			}
 		}
 		

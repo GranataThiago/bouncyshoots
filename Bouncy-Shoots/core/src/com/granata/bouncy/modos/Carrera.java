@@ -58,7 +58,7 @@ public class Carrera extends JuegoBase{
 		
 		for(Vector2 coords : spawners) {
 			Powerup p = new OneShot();
-			Body item = ControladorBodies.crearPickup(world, coords.x, coords.y, 32, 32, BodyType.StaticBody, null);
+			Body item = ControladorBodies.crearPickup(coords.x, coords.y, 32, 32, BodyType.StaticBody, null);
 			item.setUserData(p);
 			Render.spritesADibujar.add(p.getSprite());
 			p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));

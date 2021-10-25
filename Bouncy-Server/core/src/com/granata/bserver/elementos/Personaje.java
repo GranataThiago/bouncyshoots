@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.granata.bserver.io.KeyInput;
 import com.granata.bserver.managers.ControladorBalas;
 import com.granata.bserver.managers.ControladorBodies;
+import com.granata.bserver.managers.ControladorMundo;
 import com.granata.bserver.utiles.Config;
 import com.granata.bserver.utiles.Render;
 
@@ -28,21 +29,19 @@ public class Personaje{
 	private boolean muerto;
 	
 	// Box2D
-	private World world;
 	private Body pj;
 	
 	// Inputs
 	public KeyInput e = new KeyInput();
 	
-	public Personaje(Sprite sprite, World world, OrthographicCamera cam) {
-		this.world = world;
+	public Personaje(Sprite sprite, OrthographicCamera cam) {
 		Gdx.input.setInputProcessor(e);
 		inicializarPersonaje(sprite);
-		arma = new Arma(world, pj.getPosition(), cam);
+		arma = new Arma(pj.getPosition(), cam);
 	}
 	
 	private void inicializarPersonaje(Sprite sprite) {
-		pj = ControladorBodies.crearEsfera(this.world, 64, 64, 24.14f, false, 0.5f, 1f);
+		pj = ControladorBodies.crearEsfera(64, 64, 24.14f, false, 0.5f, 1f);
 		pj.setUserData(this);
 		pj.setAngularDamping(0);
 		pj.setLinearDamping(0);
