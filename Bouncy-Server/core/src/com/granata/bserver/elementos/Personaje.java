@@ -1,27 +1,22 @@
 package com.granata.bserver.elementos;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
 import com.granata.bserver.io.KeyInput;
-import com.granata.bserver.managers.ControladorBalas;
 import com.granata.bserver.managers.ControladorBodies;
-import com.granata.bserver.managers.ControladorMundo;
 import com.granata.bserver.utiles.Config;
 import com.granata.bserver.utiles.Render;
+import com.granata.bserver.utiles.Utiles;
 
 public class Personaje{
 	
 	public enum Estado { QUIETO, CORRIENDO, MUERTO, SALTANDO, CAYENDO } 
+	private Estado estadoActual = Estado.QUIETO;
 
+	
 	// Relativo al personaje 
 	private Sprite sprite;
 	private float vel = 8f, salto = 12f, vida = 100;
@@ -34,25 +29,26 @@ public class Personaje{
 	// Inputs
 	public KeyInput e = new KeyInput();
 	
-	public Personaje(Sprite sprite, OrthographicCamera cam) {
-		Gdx.input.setInputProcessor(e);
-		inicializarPersonaje(sprite);
-		arma = new Arma(pj.getPosition(), cam);
+	public Personaje(Sprite sprite) {
+		this.sprite = sprite;
 	}
 	
-	private void inicializarPersonaje(Sprite sprite) {
+	public void inicializarPersonaje(OrthographicCamera cam) {
+//		Gdx.input.setInputProcessor(e);
 		pj = ControladorBodies.crearEsfera(64, 64, 24.14f, false, 0.5f, 1f);
 		pj.setUserData(this);
 		pj.setAngularDamping(0);
 		pj.setLinearDamping(0);
-		this.sprite = sprite;
+
 		this.sprite.setSize(64 / Config.PPM, 64 / Config.PPM);
 		Render.spritesADibujar.add(this.sprite);
+		arma = new Arma(pj.getPosition(), cam);
 	}
 		
 	public void update(float dt) {
 
 		controlarMovimiento();
+		comprobarEstados();
 		disparar(dt);
 		arma.dibujarArma();
 		
@@ -60,13 +56,14 @@ public class Personaje{
 
 	private void controlarMovimiento() {
 
-		if(Gdx.input.isKeyJustPressed(Keys.SPACE) && getEstadoActual() != Estado.CAYENDO) {
+		if(Utiles.saltando && puedeSaltar()) {
 			pj.applyLinearImpulse(new Vector2(0, salto), pj.getWorldCenter(), true);
+//			enviarMensajeGeneral("ModificarPosicion!" + comando[2] + "!" + getPosition());
 		}
-		if(e.isRight() && pj.getLinearVelocity().x <= 2) {
+		if(Utiles.derecha && pj.getLinearVelocity().x <= 2) {
 			pj.applyLinearImpulse(new Vector2(vel, 0), pj.getWorldCenter(), true);
 		}
-		if(e.isLeft() && pj.getLinearVelocity().x >= -2) {
+		if(Utiles.izquierda && pj.getLinearVelocity().x >= -2) {
 			pj.applyLinearImpulse(new Vector2(-vel, 0), pj.getWorldCenter(), true);
 		}
 		sprite.setPosition(pj.getPosition().x - (sprite.getWidth() / 2), pj.getPosition().y - ( sprite.getHeight() / 2f));
@@ -120,17 +117,28 @@ public class Personaje{
 		this.arma = arma;
 	}
 
-	public Estado getEstadoActual() {
-		if(muerto) return Estado.MUERTO;
+
+	private void comprobarEstados() {
+		if(muerto) estadoActual = Estado.MUERTO;
 		else if(pj.getLinearVelocity().y > 0) {
-			return Estado.SALTANDO;
+			estadoActual = Estado.SALTANDO;
 		}else if(pj.getLinearVelocity().y < 0) {
-			return Estado.CAYENDO;
+			estadoActual = Estado.CAYENDO;
 		}else if(pj.getLinearVelocity().x != 0) {
-			return Estado.CORRIENDO;
+			estadoActual = Estado.CORRIENDO;
 		}else {
-			return Estado.QUIETO;
+			estadoActual = Estado.QUIETO;
 		}
+		
+	}
+	
+	public boolean puedeSaltar() {
+		return (getEstadoActual() != Estado.CAYENDO && getEstadoActual() != Estado.SALTANDO);
+	}
+
+	
+	public Estado getEstadoActual() {
+		return estadoActual;
 	}
 
 	

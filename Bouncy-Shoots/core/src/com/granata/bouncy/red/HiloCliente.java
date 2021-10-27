@@ -7,15 +7,16 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import com.granata.bouncy.managers.ControladorPartida;
+import com.badlogic.gdx.math.Vector2;
 import com.granata.bouncy.utiles.Global;
 import com.granata.bouncy.utiles.Nombres;
+import com.granata.bouncy.utiles.Render;
 
 public class HiloCliente extends Thread{
 
 	private DatagramSocket socket;
 	private InetAddress ipServer;
-	private int puerto = 9898;
+	private int puerto = 6767;
 	private boolean fin = false;
 	
 	public HiloCliente() {
@@ -26,7 +27,7 @@ public class HiloCliente extends Thread{
 		} catch (SocketException | UnknownHostException e) {
 			e.printStackTrace();
 		}
-		enviarMensaje("Conexion-" + Nombres.getNombreAleatorio());
+		enviarMensaje("Conexion!" + Nombres.getNombreAleatorio());
 	}
 	
 	public void enviarMensaje(String msg) {
@@ -57,17 +58,21 @@ public class HiloCliente extends Thread{
 	private void procesarMensaje(DatagramPacket dp) {
 		String msg = (new String(dp.getData())).trim();
 		
-		String[] comando = msg.split("-");
+		String[] comando = msg.split("!");
 		
 		if(comando.length > 1) {
 			if(comando[0].equals("crearCliente")) {
-				int idCliente = Integer.valueOf(comando[1]);
-				ControladorPartida.clientes.add(new Jugador(comando[2]));
+				boolean esCliente = (Render.app.getCliente().getId() == Integer.valueOf(comando[1]) ? true : false);
+				Render.app.getCliente().getClientes().add(new Jugador(comando[2], Integer.valueOf(comando[3]), esCliente));
+			}else if(comando[0].equals("OK")) {
+				ipServer = dp.getAddress();
+				Render.app.getCliente().setId(Integer.valueOf(comando[1]));
+			}else if(comando[0].equals("ModificarPosicion")) {
+				String[] pos = comando[2].substring(1, comando[2].length()-1).split(",");
+				Render.app.getCliente().getClientes().get(Integer.valueOf(comando[1])).getPj().setPosition(new Vector2(Float.parseFloat(pos[0]), Float.parseFloat(pos[1])));
 			}
 		}else {
-			if(msg.equals("OK")) {
-				ipServer = dp.getAddress();
-			}else if(msg.equals("puedeComenzar")) {
+			if(msg.equals("puedeComenzar")) {
 				Global.puedeIniciar = true;
 			}else if(msg.equals("comenzar")) {
 				Global.partidaIniciada = true;

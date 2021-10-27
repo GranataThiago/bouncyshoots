@@ -11,12 +11,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.granata.bserver.elementos.Bala;
 import com.granata.bserver.elementos.Personaje;
 import com.granata.bserver.elementos.Personaje.Estado;
-import com.granata.bserver.elementos.Personajes;
 import com.granata.bserver.managers.CollisionListener;
 import com.granata.bserver.managers.ControladorBalas;
 import com.granata.bserver.managers.ControladorBodies;
-import com.granata.bserver.managers.ControladorMundo;
 import com.granata.bserver.mapas.MapaTiled;
+import com.granata.bserver.red.Cliente;
 import com.granata.bserver.screens.ScreenJuego;
 import com.granata.bserver.utiles.Config;
 import com.granata.bserver.utiles.Render;
@@ -51,7 +50,9 @@ public abstract class JuegoBase {
 		ControladorBodies.world.setContactListener(new CollisionListener());
 
 		b2r = new Box2DDebugRenderer();
-		p = new Personaje(Personajes.getPersonajeAleatorio(), cam);
+		for(Cliente c : Render.app.getSv().getClientes()) {
+			c.crearPersonaje(cam);
+		}
 
 		mapa = new MapaTiled(rutaMapa);
 		cam.setToOrtho(false, vp.getWorldWidth(), vp.getWorldHeight());
@@ -74,13 +75,15 @@ public abstract class JuegoBase {
 
 		// Dibujamos al personaje y actualizamos la cámara
 		Render.sb.begin();
-		p.update(delta);
-		Render.dibujarSprites();
+			for(Cliente c : Render.app.getSv().getClientes()) {
+				c.getPj().update(delta);
+			}
+			Render.dibujarSprites();
 		Render.sb.end();
 		
-		if(p.getEstadoActual() == Estado.MUERTO) {
-			Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
-		}
+//		if(p.getEstadoActual() == Estado.MUERTO) {
+//			Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
+//		}
 		
 		// COSAS PARA DEBUGEAR RAPIDITO JEJE
 //		if(Gdx.input.isTouched()) {

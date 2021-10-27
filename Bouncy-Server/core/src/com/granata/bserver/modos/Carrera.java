@@ -8,6 +8,7 @@ import com.granata.bserver.managers.ControladorBodies;
 import com.granata.bserver.managers.ControladorMundo;
 import com.granata.bserver.powerups.OneShot;
 import com.granata.bserver.powerups.Powerup;
+import com.granata.bserver.red.Cliente;
 import com.granata.bserver.utiles.Config;
 import com.granata.bserver.utiles.Render;
 
@@ -19,7 +20,9 @@ public class Carrera extends JuegoBase{
 	@Override
 	public void start(String rutaMapa, Vector2[] spawners) {
 		super.start(rutaMapa, spawners);
-		p.getArma().setBalas(0);
+		for(Cliente c : Render.app.getSv().getClientes()) {
+			c.getPj().getArma().setBalas(0);;
+		}
 		spawnPickup();
 	}
 	
@@ -28,14 +31,14 @@ public class Carrera extends JuegoBase{
 		super.update(delta);
 
 		// A -------------- B (Final)
-		if(tiempoParaEmpezar > 15f && this.cam.position.x <= puntoFinal) this.cam.position.x += velCamara * delta;
-		else {
-			tiempoParaEmpezar++;
-		}
+//		if(tiempoParaEmpezar > 15f && this.cam.position.x <= puntoFinal) this.cam.position.x += velCamara * delta;
+//		else {
+//			tiempoParaEmpezar++;
+//		}
 		
-		if(p.getPosition().x > puntoFinal + 1f) {
-			System.out.println("Ganaste");
-		}
+//		if(p.getPosition().x > puntoFinal + 1f) {
+//			System.out.println("Ganaste");
+//		}
 		
 		this.cam.update();
 	}
@@ -44,14 +47,14 @@ public class Carrera extends JuegoBase{
 	public void render(float delta) {
 		super.render(delta);
 		Render.sb.setProjectionMatrix(cam.combined);
-		if(!this.cam.frustum.pointInFrustum(p.getPosition().x, p.getPosition().y, 0) && p.getEstadoActual() != Estado.MUERTO) {
-			
-			tiempoParaMorir += delta;
-			if(tiempoParaMorir > 0.5f) {
-				p.destruir();
-			}
-			
-		}else tiempoParaMorir = 0f;
+//		if(!this.cam.frustum.pointInFrustum(p.getPosition().x, p.getPosition().y, 0) && p.getEstadoActual() != Estado.MUERTO) {
+//			
+//			tiempoParaMorir += delta;
+//			if(tiempoParaMorir > 0.5f) {
+//				p.destruir();
+//			}
+//			
+//		}else tiempoParaMorir = 0f;
 	}
 
 	@Override

@@ -32,29 +32,25 @@ import com.granata.bouncy.utiles.Render;
 public class ScreenLobby implements Screen{
 	
 	// Conecto al cliente al lobby
-
+	private HiloCliente hc;
 	private Stage stage;
 	
 	private Texture txtJugar;
 	private Button btnJugar;
-	
-	private Sprite sprite;
-	
+
 	private FreeTypeFontGenerator generador;
 	private FreeTypeFontParameter parametros;
 	private BitmapFont fuente = new BitmapFont();
 
 	private Image logo = new Image(new TextureRegionDrawable(new TextureRegion(new Texture("bs-logo.png"))));
-	private String[] jugadores = new String[4];
 	private Vector2[] secciones = {new Vector2(100, Config.ALTO - 300), new Vector2(600, Config.ALTO - 300), new Vector2(1100, Config.ALTO - 300), new Vector2(1600, Config.ALTO - 300)};
 
 	public ScreenLobby() {
-		ControladorPartida.iniciarHilo();
+		Render.app.getCliente().crearHilo();
+		hc = Render.app.getCliente().getHc();
 		
 		this.stage = new Stage(new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM));
 		txtJugar = new Texture("playbtn.png");
-		jugadores[0] = "Lauti"; jugadores[1] = "Titi"; jugadores[2] = "Vermi"; jugadores[3] = "Esti";
-		sprite = Personajes.getPersonajeAleatorio();
 		
 		generador = new FreeTypeFontGenerator(Gdx.files.internal("fuentes/Acme-Regular.ttf"));
 		parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -101,7 +97,7 @@ public class ScreenLobby implements Screen{
         	public void clicked(InputEvent e, float x, float y) {
         		if(Global.puedeIniciar) {
         			//Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
-        			ControladorPartida.hc.enviarMensaje("iniciarPartida");
+        			hc.enviarMensaje("iniciarPartida");
         		}
         	}
         });
@@ -116,9 +112,9 @@ public class ScreenLobby implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		Render.sb.begin();
-			for(int i = 0; i < ControladorPartida.clientes.size(); i++) {
-					Render.sb.draw(sprite, secciones[i].x - 20, secciones[i].y - 250, 128, 128);
-					fuente.draw(Render.sb, ControladorPartida.clientes.get(i).getNombre(), secciones[i].x, secciones[i].y);
+			for(int i = 0; i < Render.app.getCliente().getClientes().size(); i++) {
+					Render.sb.draw(Render.app.getCliente().getClientes().get(i).getSprite(), secciones[i].x - 20, secciones[i].y - 250, 128, 128);
+					fuente.draw(Render.sb, Render.app.getCliente().getClientes().get(i).getNombre(), secciones[i].x, secciones[i].y);
 			}
 		Render.sb.end();
 		
@@ -126,7 +122,7 @@ public class ScreenLobby implements Screen{
         stage.draw();
 
         if(Global.partidaIniciada) {
-			Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
+			Render.app.setScreen(new ScreenJuego(2));
         }
         
         // SOLO PARA DEBUGEAR!
@@ -159,9 +155,7 @@ public class ScreenLobby implements Screen{
 		stage.dispose();
 		fuente.dispose();
 		txtJugar.dispose();
-		generador.dispose();
-		sprite.getTexture().dispose();
-		
+		generador.dispose();		
 	}
 
 }

@@ -3,21 +3,19 @@ package com.granata.bserver;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.granata.bserver.managers.ControladorNiveles;
-import com.granata.bserver.red.HiloServidor;
+import com.granata.bserver.red.Servidor;
 import com.granata.bserver.screens.ScreenMenu;
 import com.granata.bserver.utiles.Render;
 
 public class BouncyServer extends Game {
 	
 	private int mapaActual = 0;
-	private HiloServidor hs;
+	private Servidor sv;
 	
 	@Override
 	public void create () {
-		hs = new HiloServidor();
-		hs.start();
-		
 		Render.app = this;
+		sv = new Servidor();
 		Render.sb = new SpriteBatch();
 		ControladorNiveles.generarMapas();
 		this.setScreen(new ScreenMenu());
@@ -38,5 +36,9 @@ public class BouncyServer extends Game {
 	@Override
 	public void dispose () {
 		Render.sb.dispose();
+	}
+	
+	public Servidor getSv() {
+		return this.sv;
 	}
 }

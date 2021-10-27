@@ -44,14 +44,12 @@ public class ScreenLobby implements Screen{
 
 	
 	private Image logo = new Image(new TextureRegionDrawable(new TextureRegion(new Texture("bs-logo.png"))));
-	private String[] jugadores = new String[4];
 	private Vector2[] secciones = {new Vector2(100, Config.ALTO - 300), new Vector2(600, Config.ALTO - 300), new Vector2(1100, Config.ALTO - 300), new Vector2(1600, Config.ALTO - 300)};
 
 	public ScreenLobby() {
 		this.stage = new Stage(new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM));
 		txtJugar = new Texture("playbtn.png");
-		jugadores[0] = "Lauti"; jugadores[1] = "Titi"; jugadores[2] = "Vermi"; jugadores[3] = "Esti";
-		sprite = Personajes.getPersonajeAleatorio();
+		
 		
 		generador = new FreeTypeFontGenerator(Gdx.files.internal("fuentes/Acme-Regular.ttf"));
 		parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -96,7 +94,7 @@ public class ScreenLobby implements Screen{
 			
         	@Override
         	public void clicked(InputEvent e, float x, float y) {
-        		Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
+        		Render.app.setScreen(new ScreenJuego(2));
         	}
         });
 		
@@ -110,12 +108,9 @@ public class ScreenLobby implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		Render.sb.begin();
-			for(int i = 0; i < 4; i++) {
-				if(jugadores[i] != null) {
-					Render.sb.draw(sprite, secciones[i].x - 20, secciones[i].y - 250, 128, 128);
-					fuente.draw(Render.sb, jugadores[i], secciones[i].x, secciones[i].y);
-				}
-				else fuente.draw(Render.sb, "Esperando jugador...", secciones[i].x, secciones[i].y);
+			for(int i = 0; i < Render.app.getSv().getClientes().size(); i++) {
+				Render.sb.draw(Render.app.getSv().getClientes().get(i).getSprite(), secciones[i].x - 20, secciones[i].y - 250, 128, 128);
+				fuente.draw(Render.sb, Render.app.getSv().getClientes().get(i).getNombre(), secciones[i].x, secciones[i].y);
 			}
 
 		Render.sb.end();
@@ -154,7 +149,6 @@ public class ScreenLobby implements Screen{
 		fuente.dispose();
 		txtJugar.dispose();
 		generador.dispose();
-		sprite.getTexture().dispose();
 	}
 
 }

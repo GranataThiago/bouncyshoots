@@ -53,10 +53,10 @@ public abstract class JuegoBase {
 		b2r = new Box2DDebugRenderer();
 
 		
-		for(Jugador j : ControladorPartida.clientes) {
-			j.crearPersonaje(Personajes.getPersonajeAleatorio(), cam);
+		for(Jugador j : Render.app.getCliente().getClientes()) {
+			j.crearPersonaje(cam);
 		}
-		p = ControladorPartida.clientes.get(ControladorPartida.clientes.size()-1).getPj();
+		p = Render.app.getCliente().getClientes().get(Render.app.getCliente().getId()).getPj();
 
 		mapa = new MapaTiled(rutaMapa);
 		cam.setToOrtho(false, vp.getWorldWidth(), vp.getWorldHeight());
@@ -79,7 +79,7 @@ public abstract class JuegoBase {
 
 		// Dibujamos al personaje y actualizamos la cámara
 		Render.sb.begin();
-			for(Jugador j : ControladorPartida.clientes) {
+			for(Jugador j : Render.app.getCliente().getClientes()) {
 				j.getPj().update(delta);
 			}
 			Render.dibujarSprites();

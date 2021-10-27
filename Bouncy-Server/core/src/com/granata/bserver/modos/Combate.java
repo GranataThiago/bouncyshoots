@@ -92,17 +92,16 @@ public class Combate extends JuegoBase{
 	
 	@Override
 	protected void borrarCuerpos() {
-		if(!ControladorBodies.world.isLocked()){
-			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
-
-				if(Pickupable.class.isAssignableFrom(ControladorBodies.cuerposAEliminar.get(i).getUserData().getClass()) && p.getEstadoActual() != Estado.MUERTO) {
-					ocupado[comprobarEspaciosOcupados(ControladorBodies.cuerposAEliminar.get(i).getPosition())] = false;
-
-				}
-				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
-				ControladorBodies.cuerposAEliminar.remove(i);
-			}
-		}
+//		if(!ControladorBodies.world.isLocked()){
+//			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
+//
+//				if(Pickupable.class.isAssignableFrom(ControladorBodies.cuerposAEliminar.get(i).getUserData().getClass()) && p.getEstadoActual() != Estado.MUERTO) {
+//					ocupado[comprobarEspaciosOcupados(ControladorBodies.cuerposAEliminar.get(i).getPosition())] = false;
+//				}
+//				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
+//				ControladorBodies.cuerposAEliminar.remove(i);
+//			}
+//		}
 	}
 	
 	

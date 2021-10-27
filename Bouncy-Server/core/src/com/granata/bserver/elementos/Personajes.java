@@ -18,13 +18,22 @@ public enum Personajes {
 		this.posicion = posicion;
 	}
 
-	public static Sprite getPersonajeAleatorio() {
+	public Sprite getPersonajeAleatorio() {
 		int skinAleatoria = values()[Utiles.r.nextInt(values().length)].posicion;
 		TextureRegion asd = new TextureRegion(new Texture("personajes/bouncys.png"));
 		asd.setRegion((skinAleatoria == 0) ? 0 : 64 * skinAleatoria, 0, 64, 64);
 		return new Sprite(asd);
 	}
 	
+	public Sprite getSprite() {
+		TextureRegion personaje = new TextureRegion(new Texture("personajes/bouncys.png"));
+		personaje.setRegion((posicion == 0) ? 0 : 64 * posicion, 0, 64, 64);
+		return new Sprite(personaje);
+	}
+	
+	public int getPosicion() {
+		return this.posicion;
+	}
 	
 	
 }

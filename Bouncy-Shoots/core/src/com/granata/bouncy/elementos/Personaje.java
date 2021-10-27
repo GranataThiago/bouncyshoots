@@ -26,18 +26,19 @@ public class Personaje{
 	
 	// Inputs
 	public KeyInput e = new KeyInput();
+	private boolean controlable = false;
 	
-	public Personaje() {
-		System.out.println("Se creó un nuevo Personaje");
+	public Personaje(Sprite s, boolean controlable) {
+		this.sprite = s;
+		this.controlable = controlable;
 	}
 	
-	public void inicializarPersonaje(Sprite sprite, OrthographicCamera cam) {
-		Gdx.input.setInputProcessor(e);
+	public void inicializarPersonaje(OrthographicCamera cam) {
+		if(controlable) Gdx.input.setInputProcessor(e);
 		pj = ControladorBodies.crearEsfera(64, 64, 24.14f, false, 0.5f, 1f);
 		pj.setUserData(this);
 		pj.setAngularDamping(0);
 		pj.setLinearDamping(0);
-		this.sprite = sprite;
 		this.sprite.setSize(64 / Config.PPM, 64 / Config.PPM);
 		Render.spritesADibujar.add(this.sprite);
 		
@@ -45,7 +46,7 @@ public class Personaje{
 	}
 		
 	public void update(float dt) {
-
+		
 		controlarMovimiento();
 		disparar(dt);
 		comprobarEstados();
@@ -102,6 +103,10 @@ public class Personaje{
 		return pj.getPosition();
 	}
 	
+	public void setPosition(Vector2 pos) {
+		pj.setTransform(pos, 0);
+	}
+	
 	public Body getBody() {
 		return pj;
 	}
@@ -148,6 +153,10 @@ public class Personaje{
 	
 	public Estado getEstadoActual() {
 		return estadoActual;
+	}
+	
+	public Sprite getSprite() {
+		return this.sprite;
 	}
 
 	

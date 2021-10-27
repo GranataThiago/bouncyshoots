@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.MathUtils;
+import com.granata.bouncy.utiles.Render;
 
 public class KeyInput implements InputProcessor{
 
@@ -13,12 +14,15 @@ public class KeyInput implements InputProcessor{
 	@Override
 	public boolean keyDown(int keycode) {
 		if(keycode==Keys.SPACE) {
+			Render.app.getCliente().getHc().enviarMensaje("Ejecutar!Salto!" + Render.app.getCliente().getId());
 			jump = true;
 		}
 		if(keycode == Keys.D) {
+			Render.app.getCliente().getHc().enviarMensaje("Ejecutar!Derecha!" + Render.app.getCliente().getId());
 			right = true;
 		}
 		if(keycode == Keys.A) {
+			Render.app.getCliente().getHc().enviarMensaje("Ejecutar!Izquierda!" + Render.app.getCliente().getId());
 			left = true;
 		}
 		return false;
@@ -28,12 +32,17 @@ public class KeyInput implements InputProcessor{
 	public boolean keyUp(int keycode) {
 		if(keycode==Keys.SPACE) {
 			jump = false;
+			Render.app.getCliente().getHc().enviarMensaje("DejarEjecutar!Salto!" + Render.app.getCliente().getId());
 		}
 		if(keycode == Keys.D) {
 			right = false;
+			Render.app.getCliente().getHc().enviarMensaje("DejarEjecutar!Derecha!" + Render.app.getCliente().getId());
+
 		}
 		if(keycode == Keys.A) {
 			left = false;
+			Render.app.getCliente().getHc().enviarMensaje("DejarEjecutar!Izquierda!" + Render.app.getCliente().getId());
+
 		}
 		return false;
 	}
