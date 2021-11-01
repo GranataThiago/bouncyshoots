@@ -31,7 +31,7 @@ public class Combate extends JuegoBase{
 		
 		if(tiempoEntreSpawn > 0.75f && ((comprobarEspaciosVacios() == -1) ? false : true)) {
 			tiempoEntreSpawn = 0f;
-			spawnPickup();
+//			spawnPickup();
 		}
 		
 

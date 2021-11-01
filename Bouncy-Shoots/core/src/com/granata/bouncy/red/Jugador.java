@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.granata.bouncy.elementos.Personaje;
 import com.granata.bouncy.elementos.Personajes;
 import com.granata.bouncy.utiles.Render;
+import com.granata.bouncy.utiles.Utiles;
 
 public class Jugador {
 
@@ -33,9 +34,10 @@ public class Jugador {
 		return new Sprite(Personajes.values()[posicion].getSprite());
 	}
 	
-	public void crearPersonaje(OrthographicCamera cam) {
+	public void crearPersonaje() {
 		this.pj = new Personaje(new Sprite(Personajes.values()[posicion].getSprite()), esCliente);
-		this.pj.inicializarPersonaje(cam);
+		Utiles.jugadores.add(pj);
+		this.pj.inicializarPersonaje();
 	}
 	
 	

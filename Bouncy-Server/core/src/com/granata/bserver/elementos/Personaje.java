@@ -1,17 +1,16 @@
 package com.granata.bserver.elementos;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.granata.bserver.io.KeyInput;
 import com.granata.bserver.managers.ControladorBodies;
+import com.granata.bserver.managers.JugadorEventListener;
 import com.granata.bserver.utiles.Config;
 import com.granata.bserver.utiles.Render;
-import com.granata.bserver.utiles.Utiles;
 
-public class Personaje{
+public class Personaje implements JugadorEventListener{
 	
 	public enum Estado { QUIETO, CORRIENDO, MUERTO, SALTANDO, CAYENDO } 
 	private Estado estadoActual = Estado.QUIETO;
@@ -22,19 +21,21 @@ public class Personaje{
 	private float vel = 8f, salto = 12f, vida = 100;
 	private Arma arma;
 	private boolean muerto;
+	private int idJugador;
 	
 	// Box2D
 	private Body pj;
+
+	// Movimiento
+	private boolean mueveDerecha = false, mueveIzquierda = false;
+	private boolean usaSalto = false, ejecutoDisparo = false;
 	
-	// Inputs
-	public KeyInput e = new KeyInput();
-	
-	public Personaje(Sprite sprite) {
+	public Personaje(Sprite sprite, int id) {
 		this.sprite = sprite;
+		this.idJugador = id;
 	}
 	
 	public void inicializarPersonaje(OrthographicCamera cam) {
-//		Gdx.input.setInputProcessor(e);
 		pj = ControladorBodies.crearEsfera(64, 64, 24.14f, false, 0.5f, 1f);
 		pj.setUserData(this);
 		pj.setAngularDamping(0);
@@ -42,40 +43,42 @@ public class Personaje{
 
 		this.sprite.setSize(64 / Config.PPM, 64 / Config.PPM);
 		Render.spritesADibujar.add(this.sprite);
-		arma = new Arma(pj.getPosition(), cam);
+		arma = new Arma();
 	}
 		
 	public void update(float dt) {
 
 		controlarMovimiento();
 		comprobarEstados();
-		disparar(dt);
-		arma.dibujarArma();
+		arma.update(dt);
 		
+		if(pj.getLinearVelocity().x != 0) {
+			sprite.setPosition(pj.getPosition().x - (sprite.getWidth() / 2), pj.getPosition().y - ( sprite.getHeight() / 2f));
+			Render.app.getSv().getHs().enviarMensajeGeneral("ModificarPosicion!" + idJugador + "!" + (pj.getPosition().x - (sprite.getWidth() / 2)) + "!" + (pj.getPosition().y - ( sprite.getHeight() / 2f)));
+		}
+
 	}
 
 	private void controlarMovimiento() {
-
-		if(Utiles.saltando && puedeSaltar()) {
-			pj.applyLinearImpulse(new Vector2(0, salto), pj.getWorldCenter(), true);
-//			enviarMensajeGeneral("ModificarPosicion!" + comando[2] + "!" + getPosition());
-		}
-		if(Utiles.derecha && pj.getLinearVelocity().x <= 2) {
+		if(mueveDerecha && pj.getLinearVelocity().x <= 2) {
 			pj.applyLinearImpulse(new Vector2(vel, 0), pj.getWorldCenter(), true);
-		}
-		if(Utiles.izquierda && pj.getLinearVelocity().x >= -2) {
+		}else if(mueveIzquierda && pj.getLinearVelocity().x >= -2) {
 			pj.applyLinearImpulse(new Vector2(-vel, 0), pj.getWorldCenter(), true);
 		}
-		sprite.setPosition(pj.getPosition().x - (sprite.getWidth() / 2), pj.getPosition().y - ( sprite.getHeight() / 2f));
 	}
-	
-	private void disparar(float dt) {
 
-		if(Gdx.input.justTouched() && arma.getBalas() > 0) {
-			arma.disparar(pj.getPosition());
+	private void saltar() {
+		if(puedeSaltar()) {
+			pj.applyLinearImpulse(new Vector2(0, salto), pj.getWorldCenter(), true);
 		}
 	}
 	
+	private void disparar(Vector2 target) {
+		if(ejecutoDisparo && arma.getBalas() > 0) {
+			arma.disparar(pj.getPosition(), new Vector3(target.x, target.y, 0), idJugador);
+		}
+	}
+
 	public void recibirDaño(float daño) {
 		this.vida -= daño;
 		if(this.vida <= 0) {
@@ -113,6 +116,10 @@ public class Personaje{
 		return arma;
 	}
 	
+	public Sprite getSprite() {
+		return sprite;
+	}
+	
 	public void setArma(Arma arma) {
 		this.arma = arma;
 	}
@@ -140,6 +147,39 @@ public class Personaje{
 	public Estado getEstadoActual() {
 		return estadoActual;
 	}
+
+	@Override
+	public void ejecutarMovimiento(String dir) {
+		if(dir.equals("Derecha")) {
+			mueveDerecha = true;
+		}else if(dir.equals("Izquierda")) {
+			mueveIzquierda = true;
+		}
+		
+	}
+
+	@Override
+	public void dejarEjecutarMovimiento(String dir) {
+		if(dir.equals("Derecha")) {
+			mueveDerecha = false;
+		}else if(dir.equals("Izquierda")) {
+			mueveIzquierda = false;
+		}
+		
+	}
+
+	@Override
+	public void ejecutarDisparo(Vector2 target) {
+		ejecutoDisparo = true;
+		disparar(target);
+	}
+
+	@Override
+	public void dejarDisparar() {
+		ejecutoDisparo = false;
+	}
+
+
 
 	
 }

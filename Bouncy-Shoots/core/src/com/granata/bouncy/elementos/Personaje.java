@@ -4,13 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.granata.bouncy.io.KeyInput;
 import com.granata.bouncy.managers.ControladorBodies;
+import com.granata.bouncy.managers.JugadorEventListener;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Render;
 
-public class Personaje{
+public class Personaje implements JugadorEventListener{
 	
 	public enum Estado { QUIETO, CORRIENDO, MUERTO, SALTANDO, CAYENDO } 
 	private Estado estadoActual = Estado.QUIETO;
@@ -22,7 +24,7 @@ public class Personaje{
 	private boolean muerto;
 	
 	// Box2D
-	private Body pj;
+//	private Body pj;
 	
 	// Inputs
 	public KeyInput e = new KeyInput();
@@ -33,23 +35,21 @@ public class Personaje{
 		this.controlable = controlable;
 	}
 	
-	public void inicializarPersonaje(OrthographicCamera cam) {
+	public void inicializarPersonaje() {
 		if(controlable) Gdx.input.setInputProcessor(e);
-		pj = ControladorBodies.crearEsfera(64, 64, 24.14f, false, 0.5f, 1f);
-		pj.setUserData(this);
-		pj.setAngularDamping(0);
-		pj.setLinearDamping(0);
+//		pj = ControladorBodies.crearEsfera(64, 64, 24.14f, false, 0.5f, 1f);
+//		pj.setUserData(this);
+//		pj.setAngularDamping(0);
+//		pj.setLinearDamping(0);
 		this.sprite.setSize(64 / Config.PPM, 64 / Config.PPM);
 		Render.spritesADibujar.add(this.sprite);
 		
-		arma = new Arma(pj.getPosition(), cam);
+		arma = new Arma();
 	}
 		
 	public void update(float dt) {
 		
 		controlarMovimiento();
-		disparar(dt);
-		comprobarEstados();
 		arma.update(dt);
 		
 	}
@@ -57,33 +57,32 @@ public class Personaje{
 	private void controlarMovimiento() {
 		
 //		if(Gdx.input.isKeyJustPressed(Keys.SPACE) && getEstadoActual() != Estado.CAYENDO) {
-//		pj.applyLinearImpulse(new Vector2(0, salto), pj.getWorldCenter(), true);
+//			pj.applyLinearImpulse(new Vector2(0, salto), pj.getWorldCenter(), true);
 //		}
 		
 		
-		// Adaptado para funcionar con InputProcessor
-		if(e.isJumping() && puedeSaltar()) {
-			pj.applyLinearImpulse(new Vector2(0, salto), pj.getWorldCenter(), true);
-		}
-		if(e.isRight() && pj.getLinearVelocity().x <= 2) {
-			pj.applyLinearImpulse(new Vector2(vel, 0), pj.getWorldCenter(), true);
-		}
-		if(e.isLeft() && pj.getLinearVelocity().x >= -2) {
-			pj.applyLinearImpulse(new Vector2(-vel, 0), pj.getWorldCenter(), true);
-		}
-		sprite.setPosition(pj.getPosition().x - (sprite.getWidth() / 2), pj.getPosition().y - ( sprite.getHeight() / 2f));
+//		// Adaptado para funcionar con InputProcessor
+//		if(e.isJumping() && puedeSaltar()) {
+////			pj.applyLinearImpulse(new Vector2(0, salto), pj.getWorldCenter(), true);
+//		}
+//		if(e.isRight() && pj.getLinearVelocity().x <= 2) {
+////			pj.applyLinearImpulse(new Vector2(vel, 0), pj.getWorldCenter(), true);
+//		}
+//		if(e.isLeft() && pj.getLinearVelocity().x >= -2) {
+////			pj.applyLinearImpulse(new Vector2(-vel, 0), pj.getWorldCenter(), true);
+//		}
 	}
 	
-	private void disparar(float dt) {
+	private void disparar() {
 
 //		if(Gdx.input.justTouched() && arma.getBalas() > 0) {
 //			arma.disparar(pj.getPosition());
 //		}
 		
 		// Adaptado para funcionar con InputProcessor
-		if(e.isClicking() && arma.getBalas() > 0) {
-			arma.disparar(pj.getPosition());
-		}
+//		if(e.isClicking() && arma.getBalas() > 0) {
+//			arma.disparar(pj.getPosition());
+//		}
 	}
 	
 	public void recibirDaño(float daño) {
@@ -92,24 +91,44 @@ public class Personaje{
 			destruir();
 		}
 	}
-	
-	public void destruir() {
-			muerto = true;
-			Render.spritesADibujar.remove(this.sprite);
-			ControladorBodies.cuerposAEliminar.add(this.pj);
+
+//	public Vector2 getPosition() {
+//		return pj.getPosition();
+//	}
+//	
+//	public Body getBody() {
+//		return pj;
+//	}
+
+
+	public Arma getArma() {
+		return arma;
 	}
 
-	public Vector2 getPosition() {
-		return pj.getPosition();
-	}
+
+//	private void comprobarEstados() {
+//		if(muerto) estadoActual = Estado.MUERTO;
+//		else if(pj.getLinearVelocity().y > 0) {
+//			estadoActual = Estado.SALTANDO;
+//		}else if(pj.getLinearVelocity().y < 0) {
+//			estadoActual = Estado.CAYENDO;
+//		}else if(pj.getLinearVelocity().x != 0) {
+//			estadoActual = Estado.CORRIENDO;
+//		}else {
+//			estadoActual = Estado.QUIETO;
+//		}
+//		
+//	}
 	
-	public void setPosition(Vector2 pos) {
-		pj.setTransform(pos, 0);
+	public boolean puedeSaltar() {
+		return (getEstadoActual() != Estado.CAYENDO && getEstadoActual() != Estado.SALTANDO);
 	}
+
 	
-	public Body getBody() {
-		return pj;
+	public Estado getEstadoActual() {
+		return estadoActual;
 	}
+
 	
 	public void aumentarVel(float vel) {
 		this.vel += vel;
@@ -122,42 +141,27 @@ public class Personaje{
 	public void aumentarVida(float vida) {
 		this.vida += vida;
 	}
-
-	public Arma getArma() {
-		return arma;
-	}
 	
-//	public void setArma(Arma arma) {
-//		this.arma = arma;
-//	}
+	public void destruir() {
+		muerto = true;
+		Render.spritesADibujar.remove(this.sprite);
 
+}
+	
+	@Override
+	public void actualizarPosicion(float x, float y) {
+		sprite.setPosition(x, y);
+	}
 
-	private void comprobarEstados() {
-		if(muerto) estadoActual = Estado.MUERTO;
-		else if(pj.getLinearVelocity().y > 0) {
-			estadoActual = Estado.SALTANDO;
-		}else if(pj.getLinearVelocity().y < 0) {
-			estadoActual = Estado.CAYENDO;
-		}else if(pj.getLinearVelocity().x != 0) {
-			estadoActual = Estado.CORRIENDO;
-		}else {
-			estadoActual = Estado.QUIETO;
+	@Override
+	public void disparar(Vector2 posDisparo, Vector3 target) {
+		if(arma.getBalas() > 0) {
+			arma.disparar(posDisparo, target);
 		}
-		
-	}
-	
-	public boolean puedeSaltar() {
-		return (getEstadoActual() != Estado.CAYENDO && getEstadoActual() != Estado.SALTANDO);
 	}
 
 	
-	public Estado getEstadoActual() {
-		return estadoActual;
-	}
-	
-	public Sprite getSprite() {
-		return this.sprite;
-	}
+
 
 	
 }

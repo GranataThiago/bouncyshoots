@@ -10,17 +10,17 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.granata.bouncy.elementos.Bala;
 import com.granata.bouncy.elementos.Personaje;
-import com.granata.bouncy.elementos.Personajes;
 import com.granata.bouncy.elementos.Personaje.Estado;
 import com.granata.bouncy.managers.CollisionListener;
 import com.granata.bouncy.managers.ControladorBalas;
 import com.granata.bouncy.managers.ControladorBodies;
-import com.granata.bouncy.managers.ControladorPartida;
 import com.granata.bouncy.mapas.MapaTiled;
 import com.granata.bouncy.red.Jugador;
 import com.granata.bouncy.screens.ScreenJuego;
 import com.granata.bouncy.utiles.Config;
+import com.granata.bouncy.utiles.Global;
 import com.granata.bouncy.utiles.Render;
+import com.granata.bouncy.utiles.Utiles;
 
 public abstract class JuegoBase {
 
@@ -31,7 +31,6 @@ public abstract class JuegoBase {
 	protected Personaje p;
 
 	// Camara
-	protected OrthographicCamera cam;
 	private Viewport vp;
 	
 	// Mapa
@@ -44,7 +43,7 @@ public abstract class JuegoBase {
 	public void start(String rutaMapa, Vector2[] spawners) {
 		this.spawners = spawners;
 		
-		cam = new OrthographicCamera();
+		Global.cam = new OrthographicCamera();
 		vp = new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM);
 		
 		// Creación del mundo necesario para Box2D
@@ -54,12 +53,11 @@ public abstract class JuegoBase {
 
 		
 		for(Jugador j : Render.app.getCliente().getClientes()) {
-			j.crearPersonaje(cam);
+			j.crearPersonaje();
 		}
 		p = Render.app.getCliente().getClientes().get(Render.app.getCliente().getId()).getPj();
-
 		mapa = new MapaTiled(rutaMapa);
-		cam.setToOrtho(false, vp.getWorldWidth(), vp.getWorldHeight());
+		Global.cam.setToOrtho(false, vp.getWorldWidth(), vp.getWorldHeight());
 
 	}
 	
@@ -69,13 +67,13 @@ public abstract class JuegoBase {
 		
 		// Renderiza el mapa
 		mapa.render();
-		Render.sb.setProjectionMatrix(cam.combined);
+		Render.sb.setProjectionMatrix(Global.cam.combined);
 
 		// Como "pasa" el tiempo y el render del Box2D
 		// Como primer argumento funcionaron "bien" Gdx.graphics.getDeltaTime(); o 1/60f
 		ControladorBodies.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 		borrarCuerpos();
-		b2r.render(ControladorBodies.world, cam.combined);
+		b2r.render(ControladorBodies.world, Global.cam.combined);
 
 		// Dibujamos al personaje y actualizamos la cámara
 		Render.sb.begin();
@@ -85,13 +83,13 @@ public abstract class JuegoBase {
 			Render.dibujarSprites();
 		Render.sb.end();
 		
-		for(Bala b : ControladorBalas.balasActivas) {
-			b.update();
-		}
+//		for(Bala b : ControladorBalas.balasActivas) {
+//			b.update();
+//		}
 
-		if(p.getEstadoActual() == Estado.MUERTO) {
-			Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
-		}
+//		if(p.getEstadoActual() == Estado.MUERTO) {
+//			Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
+//		}
 		
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 			Gdx.app.exit();
@@ -102,7 +100,7 @@ public abstract class JuegoBase {
 	
 	public void update(float delta) {
 		tiempoEntreSpawn += delta;
-		mapa.update(delta, cam);
+		mapa.update(delta, Global.cam);
 	}
 	
 	protected abstract void spawnPickup();
@@ -117,7 +115,7 @@ public abstract class JuegoBase {
 		b2r.dispose();
 		mapa.dispose();
 		Render.spritesADibujar.removeAll(Render.spritesADibujar);
-		for(Jugador j : ControladorPartida.clientes) {
+		for(Jugador j : Render.app.getCliente().getClientes()) {
 			j.getPj().getArma().dispose();
 		}
 	}

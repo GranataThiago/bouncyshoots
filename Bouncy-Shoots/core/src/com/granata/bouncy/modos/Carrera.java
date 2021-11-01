@@ -3,11 +3,11 @@ package com.granata.bouncy.modos;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.granata.bouncy.elementos.Personaje.Estado;
 import com.granata.bouncy.managers.ControladorBodies;
 import com.granata.bouncy.powerups.OneShot;
 import com.granata.bouncy.powerups.Powerup;
 import com.granata.bouncy.utiles.Config;
+import com.granata.bouncy.utiles.Global;
 import com.granata.bouncy.utiles.Render;
 
 public class Carrera extends JuegoBase{
@@ -27,30 +27,30 @@ public class Carrera extends JuegoBase{
 		super.update(delta);
 
 		// A -------------- B (Final)
-		if(tiempoParaEmpezar > 15f && this.cam.position.x <= puntoFinal) this.cam.position.x += velCamara * delta;
+		if(tiempoParaEmpezar > 15f && Global.cam.position.x <= puntoFinal) Global.cam.position.x += velCamara * delta;
 		else {
 			tiempoParaEmpezar++;
 		}
 		
-		if(p.getPosition().x > puntoFinal + 1f) {
-			System.out.println("Ganaste");
-		}
+//		if(p.getPosition().x > puntoFinal + 1f) {
+//			System.out.println("Ganaste");
+//		}
 		
-		this.cam.update();
+		Global.cam.update();
 	}
 	
 	@Override
 	public void render(float delta) {
 		super.render(delta);
-		Render.sb.setProjectionMatrix(cam.combined);
-		if(!this.cam.frustum.pointInFrustum(p.getPosition().x, p.getPosition().y, 0) && p.getEstadoActual() != Estado.MUERTO) {
-			
-			tiempoParaMorir += delta;
-			if(tiempoParaMorir > 0.5f) {
-				p.destruir();
-			}
-			
-		}else tiempoParaMorir = 0f;
+		Render.sb.setProjectionMatrix(Global.cam.combined);
+//		if(!this.cam.frustum.pointInFrustum(p.getPosition().x, p.getPosition().y, 0) && p.getEstadoActual() != Estado.MUERTO) {
+//			
+//			tiempoParaMorir += delta;
+//			if(tiempoParaMorir > 0.5f) {
+//				p.destruir();
+//			}
+//			
+//		}else tiempoParaMorir = 0f;
 	}
 
 	@Override

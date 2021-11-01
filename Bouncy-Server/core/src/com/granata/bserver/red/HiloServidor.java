@@ -6,8 +6,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
+import com.badlogic.gdx.math.Vector2;
 import com.granata.bserver.elementos.Personajes;
-import com.granata.bserver.screens.ScreenJuego;
 import com.granata.bserver.utiles.Render;
 import com.granata.bserver.utiles.Utiles;
 
@@ -76,22 +76,27 @@ public class HiloServidor extends Thread{
 				}
 			}else if(comando[0].equals("Ejecutar")) {
 				if(comando[1].equals("Salto")) {
-					Utiles.saltando = true;
+					// Tiene que ejecutar el salto para el jugador que recibió
 				}else if(comando[1].equals("Derecha")) {
-					Utiles.derecha = true;
+					Utiles.jugadores.get(Integer.valueOf(comando[2])).ejecutarMovimiento(comando[1]);
 				}else if(comando[1].equals("Izquierda")) {
-					Utiles.izquierda = true;
+					Utiles.jugadores.get(Integer.valueOf(comando[2])).ejecutarMovimiento(comando[1]);
+				}else if(comando[1].equals("Disparo")) {
+					Utiles.jugadores.get(Integer.valueOf(comando[2])).ejecutarDisparo(new Vector2(Float.parseFloat(comando[3]), Float.parseFloat(comando[4])));
 				}
 				
-				enviarMensajeGeneral("ModificarPosicion!" + comando[2] + "!" + Render.app.getSv().getClientes().get(Integer.valueOf(comando[2])).getPj().getPosition());
 
 			}else if(comando[0].equals("DejarEjecutar")) {
 				if(comando[1].equals("Salto")) {
-					Utiles.saltando = false;
+					
 				}else if(comando[1].equals("Derecha")) {
-					Utiles.derecha = true;
+					// Tiene que dejar de ejecutar el movimiento hacia la derecha para el jugador que recibió
+					Utiles.jugadores.get(Integer.valueOf(comando[2])).dejarEjecutarMovimiento(comando[1]);
 				}else if(comando[1].equals("Izquierda")) {
-					Utiles.izquierda = true;
+					// Tiene que dejar de ejecutar el movimiento hacia la izquierda para el jugador que recibió
+					Utiles.jugadores.get(Integer.valueOf(comando[2])).dejarEjecutarMovimiento(comando[1]);
+				}else if(comando[1].equals("Disparo")) {
+					Utiles.jugadores.get(Integer.valueOf(comando[2])).dejarDisparar();
 				}
 			}
 		}else {
@@ -99,7 +104,7 @@ public class HiloServidor extends Thread{
 			/* Si se inició la partida, le envio un mensaje a todos los clientes para que tmb comiencen la partida */
 			if(msg.equals("iniciarPartida")) {
 				enviarMensajeGeneral("comenzar");
-//				Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
+				Utiles.partidaIniciada = true;
 			}
 			
 		}
@@ -114,7 +119,7 @@ public class HiloServidor extends Thread{
 		
 	}
 
-	private void enviarMensajeGeneral(String msj) {
+	public void enviarMensajeGeneral(String msj) {
 		for(int i = 0; i < cantClientes; i++) {
 			enviarMensaje(msj, sv.getClientes().get(i).getIp(), sv.getClientes().get(i).getPuerto());
 		}

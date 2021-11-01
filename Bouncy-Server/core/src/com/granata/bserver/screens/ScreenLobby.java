@@ -18,16 +18,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.granata.bserver.elementos.Personajes;
 import com.granata.bserver.utiles.Config;
 import com.granata.bserver.utiles.Render;
+import com.granata.bserver.utiles.Utiles;
 
 public class ScreenLobby implements Screen{
 
@@ -98,7 +95,7 @@ public class ScreenLobby implements Screen{
         	}
         });
 		
-		stage.addActor(btnJugar);
+//		stage.addActor(btnJugar);
 
 	}
 
@@ -114,6 +111,10 @@ public class ScreenLobby implements Screen{
 			}
 
 		Render.sb.end();
+		
+        if(Utiles.partidaIniciada) {
+			Render.app.setScreen(new ScreenJuego(2));
+        }
 		
         stage.act();
         stage.draw();

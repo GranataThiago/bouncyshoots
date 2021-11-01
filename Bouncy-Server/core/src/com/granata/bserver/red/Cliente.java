@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.granata.bserver.elementos.Personaje;
 import com.granata.bserver.elementos.Personajes;
+import com.granata.bserver.utiles.Render;
+import com.granata.bserver.utiles.Utiles;
 
 public class Cliente {
 
@@ -46,7 +48,8 @@ public class Cliente {
 	}
 	
 	public void crearPersonaje(OrthographicCamera cam) {
-		this.pj = new Personaje(new Sprite(Personajes.values()[posTxt].getSprite()));
+		this.pj = new Personaje(new Sprite(Personajes.values()[posTxt].getSprite()), posTxt);
+		Utiles.jugadores.add(pj);
 		this.pj.inicializarPersonaje(cam);
 	}
 	

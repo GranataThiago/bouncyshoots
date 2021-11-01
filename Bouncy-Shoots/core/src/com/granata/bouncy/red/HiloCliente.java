@@ -8,9 +8,12 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.granata.bouncy.managers.ControladorBalas;
 import com.granata.bouncy.utiles.Global;
 import com.granata.bouncy.utiles.Nombres;
 import com.granata.bouncy.utiles.Render;
+import com.granata.bouncy.utiles.Utiles;
 
 public class HiloCliente extends Thread{
 
@@ -68,8 +71,18 @@ public class HiloCliente extends Thread{
 				ipServer = dp.getAddress();
 				Render.app.getCliente().setId(Integer.valueOf(comando[1]));
 			}else if(comando[0].equals("ModificarPosicion")) {
-				String[] pos = comando[2].substring(1, comando[2].length()-1).split(",");
-				Render.app.getCliente().getClientes().get(Integer.valueOf(comando[1])).getPj().setPosition(new Vector2(Float.parseFloat(pos[0]), Float.parseFloat(pos[1])));
+				if(Utiles.jugadores != null) {
+					Utiles.jugadores.get(Integer.valueOf(comando[1])).actualizarPosicion(Float.parseFloat(comando[2]), Float.parseFloat(comando[3]));
+				}
+			}else if(comando[0].equals("Disparo")) {
+				if(Utiles.jugadores != null) {
+					String[] posDisparo = comando[2].substring(1, comando[2].length()-1).split(",");
+					String[] target = comando[3].substring(1, comando[3].length()-1).split(",");
+					Utiles.jugadores.get(Integer.valueOf(comando[1])).disparar(new Vector2(Float.parseFloat(posDisparo[0]), Float.parseFloat(posDisparo[1])), new Vector3(Float.parseFloat(target[0]), Float.parseFloat(target[1]), 0));
+				}
+			}else if(comando[0].equals("ModificarPosBala")) {
+				// Actualizar bala
+				ControladorBalas.balasActivas.get(Integer.valueOf(comando[1])).actualizarPosicion(Float.parseFloat(comando[2]), Float.parseFloat(comando[3]));
 			}
 		}else {
 			if(msg.equals("puedeComenzar")) {

@@ -11,7 +11,7 @@ public class DesktopLauncher {
 		config.title = Config.NOMBRE;
 		config.height = Config.ALTO;
 		config.width = Config.ANCHO;
-		config.fullscreen = true;
+//		config.fullscreen = true;
 		new LwjglApplication(new BouncyShoots(), config);
 	}
 }

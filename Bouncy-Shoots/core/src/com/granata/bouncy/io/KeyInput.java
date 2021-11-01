@@ -1,9 +1,9 @@
 package com.granata.bouncy.io;
 
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
+import com.granata.bouncy.utiles.Global;
 import com.granata.bouncy.utiles.Render;
 
 public class KeyInput implements InputProcessor{
@@ -56,12 +56,15 @@ public class KeyInput implements InputProcessor{
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		click = true;
+		Vector3 clickPos = Global.cam.unproject(new Vector3(screenX, screenY, 0));
+		Render.app.getCliente().getHc().enviarMensaje("Ejecutar!Disparo!" + Render.app.getCliente().getId() + "!" + clickPos.x + "!" + clickPos.y);
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		click = false;
+		Render.app.getCliente().getHc().enviarMensaje("DejarEjecutar!Disparo!" + Render.app.getCliente().getId());
 		return false;
 	}
 

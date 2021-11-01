@@ -19,14 +19,13 @@ import com.granata.bserver.red.Cliente;
 import com.granata.bserver.screens.ScreenJuego;
 import com.granata.bserver.utiles.Config;
 import com.granata.bserver.utiles.Render;
+import com.granata.bserver.utiles.Utiles;
 
 public abstract class JuegoBase {
 
 	// Box2D
 	private Box2DDebugRenderer b2r;
 	
-	// Personaje
-	protected Personaje p;
 
 	// Camara
 	protected OrthographicCamera cam;
@@ -85,24 +84,24 @@ public abstract class JuegoBase {
 //			Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
 //		}
 		
-		// COSAS PARA DEBUGEAR RAPIDITO JEJE
-//		if(Gdx.input.isTouched()) {
-//			System.out.println(new Vector2(Gdx.input.getX(), Config.ALTO - Gdx.input.getY()));
-//		}
-		
+
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 			Gdx.app.exit();
 		}
 		
-		
+		int cantBalas = 0;
 		for(Bala b : ControladorBalas.balasActivas) {
-			b.update();
+			b.update(cantBalas);
+			cantBalas++;
 		}
+		
 	}
 	
 	public void update(float delta) {
 		tiempoEntreSpawn += delta;
 		mapa.update(delta, cam);
+		
+
 	}
 	
 	protected abstract void spawnPickup();
@@ -117,7 +116,7 @@ public abstract class JuegoBase {
 		b2r.dispose();
 		mapa.dispose();
 		Render.spritesADibujar.removeAll(Render.spritesADibujar);
-		p.getArma().dispose();
+//		p.getArma().dispose();
 	}
 	
 	protected void borrarCuerpos() {

@@ -17,4 +17,8 @@ public class Servidor {
 		return this.clientes;
 	}
 	
+	public HiloServidor getHs() {
+		return this.hs;
+	}
+	
 }
