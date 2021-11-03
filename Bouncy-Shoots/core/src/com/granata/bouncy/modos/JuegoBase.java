@@ -14,7 +14,11 @@ import com.granata.bouncy.elementos.Personaje.Estado;
 import com.granata.bouncy.managers.CollisionListener;
 import com.granata.bouncy.managers.ControladorBalas;
 import com.granata.bouncy.managers.ControladorBodies;
+import com.granata.bouncy.managers.JuegoEventListener;
+import com.granata.bouncy.managers.JugadorEventListener;
 import com.granata.bouncy.mapas.MapaTiled;
+import com.granata.bouncy.powerups.Powerup;
+import com.granata.bouncy.powerups.Powerups;
 import com.granata.bouncy.red.Jugador;
 import com.granata.bouncy.screens.ScreenJuego;
 import com.granata.bouncy.utiles.Config;
@@ -22,10 +26,7 @@ import com.granata.bouncy.utiles.Global;
 import com.granata.bouncy.utiles.Render;
 import com.granata.bouncy.utiles.Utiles;
 
-public abstract class JuegoBase {
-
-	// Box2D
-	private Box2DDebugRenderer b2r;
+public abstract class JuegoBase implements JuegoEventListener{
 	
 	// Personaje
 	protected Personaje p;
@@ -42,14 +43,10 @@ public abstract class JuegoBase {
 	
 	public void start(String rutaMapa, Vector2[] spawners) {
 		this.spawners = spawners;
+		Utiles.juegoListener = this;
 		
 		Global.cam = new OrthographicCamera();
 		vp = new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM);
-		
-		// Creación del mundo necesario para Box2D
-		ControladorBodies.world = new World(new Vector2(0, -16.42f), false);
-		ControladorBodies.world.setContactListener(new CollisionListener());
-		b2r = new Box2DDebugRenderer();
 
 		
 		for(Jugador j : Render.app.getCliente().getClientes()) {
@@ -68,12 +65,6 @@ public abstract class JuegoBase {
 		// Renderiza el mapa
 		mapa.render();
 		Render.sb.setProjectionMatrix(Global.cam.combined);
-
-		// Como "pasa" el tiempo y el render del Box2D
-		// Como primer argumento funcionaron "bien" Gdx.graphics.getDeltaTime(); o 1/60f
-		ControladorBodies.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-		borrarCuerpos();
-		b2r.render(ControladorBodies.world, Global.cam.combined);
 
 		// Dibujamos al personaje y actualizamos la cámara
 		Render.sb.begin();
@@ -102,17 +93,14 @@ public abstract class JuegoBase {
 		tiempoEntreSpawn += delta;
 		mapa.update(delta, Global.cam);
 	}
-	
-	protected abstract void spawnPickup();
+
 	
 	public void resize(int width, int height) {
 		vp = new FitViewport(width, height);
 	}
 	
 	public void dispose() {
-		borrarCuerpos();
-		ControladorBodies.world.dispose();
-		b2r.dispose();
+		Utiles.jugadores.removeAll(Utiles.jugadores);
 		mapa.dispose();
 		Render.spritesADibujar.removeAll(Render.spritesADibujar);
 		for(Jugador j : Render.app.getCliente().getClientes()) {
@@ -120,13 +108,7 @@ public abstract class JuegoBase {
 		}
 	}
 	
-	protected void borrarCuerpos() {
-		if(!ControladorBodies.world.isLocked()){
-			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
-				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
-				ControladorBodies.cuerposAEliminar.remove(i);
-			}
-		}
-	}
+	
+	
 
 }

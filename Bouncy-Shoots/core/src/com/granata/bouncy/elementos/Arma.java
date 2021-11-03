@@ -24,7 +24,7 @@ public class Arma{
 	private int daño = 30;
 	private int rebotes = 10;
 	private float incDañoRebotes = 0;
-	private float tiempoTranscurrido = 0, tiempoEntreDisparo = 0.25f;
+//	private float tiempoTranscurrido = 0, tiempoEntreDisparo = 0.25f;
 	
 	public Arma() {
 		sprite.setSize(15 / Config.PPM, 15 / Config.PPM);
@@ -42,13 +42,11 @@ public class Arma{
 
 	public void disparar(Vector2 posDisparo, Vector3 target) {
 
-		
 			Bala b = ControladorBalas.bp.obtain();
-			b.crearBala(calcularPosicionDisparo(posDisparo, target), target, rebotes, incDañoRebotes, daño);
+			b.crearBala(calcularPosicionDisparo(posDisparo, target), target);
 			ControladorBalas.balasActivas.add(b);
-			balas--;
-		
-		
+			System.out.println(ControladorBalas.balasActivas.size);
+			//balas--;
 		
 	}
 	

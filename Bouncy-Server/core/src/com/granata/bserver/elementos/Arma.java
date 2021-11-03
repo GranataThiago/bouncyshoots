@@ -39,7 +39,7 @@ public class Arma{
 
 		if(tiempoTranscurrido > tiempoEntreDisparo) {
 			Bala b = ControladorBalas.bp.obtain();
-			b.crearBala(calcularPosicionDisparo(posDisparo, target), target, rebotes, incDañoRebotes, daño);
+			b.crearBala(calcularPosicionDisparo(posDisparo, target), target, rebotes, incDañoRebotes, daño, ControladorBalas.balasActivas.size);
 			Render.app.getSv().getHs().enviarMensajeGeneral("Disparo!" + idJugador + "!" + posDisparo + "!" + target);
 			ControladorBalas.balasActivas.add(b);
 			balas--;

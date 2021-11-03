@@ -9,7 +9,7 @@ import com.granata.bserver.utiles.Render;
 
 public class BouncyServer extends Game {
 	
-	private int mapaActual = 0;
+	private int mapaActual = 1;
 	private Servidor sv;
 	
 	@Override
@@ -17,15 +17,15 @@ public class BouncyServer extends Game {
 		Render.app = this;
 		sv = new Servidor();
 		Render.sb = new SpriteBatch();
-		ControladorNiveles.generarMapas();
+		ControladorNiveles.generarMapas(2);
 		this.setScreen(new ScreenMenu());
 	}
 
 	public int cambiarMapa() {
-		if(mapaActual == ControladorNiveles.niveles.size() - 1) mapaActual = 0;
-		else mapaActual++;
-
-		return mapaActual;
+		int mapa = ControladorNiveles.niveles.get(mapaActual);
+		System.out.println("Se le envia al cliente el mapa " + mapa + " y el servidor carga el mapa: " + mapa);
+		sv.getHs().enviarMensajeGeneral("CambiarMapa!" + mapa);
+		return ControladorNiveles.niveles.get(mapaActual++);
 	}
 
 	@Override

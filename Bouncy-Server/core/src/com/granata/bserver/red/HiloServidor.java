@@ -8,6 +8,7 @@ import java.net.SocketException;
 
 import com.badlogic.gdx.math.Vector2;
 import com.granata.bserver.elementos.Personajes;
+import com.granata.bserver.managers.ControladorNiveles;
 import com.granata.bserver.utiles.Render;
 import com.granata.bserver.utiles.Utiles;
 
@@ -76,7 +77,7 @@ public class HiloServidor extends Thread{
 				}
 			}else if(comando[0].equals("Ejecutar")) {
 				if(comando[1].equals("Salto")) {
-					// Tiene que ejecutar el salto para el jugador que recibió
+					Utiles.jugadores.get(Integer.valueOf(comando[2])).ejecutarMovimiento(comando[1]);
 				}else if(comando[1].equals("Derecha")) {
 					Utiles.jugadores.get(Integer.valueOf(comando[2])).ejecutarMovimiento(comando[1]);
 				}else if(comando[1].equals("Izquierda")) {
@@ -88,7 +89,7 @@ public class HiloServidor extends Thread{
 
 			}else if(comando[0].equals("DejarEjecutar")) {
 				if(comando[1].equals("Salto")) {
-					
+					Utiles.jugadores.get(Integer.valueOf(comando[2])).dejarEjecutarMovimiento(comando[1]);
 				}else if(comando[1].equals("Derecha")) {
 					// Tiene que dejar de ejecutar el movimiento hacia la derecha para el jugador que recibió
 					Utiles.jugadores.get(Integer.valueOf(comando[2])).dejarEjecutarMovimiento(comando[1]);
@@ -103,7 +104,7 @@ public class HiloServidor extends Thread{
 			
 			/* Si se inició la partida, le envio un mensaje a todos los clientes para que tmb comiencen la partida */
 			if(msg.equals("iniciarPartida")) {
-				enviarMensajeGeneral("comenzar");
+				enviarMensajeGeneral("comenzar!" + ControladorNiveles.niveles.get(0));
 				Utiles.partidaIniciada = true;
 			}
 			

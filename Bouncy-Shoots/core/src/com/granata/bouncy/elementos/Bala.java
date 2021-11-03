@@ -30,7 +30,7 @@ public class Bala extends Sprite implements Movible, Poolable{
 
 	}
 	
-	public void crearBala(Vector2 curPos, Vector3 target, int rebotes, float incDañoRebotes, float daño) {
+	public void crearBala(Vector2 curPos, Vector3 target) {
 		sprite = new Sprite(Render.bala);
 		sprite.setSize(16 / Config.PPM, 16 / Config.PPM);
 		Render.spritesADibujar.add(sprite);
@@ -75,12 +75,13 @@ public class Bala extends Sprite implements Movible, Poolable{
 	}
 	
 	public void destruir() {
-		ControladorBodies.cuerposAEliminar.add(bala);
+		System.out.println("bala destruida");
 		Render.spritesADibujar.remove(sprite);
 	}
 	
 	@Override
 	public void onDibujar() {
+		System.out.println("dibujando bala");
 	    Render.spritesADibujar.add(sprite);
 	}
 

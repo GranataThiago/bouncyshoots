@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.granata.bserver.managers.ControladorNiveles;
 import com.granata.bserver.utiles.Config;
 import com.granata.bserver.utiles.Render;
 import com.granata.bserver.utiles.Utiles;
@@ -31,9 +32,6 @@ public class ScreenLobby implements Screen{
 	private Stage stage;
 	
 	private Texture txtJugar;
-	private Button btnJugar;
-	
-	private Sprite sprite;
 	
 	private FreeTypeFontGenerator generador;
 	private FreeTypeFontParameter parametros;
@@ -68,35 +66,6 @@ public class ScreenLobby implements Screen{
 		logo.setPosition((Config.ANCHO / 2 - 150) / Config.PPM, (Config.ALTO - 200) / Config.PPM);
 		logo.setSize(280 / Config.PPM, 130 / Config.PPM);
 		stage.addActor(logo);
-		
-		btnJugar = new Button(new TextureRegionDrawable(new TextureRegion(txtJugar)));
-		btnJugar.setPosition((Config.ANCHO / 2 - 150) / Config.PPM, 150 / Config.PPM);
-		btnJugar.setSize(280 / Config.PPM, 80 / Config.PPM);
-		btnJugar.setOrigin(Align.center);
-		btnJugar.setTransform(true);
-		btnJugar.addListener(new ClickListener() {
-			@Override
-			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-
-				btnJugar.addAction(Actions.scaleTo(1.1f, 1.1f, 0.1f));
-
-			}
-			
-			@Override
-			public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-
-				btnJugar.setScale(1f);
-				
-			}
-			
-        	@Override
-        	public void clicked(InputEvent e, float x, float y) {
-        		Render.app.setScreen(new ScreenJuego(2));
-        	}
-        });
-		
-//		stage.addActor(btnJugar);
-
 	}
 
 	@Override
@@ -113,7 +82,7 @@ public class ScreenLobby implements Screen{
 		Render.sb.end();
 		
         if(Utiles.partidaIniciada) {
-			Render.app.setScreen(new ScreenJuego(2));
+			Render.app.setScreen(new ScreenJuego(ControladorNiveles.niveles.get(0)));
         }
 		
         stage.act();

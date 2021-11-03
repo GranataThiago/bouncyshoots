@@ -1,13 +1,10 @@
 package com.granata.bouncy.elementos;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.granata.bouncy.io.KeyInput;
-import com.granata.bouncy.managers.ControladorBodies;
 import com.granata.bouncy.managers.JugadorEventListener;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Render;
@@ -37,10 +34,7 @@ public class Personaje implements JugadorEventListener{
 	
 	public void inicializarPersonaje() {
 		if(controlable) Gdx.input.setInputProcessor(e);
-//		pj = ControladorBodies.crearEsfera(64, 64, 24.14f, false, 0.5f, 1f);
-//		pj.setUserData(this);
-//		pj.setAngularDamping(0);
-//		pj.setLinearDamping(0);
+		
 		this.sprite.setSize(64 / Config.PPM, 64 / Config.PPM);
 		Render.spritesADibujar.add(this.sprite);
 		
@@ -49,41 +43,10 @@ public class Personaje implements JugadorEventListener{
 		
 	public void update(float dt) {
 		
-		controlarMovimiento();
 		arma.update(dt);
 		
 	}
-	
-	private void controlarMovimiento() {
-		
-//		if(Gdx.input.isKeyJustPressed(Keys.SPACE) && getEstadoActual() != Estado.CAYENDO) {
-//			pj.applyLinearImpulse(new Vector2(0, salto), pj.getWorldCenter(), true);
-//		}
-		
-		
-//		// Adaptado para funcionar con InputProcessor
-//		if(e.isJumping() && puedeSaltar()) {
-////			pj.applyLinearImpulse(new Vector2(0, salto), pj.getWorldCenter(), true);
-//		}
-//		if(e.isRight() && pj.getLinearVelocity().x <= 2) {
-////			pj.applyLinearImpulse(new Vector2(vel, 0), pj.getWorldCenter(), true);
-//		}
-//		if(e.isLeft() && pj.getLinearVelocity().x >= -2) {
-////			pj.applyLinearImpulse(new Vector2(-vel, 0), pj.getWorldCenter(), true);
-//		}
-	}
-	
-	private void disparar() {
 
-//		if(Gdx.input.justTouched() && arma.getBalas() > 0) {
-//			arma.disparar(pj.getPosition());
-//		}
-		
-		// Adaptado para funcionar con InputProcessor
-//		if(e.isClicking() && arma.getBalas() > 0) {
-//			arma.disparar(pj.getPosition());
-//		}
-	}
 	
 	public void recibirDaño(float daño) {
 		this.vida -= daño;
@@ -120,32 +83,31 @@ public class Personaje implements JugadorEventListener{
 //		
 //	}
 	
-	public boolean puedeSaltar() {
-		return (getEstadoActual() != Estado.CAYENDO && getEstadoActual() != Estado.SALTANDO);
-	}
-
-	
-	public Estado getEstadoActual() {
-		return estadoActual;
-	}
-
-	
-	public void aumentarVel(float vel) {
-		this.vel += vel;
-	}
-
-	public void aumentarSalto(float salto) {
-		this.salto += salto;
-	}
-
-	public void aumentarVida(float vida) {
-		this.vida += vida;
-	}
+//	public boolean puedeSaltar() {
+//		return (getEstadoActual() != Estado.CAYENDO && getEstadoActual() != Estado.SALTANDO);
+//	}
+//
+//	
+//	public Estado getEstadoActual() {
+//		return estadoActual;
+//	}
+//
+//	
+//	public void aumentarVel(float vel) {
+//		this.vel += vel;
+//	}
+//
+//	public void aumentarSalto(float salto) {
+//		this.salto += salto;
+//	}
+//
+//	public void aumentarVida(float vida) {
+//		this.vida += vida;
+//	}
 	
 	public void destruir() {
 		muerto = true;
 		Render.spritesADibujar.remove(this.sprite);
-
 }
 	
 	@Override

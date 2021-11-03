@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class ControladorBodies {
 
-	public static ArrayList<Body> cuerposAEliminar = new ArrayList();
+	public static ArrayList<Body> cuerposAEliminar = new ArrayList<Body>();
 	public static World world;
 	
 	

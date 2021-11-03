@@ -18,8 +18,7 @@ public class Carrera extends JuegoBase{
 	@Override
 	public void start(String rutaMapa, Vector2[] spawners) {
 		super.start(rutaMapa, spawners);
-		p.getArma().setBalas(0);
-		spawnPickup();
+		System.out.println("Iniciando carrera...");
 	}
 	
 	@Override
@@ -27,10 +26,10 @@ public class Carrera extends JuegoBase{
 		super.update(delta);
 
 		// A -------------- B (Final)
-		if(tiempoParaEmpezar > 15f && Global.cam.position.x <= puntoFinal) Global.cam.position.x += velCamara * delta;
-		else {
-			tiempoParaEmpezar++;
-		}
+//		if(tiempoParaEmpezar > 15f && Global.cam.position.x <= puntoFinal) Global.cam.position.x += velCamara * delta;
+//		else {
+//			tiempoParaEmpezar++;
+//		}
 		
 //		if(p.getPosition().x > puntoFinal + 1f) {
 //			System.out.println("Ganaste");
@@ -53,16 +52,23 @@ public class Carrera extends JuegoBase{
 //		}else tiempoParaMorir = 0f;
 	}
 
+
+
 	@Override
-	protected void spawnPickup() {
+	public void spawnPickup(int nroPowerup, int posPowerup) {
+		// TODO Auto-generated method stub
 		
-		for(Vector2 coords : spawners) {
-			Powerup p = new OneShot();
-			Body item = ControladorBodies.crearPickup(coords.x, coords.y, 32, 32, BodyType.StaticBody, null);
-			item.setUserData(p);
-			Render.spritesADibujar.add(p.getSprite());
-			p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
-		}
+	}
+
+	@Override
+	public void borrarPickup(int posicion) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cambiarMapa(int mapa) {
+		System.out.println("a");
 		
 	}
 

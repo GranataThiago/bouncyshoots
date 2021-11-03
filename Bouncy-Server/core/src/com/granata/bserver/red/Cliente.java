@@ -49,8 +49,8 @@ public class Cliente {
 	
 	public void crearPersonaje(OrthographicCamera cam) {
 		this.pj = new Personaje(new Sprite(Personajes.values()[posTxt].getSprite()), posTxt);
-		Utiles.jugadores.add(pj);
 		this.pj.inicializarPersonaje(cam);
+		Utiles.jugadores.add(pj);
 	}
 	
 	public Personaje getPj() {

@@ -18,6 +18,7 @@ import com.granata.bserver.utiles.Utiles;
 public class Combate extends JuegoBase{
 
 	private boolean[] ocupado;
+	private int cantPu = 0;
 	
 	@Override
 	public void start(String rutaMapa, Vector2[] spawners) {
@@ -30,8 +31,9 @@ public class Combate extends JuegoBase{
 		super.update(delta);
 		
 		if(tiempoEntreSpawn > 0.75f && ((comprobarEspaciosVacios() == -1) ? false : true)) {
+			System.out.println(cantPu++);
 			tiempoEntreSpawn = 0f;
-//			spawnPickup();
+			spawnPickup();
 		}
 		
 
@@ -77,8 +79,11 @@ public class Combate extends JuegoBase{
 	@Override
 	protected void spawnPickup() {
 		int posicion = comprobarEspaciosVacios();
-
-		Powerup p = Powerups.values()[Utiles.r.nextInt(Powerups.values().length)].getPowerup();
+		
+		int nroPowerup = Utiles.r.nextInt(Powerups.values().length);
+		Powerup p = Powerups.values()[nroPowerup].getPowerup();
+				
+		Render.app.getSv().getHs().enviarMensajeGeneral("SpawnPowerup!" + nroPowerup + "!" + posicion);
 		
 		Vector2 coords = spawners[posicion];
 		ocupado[posicion] = true;
@@ -88,20 +93,23 @@ public class Combate extends JuegoBase{
 		
 		Render.spritesADibujar.add(p.getSprite());
 		p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
+
 	}
 	
 	@Override
 	protected void borrarCuerpos() {
-//		if(!ControladorBodies.world.isLocked()){
-//			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
-//
-//				if(Pickupable.class.isAssignableFrom(ControladorBodies.cuerposAEliminar.get(i).getUserData().getClass()) && p.getEstadoActual() != Estado.MUERTO) {
-//					ocupado[comprobarEspaciosOcupados(ControladorBodies.cuerposAEliminar.get(i).getPosition())] = false;
-//				}
-//				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
-//				ControladorBodies.cuerposAEliminar.remove(i);
-//			}
-//		}
+		if(!ControladorBodies.world.isLocked()){
+			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
+
+				if(Pickupable.class.isAssignableFrom(ControladorBodies.cuerposAEliminar.get(i).getUserData().getClass())) {
+					int pos = comprobarEspaciosOcupados(ControladorBodies.cuerposAEliminar.get(i).getPosition());
+					Render.app.getSv().getHs().enviarMensajeGeneral("BorrarPowerup!" + pos);
+					ocupado[pos] = false;
+				}
+				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
+				ControladorBodies.cuerposAEliminar.remove(i);
+			}
+		}
 	}
 	
 	

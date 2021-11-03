@@ -52,7 +52,7 @@ public class Personaje implements JugadorEventListener{
 		comprobarEstados();
 		arma.update(dt);
 		
-		if(pj.getLinearVelocity().x != 0) {
+		if((pj.getLinearVelocity().y != 0 || pj.getLinearVelocity().x != 0) && getEstadoActual() != Estado.MUERTO) {
 			sprite.setPosition(pj.getPosition().x - (sprite.getWidth() / 2), pj.getPosition().y - ( sprite.getHeight() / 2f));
 			Render.app.getSv().getHs().enviarMensajeGeneral("ModificarPosicion!" + idJugador + "!" + (pj.getPosition().x - (sprite.getWidth() / 2)) + "!" + (pj.getPosition().y - ( sprite.getHeight() / 2f)));
 		}
@@ -62,14 +62,13 @@ public class Personaje implements JugadorEventListener{
 	private void controlarMovimiento() {
 		if(mueveDerecha && pj.getLinearVelocity().x <= 2) {
 			pj.applyLinearImpulse(new Vector2(vel, 0), pj.getWorldCenter(), true);
+			System.out.println("Se está moviendo");
 		}else if(mueveIzquierda && pj.getLinearVelocity().x >= -2) {
 			pj.applyLinearImpulse(new Vector2(-vel, 0), pj.getWorldCenter(), true);
-		}
-	}
-
-	private void saltar() {
-		if(puedeSaltar()) {
+			System.out.println("Se está moviendo");
+		}else if(usaSalto && puedeSaltar()) {
 			pj.applyLinearImpulse(new Vector2(0, salto), pj.getWorldCenter(), true);
+			System.out.println("Se está moviendo");
 		}
 	}
 	
@@ -81,15 +80,18 @@ public class Personaje implements JugadorEventListener{
 
 	public void recibirDaño(float daño) {
 		this.vida -= daño;
-		if(this.vida <= 0) {
+		if(this.vida <= 0 && getEstadoActual() != Estado.MUERTO) {
 			destruir();
 		}
 	}
 	
 	public void destruir() {
+
 		muerto = true;
+		Render.app.getSv().getHs().enviarMensajeGeneral("BorrarJugador!" + idJugador);
 		Render.spritesADibujar.remove(this.sprite);
-		ControladorBodies.cuerposAEliminar.add(this.pj);
+		ControladorBodies.cuerposAEliminar.add(getBody());
+
 	}
 	
 	public Vector2 getPosition() {
@@ -154,6 +156,8 @@ public class Personaje implements JugadorEventListener{
 			mueveDerecha = true;
 		}else if(dir.equals("Izquierda")) {
 			mueveIzquierda = true;
+		}else if(dir.equals("Salto")) {
+			usaSalto = true;
 		}
 		
 	}
@@ -164,6 +168,8 @@ public class Personaje implements JugadorEventListener{
 			mueveDerecha = false;
 		}else if(dir.equals("Izquierda")) {
 			mueveIzquierda = false;
+		}else if(dir.equals("Salto")) {
+			usaSalto = false;
 		}
 		
 	}

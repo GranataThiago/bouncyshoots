@@ -16,9 +16,11 @@ public class Bala extends Sprite implements Movible, Poolable{
 	private Body bala;
 
 	// Movimiento de la bala
-	Vector2 direccion;
+	private Vector2 direccion;
 
 	// Configuración Balas
+	private boolean destruido = false;
+	private int nroBala;
 	private float vel = 10f, daño, incDañoRebotes;
 	private int rebotes;
 	private Sprite sprite;
@@ -35,12 +37,12 @@ public class Bala extends Sprite implements Movible, Poolable{
 		this.daño = 30;
 	}
 	
-	public void crearBala(Vector2 curPos, Vector3 target, int rebotes, float incDañoRebotes, float daño) {
+	public void crearBala(Vector2 curPos, Vector3 target, int rebotes, float incDañoRebotes, float daño, int nro) {
 		sprite = new Sprite(Render.bala);
 		sprite.setSize(16 / Config.PPM, 16 / Config.PPM);
 		Render.spritesADibujar.add(sprite);
 		
-		
+		this.nroBala = nro;
 		this.rebotes = rebotes;
 		this.incDañoRebotes = incDañoRebotes;
 		this.daño = daño;
@@ -80,8 +82,10 @@ public class Bala extends Sprite implements Movible, Poolable{
 	}
 	
 	public void update(int cantBalas) {
-		sprite.setPosition(getPosicion().x - (sprite.getWidth() / 2), getPosicion().y - (sprite.getHeight() / 2));
-		Render.app.getSv().getHs().enviarMensajeGeneral("ModificarPosBala!" + cantBalas + "!" + (getPosicion().x - (sprite.getWidth() / 2)) + "!" + (getPosicion().y - (sprite.getHeight() / 2)));
+		if(!destruido) {
+			sprite.setPosition(getPosicion().x - (sprite.getWidth() / 2), getPosicion().y - (sprite.getHeight() / 2));
+			Render.app.getSv().getHs().enviarMensajeGeneral("ModificarPosBala!" + cantBalas + "!" + (getPosicion().x - (sprite.getWidth() / 2)) + "!" + (getPosicion().y - (sprite.getHeight() / 2)));
+		}
 	}
 	
 	public void rebotar() {
@@ -93,8 +97,10 @@ public class Bala extends Sprite implements Movible, Poolable{
 	}
 
 	public void destruir() {
+		destruido = true;
 		ControladorBodies.cuerposAEliminar.add(bala);
 		Render.spritesADibujar.remove(sprite);
+		Render.app.getSv().getHs().enviarMensajeGeneral("BorrarBala!" + nroBala);
 	}
 	
 	@Override
@@ -105,7 +111,6 @@ public class Bala extends Sprite implements Movible, Poolable{
 	@Override
 	public void reset() {
 		this.direccion.set(0, 0);
-		
-		
+		destruido = false;
 	}
 }

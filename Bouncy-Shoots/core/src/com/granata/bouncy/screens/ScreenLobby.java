@@ -119,7 +119,7 @@ public class ScreenLobby implements Screen{
         stage.draw();
 
         if(Global.partidaIniciada) {
-			Render.app.setScreen(new ScreenJuego(2));
+			Render.app.setScreen(new ScreenJuego(Global.nroMapaInicial));
         }
         
         // SOLO PARA DEBUGEAR!

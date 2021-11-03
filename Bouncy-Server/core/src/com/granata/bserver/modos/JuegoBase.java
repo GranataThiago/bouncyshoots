@@ -14,6 +14,7 @@ import com.granata.bserver.elementos.Personaje.Estado;
 import com.granata.bserver.managers.CollisionListener;
 import com.granata.bserver.managers.ControladorBalas;
 import com.granata.bserver.managers.ControladorBodies;
+import com.granata.bserver.managers.JugadorEventListener;
 import com.granata.bserver.mapas.MapaTiled;
 import com.granata.bserver.red.Cliente;
 import com.granata.bserver.screens.ScreenJuego;
@@ -73,20 +74,20 @@ public abstract class JuegoBase {
 		b2r.render(ControladorBodies.world, cam.combined);
 
 		// Dibujamos al personaje y actualizamos la cámara
+		int cantVivos = 0;
 		Render.sb.begin();
 			for(Cliente c : Render.app.getSv().getClientes()) {
-				c.getPj().update(delta);
+				if(c.getPj().getEstadoActual() != Estado.MUERTO) {
+					c.getPj().update(delta);
+					System.out.println(c.getPj().getPosition());
+					cantVivos++;
+				}
 			}
 			Render.dibujarSprites();
 		Render.sb.end();
 		
-//		if(p.getEstadoActual() == Estado.MUERTO) {
-//			Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
-//		}
-		
-
-		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-			Gdx.app.exit();
+		if(cantVivos <= 1) {
+			Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
 		}
 		
 		int cantBalas = 0;
@@ -95,13 +96,17 @@ public abstract class JuegoBase {
 			cantBalas++;
 		}
 		
+		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+			Gdx.app.exit();
+		}
+		
+		
 	}
 	
 	public void update(float delta) {
 		tiempoEntreSpawn += delta;
-		mapa.update(delta, cam);
 		
-
+		mapa.update(delta, cam);
 	}
 	
 	protected abstract void spawnPickup();
@@ -112,6 +117,7 @@ public abstract class JuegoBase {
 	
 	public void dispose() {
 		borrarCuerpos();
+		Utiles.jugadores.removeAll(Utiles.jugadores);
 		ControladorBodies.world.dispose();
 		b2r.dispose();
 		mapa.dispose();

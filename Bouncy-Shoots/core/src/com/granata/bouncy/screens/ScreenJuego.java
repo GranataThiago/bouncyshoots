@@ -1,5 +1,6 @@
 package com.granata.bouncy.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.granata.bouncy.mapas.Mapas;
 import com.granata.bouncy.modos.JuegoBase;
@@ -12,13 +13,18 @@ public class ScreenJuego implements Screen{
 	public ScreenJuego(int numMapa) {
 		mapa = Mapas.values()[numMapa];
 		juego = mapa.getModo();
-		System.out.println(Mapas.values()[numMapa].getModo());
 	}
 	
 	
 	@Override
 	public void show() {
-		juego.start(mapa.getRuta(), mapa.getSpawners());
+		Gdx.app.postRunnable(new Runnable() {
+			@Override
+			public void run() {
+				juego.start(mapa.getRuta(), mapa.getSpawners());
+			}
+		});
+
 	}
 	
 	public void update(float delta) {
@@ -55,7 +61,14 @@ public class ScreenJuego implements Screen{
 
 	@Override
 	public void dispose() {
-		juego.dispose();
+		Gdx.app.postRunnable(new Runnable() {
+			@Override
+			public void run() {
+				juego.dispose();
+				System.out.println("disposeado");
+			}
+		});
+//		juego.dispose();
 	}	
 	
 

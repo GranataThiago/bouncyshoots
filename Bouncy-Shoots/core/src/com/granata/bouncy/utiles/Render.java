@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.granata.bouncy.BouncyShoots;
 
 public abstract class Render {
@@ -15,6 +16,7 @@ public abstract class Render {
 	public static BouncyShoots app;
 	public static ArrayList<Sprite> spritesADibujar = new ArrayList<Sprite>();
 	public static Texture bala = new Texture("Sin-título-2.png");
+	public static TextureRegion sPowerups = new TextureRegion(new Texture("powerups.png"));
 	
 	public static void limpiarPantallaB() {
 		Gdx.gl.glClearColor(.5f, 0f, 0.2f, 1);

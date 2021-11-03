@@ -1,16 +1,15 @@
 package com.granata.bouncy.powerups;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.granata.bouncy.elementos.Personaje;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Render;
 
-public abstract class Powerup implements Pickupable{
+public abstract class Powerup {
 
 	// Sprites powerups
-	private TextureRegion sPowerups = new TextureRegion(new Texture("powerups.png"));
+	private TextureRegion sPowerups = Render.sPowerups;
 	
 	// Todo está en unidades
 	// Incrementos relativos al personaje
@@ -99,15 +98,7 @@ public abstract class Powerup implements Pickupable{
 		return dañoJugador;
 	}
 	
-	@Override
-	public void onPickup(Personaje pj) {
-		pj.aumentarVel(incVel);
-		pj.aumentarSalto(incSalto);
-		pj.aumentarVida(incVida);
-		pj.getArma().aumentarRebotes(incRebotes);
-		pj.getArma().setIncDañoRebotes(incDañoRebotes);
-		pj.getArma().setBalas(pj.getArma().getBalas() + incBalas);
-		pj.getArma().setDaño(30 + incDaño);
+	public void destruir() {
 		Render.spritesADibujar.remove(this.sprite);
 	}
 	

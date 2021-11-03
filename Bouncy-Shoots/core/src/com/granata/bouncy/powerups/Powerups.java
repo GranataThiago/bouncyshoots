@@ -34,12 +34,11 @@ public enum Powerups {
 
 	public Powerup getPowerup() {
 		String clase = "com.granata.bouncy.powerups." + this.clase;
-
 		Powerup p = null;
 		try {
 			
 			p = (Powerup) Class.forName(clase).getDeclaredConstructor().newInstance();
-			
+
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
 		}

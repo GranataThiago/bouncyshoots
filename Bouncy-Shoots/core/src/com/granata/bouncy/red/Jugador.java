@@ -36,8 +36,8 @@ public class Jugador {
 	
 	public void crearPersonaje() {
 		this.pj = new Personaje(new Sprite(Personajes.values()[posicion].getSprite()), esCliente);
-		Utiles.jugadores.add(pj);
 		this.pj.inicializarPersonaje();
+		Utiles.jugadores.add(pj);
 	}
 	
 	
