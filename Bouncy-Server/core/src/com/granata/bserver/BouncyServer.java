@@ -1,10 +1,14 @@
 package com.granata.bserver;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.granata.bserver.managers.ControladorNiveles;
+import com.granata.bserver.red.Cliente;
 import com.granata.bserver.red.Servidor;
+import com.granata.bserver.screens.ScreenJuego;
 import com.granata.bserver.screens.ScreenMenu;
+import com.granata.bserver.screens.ScreenResultados;
 import com.granata.bserver.utiles.Render;
 
 public class BouncyServer extends Game {
@@ -17,15 +21,35 @@ public class BouncyServer extends Game {
 		Render.app = this;
 		sv = new Servidor();
 		Render.sb = new SpriteBatch();
-		ControladorNiveles.generarMapas(2);
+		ControladorNiveles.generarMapas(4);
 		this.setScreen(new ScreenMenu());
 	}
-
-	public int cambiarMapa() {
-		int mapa = ControladorNiveles.niveles.get(mapaActual);
-		System.out.println("Se le envia al cliente el mapa " + mapa + " y el servidor carga el mapa: " + mapa);
-		sv.getHs().enviarMensajeGeneral("CambiarMapa!" + mapa);
-		return ControladorNiveles.niveles.get(mapaActual++);
+	
+	public Screen pasarNivel() {
+		if(mapaActual < ControladorNiveles.niveles.size()) {
+			int mapa = ControladorNiveles.niveles.get(mapaActual);
+			System.out.println("Se le envia al cliente el nro mapa " + ControladorNiveles.niveles.get(mapa) + " y el servidor carga la pos mapa: " + ControladorNiveles.niveles.get(mapaActual));
+			sv.getHs().enviarMensajeGeneral("CambiarMapa!" + mapa);
+			return new ScreenJuego(ControladorNiveles.niveles.get(mapaActual++));
+		}
+		
+		return new ScreenResultados(calcularGanador());
+	}
+	
+	public int calcularGanador() {
+		int ganador = -1;
+		
+		for (int i = 0; i < sv.getClientes().size(); i++) {
+			if(i==0) {
+				ganador = i;
+			} else {
+				if(sv.getClientes().get(i).getScore() > sv.getClientes().get(ganador).getScore()) {
+					ganador = i;
+				}
+			}
+		}
+		
+		return ganador;
 	}
 
 	@Override
@@ -35,6 +59,7 @@ public class BouncyServer extends Game {
 	
 	@Override
 	public void dispose () {
+		System.out.println("Disposée el spritebatch");
 		Render.sb.dispose();
 	}
 	

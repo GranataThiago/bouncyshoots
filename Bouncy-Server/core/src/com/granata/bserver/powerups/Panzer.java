@@ -2,8 +2,8 @@ package com.granata.bserver.powerups;
 
 public class Panzer extends Powerup{
 
-	public Panzer() {
-		super(1, 0, 0, 150, 0, 0, true, 0);
+	public Panzer(int pos) {
+		super(1, 0, 0, 150, 0, 0, true, 0, pos);
 	}
 
 }

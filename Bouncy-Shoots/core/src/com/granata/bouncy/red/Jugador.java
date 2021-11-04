@@ -1,10 +1,8 @@
 package com.granata.bouncy.red;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.granata.bouncy.elementos.Personaje;
 import com.granata.bouncy.elementos.Personajes;
-import com.granata.bouncy.utiles.Render;
 import com.granata.bouncy.utiles.Utiles;
 
 public class Jugador {

@@ -22,7 +22,7 @@ public class Bala extends Sprite implements Movible, Poolable{
 	private boolean destruido = false;
 	private int nroBala;
 	private float vel = 10f, daño, incDañoRebotes;
-	private int rebotes;
+	private int rebotes, idTirador;
 	private Sprite sprite;
 	
 	public Bala() {
@@ -37,7 +37,7 @@ public class Bala extends Sprite implements Movible, Poolable{
 		this.daño = 30;
 	}
 	
-	public void crearBala(Vector2 curPos, Vector3 target, int rebotes, float incDañoRebotes, float daño, int nro) {
+	public void crearBala(Vector2 curPos, Vector3 target, int rebotes, float incDañoRebotes, float daño, int nro, int idTirador) {
 		sprite = new Sprite(Render.bala);
 		sprite.setSize(16 / Config.PPM, 16 / Config.PPM);
 		Render.spritesADibujar.add(sprite);
@@ -46,6 +46,7 @@ public class Bala extends Sprite implements Movible, Poolable{
 		this.rebotes = rebotes;
 		this.incDañoRebotes = incDañoRebotes;
 		this.daño = daño;
+		this.idTirador = idTirador;
 		
 		bala = ControladorBodies.crearEsfera(curPos.x * Config.PPM, curPos.y  * Config.PPM, 6, false, 1, 0);
 		bala.setUserData(this);
@@ -75,6 +76,10 @@ public class Bala extends Sprite implements Movible, Poolable{
 	
 	public float getDaño() {
 		return this.daño;
+	}
+	
+	public int getIdTirador() {
+		return this.idTirador;
 	}
 	
 	public Sprite getSprite() {

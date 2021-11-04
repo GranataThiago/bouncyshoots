@@ -89,7 +89,12 @@ public class HiloCliente extends Thread{
 				Render.app.getCliente().getClientes().get(Integer.valueOf(comando[1])).getPj().destruir();
 			}else if(comando[0].equals("SpawnPowerup")) {
 				System.out.println("Se recibió un powerup");
-				Utiles.juegoListener.spawnPickup(Integer.valueOf(comando[1]), Integer.valueOf(comando[2]));
+				if(comando.length > 2) {
+					Utiles.juegoListener.spawnPickup(Integer.valueOf(comando[1]), Integer.valueOf(comando[2]));
+				}else {
+					// TO-DO: Arreglar esto más adelante
+					Utiles.juegoListener.spawnPickup(0, Integer.valueOf(comando[1]));
+				}
 			}else if(comando[0].equals("BorrarPowerup")) {
 				Utiles.juegoListener.borrarPickup(Integer.valueOf(comando[1]));
 			}else if(comando[0].equals("CambiarMapa")) {

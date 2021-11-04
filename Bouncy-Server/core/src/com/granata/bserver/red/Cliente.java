@@ -17,8 +17,11 @@ public class Cliente {
 
 	// Datos del Cliente/Jugador
 	private String nombre;
-	private int posTxt;
 	private Personaje pj;
+	private int posTxt;
+	
+	//Partida
+	private float score = 0;
 	
 	public Cliente(InetAddress ip, int puerto, String nombre, int posTxt) {
 		this.ip = ip;
@@ -53,6 +56,15 @@ public class Cliente {
 		Utiles.jugadores.add(pj);
 	}
 	
+	public float getScore() {
+		return score;
+	}
+
+	public void setScore(float score) {
+		this.score += score;
+		System.out.println("Cliente: " + posTxt + " score: " + this.score);
+	}
+
 	public Personaje getPj() {
 		return this.pj;
 	}

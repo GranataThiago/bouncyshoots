@@ -30,8 +30,7 @@ public class Combate extends JuegoBase{
 	public void update(float delta) {
 		super.update(delta);
 		
-		if(tiempoEntreSpawn > 0.75f && ((comprobarEspaciosVacios() == -1) ? false : true)) {
-			System.out.println(cantPu++);
+		if(tiempoEntreSpawn > 1f && ((comprobarEspaciosVacios() == -1) ? false : true)) {
 			tiempoEntreSpawn = 0f;
 			spawnPickup();
 		}
@@ -81,7 +80,7 @@ public class Combate extends JuegoBase{
 		int posicion = comprobarEspaciosVacios();
 		
 		int nroPowerup = Utiles.r.nextInt(Powerups.values().length);
-		Powerup p = Powerups.values()[nroPowerup].getPowerup();
+		Powerup p = Powerups.values()[nroPowerup].getPowerup(posicion);
 				
 		Render.app.getSv().getHs().enviarMensajeGeneral("SpawnPowerup!" + nroPowerup + "!" + posicion);
 		
@@ -102,9 +101,7 @@ public class Combate extends JuegoBase{
 			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
 
 				if(Pickupable.class.isAssignableFrom(ControladorBodies.cuerposAEliminar.get(i).getUserData().getClass())) {
-					int pos = comprobarEspaciosOcupados(ControladorBodies.cuerposAEliminar.get(i).getPosition());
-					Render.app.getSv().getHs().enviarMensajeGeneral("BorrarPowerup!" + pos);
-					ocupado[pos] = false;
+					ocupado[comprobarEspaciosOcupados(ControladorBodies.cuerposAEliminar.get(i).getPosition())] = false;
 				}
 				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
 				ControladorBodies.cuerposAEliminar.remove(i);

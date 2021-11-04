@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.granata.bserver.elementos.Personaje.Estado;
 import com.granata.bserver.managers.ControladorBodies;
 import com.granata.bserver.managers.JugadorEventListener;
 import com.granata.bserver.utiles.Config;
@@ -58,6 +59,12 @@ public class Personaje implements JugadorEventListener{
 		}
 
 	}
+	
+	public boolean chequearFueraDeCamara(OrthographicCamera cam) {
+		System.out.println("chequeando");
+		if(!cam.frustum.pointInFrustum(getPosition().x, getPosition().y, 0) && getEstadoActual() != Estado.MUERTO) return true;	
+		else return false;
+	}
 
 	private void controlarMovimiento() {
 		if(mueveDerecha && pj.getLinearVelocity().x <= 2) {
@@ -78,11 +85,21 @@ public class Personaje implements JugadorEventListener{
 		}
 	}
 
-	public void recibirDaño(float daño) {
+	public void recibirDaño(float daño, int tirador) {
 		this.vida -= daño;
 		if(this.vida <= 0 && getEstadoActual() != Estado.MUERTO) {
-			destruir();
+			destruir(tirador);
 		}
+	}
+	
+	public void destruir(int tirador) {
+
+		muerto = true;
+		Render.app.getSv().getHs().enviarMensajeGeneral("BorrarJugador!" + idJugador);
+		Render.app.getSv().getClientes().get(tirador).setScore(100);
+		Render.spritesADibujar.remove(this.sprite);
+		ControladorBodies.cuerposAEliminar.add(getBody());
+
 	}
 	
 	public void destruir() {

@@ -25,8 +25,9 @@ public abstract class Powerup implements Pickupable{
 	private float duracion;
 	
 	private Sprite sprite;
-
-	public Powerup(int lugar, float incVel, float incSalto, float incVida, float incRebotes, float incDañoRebotes, boolean dañoJugador, float duracion) {
+	private int pos;
+	
+	public Powerup(int lugar, float incVel, float incSalto, float incVida, float incRebotes, float incDañoRebotes, boolean dañoJugador, float duracion, int pos) {
 		this.incVel = incVel;
 		this.incSalto = incSalto;
 		this.incVida = incVida;
@@ -34,11 +35,11 @@ public abstract class Powerup implements Pickupable{
 		this.incDañoRebotes = incDañoRebotes;
 		this.dañoJugador = dañoJugador;
 		this.duracion = duracion;
-
+		this.pos = pos;
 		inicializarSprite(lugar);
 	}
 	
-	public Powerup(int lugar, int incBalas, int incDaño) {
+	public Powerup(int lugar, int incBalas, int incDaño, int pos) {
 		this.incVel = 0;
 		this.incSalto = 0;
 		this.incVida = 0;
@@ -49,6 +50,7 @@ public abstract class Powerup implements Pickupable{
 		
 		this.incBalas = incBalas;
 		this.incDaño = incDaño;
+		this.pos = pos;
 		
 		inicializarSprite(lugar);
 	}
@@ -94,7 +96,6 @@ public abstract class Powerup implements Pickupable{
 		return incDañoRebotes;
 	}
 
-
 	public boolean isDañoJugador() {
 		return dañoJugador;
 	}
@@ -109,6 +110,8 @@ public abstract class Powerup implements Pickupable{
 		pj.getArma().setBalas(pj.getArma().getBalas() + incBalas);
 		pj.getArma().setDaño(30 + incDaño);
 		Render.spritesADibujar.remove(this.sprite);
+		Render.app.getSv().getHs().enviarMensajeGeneral("BorrarPowerup!" + pos);
+
 	}
 	
 }

@@ -34,22 +34,6 @@ public class Bala extends Sprite implements Movible, Poolable{
 		sprite = new Sprite(Render.bala);
 		sprite.setSize(16 / Config.PPM, 16 / Config.PPM);
 		Render.spritesADibujar.add(sprite);
-//		
-//		this.rebotes = rebotes;
-//		this.incDañoRebotes = incDañoRebotes;
-//		this.daño = daño;
-//		
-//		bala = ControladorBodies.crearEsfera(curPos.x * Config.PPM, curPos.y  * Config.PPM, 6, false, 1, 0);
-//		bala.setUserData(this);
-//		bala.setAngularDamping(0);
-//		bala.setLinearDamping(0);
-//		bala.setGravityScale(0);
-//		
-//	    direccion = new Vector2(target.x, target.y);
-//	    direccion.sub(bala.getPosition());
-//	    direccion.nor();
-//	    
-//	    bala.setLinearVelocity(direccion.scl(vel));
 
 	}
 	

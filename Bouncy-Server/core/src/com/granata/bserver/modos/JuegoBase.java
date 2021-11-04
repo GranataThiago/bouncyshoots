@@ -60,48 +60,47 @@ public abstract class JuegoBase {
 	}
 	
 	public void render(float delta) {
-		update(delta);
-		Render.limpiarPantallaN();
-		
-		// Renderiza el mapa
-		mapa.render();
-		Render.sb.setProjectionMatrix(cam.combined);
 
-		// Como "pasa" el tiempo y el render del Box2D
-		// Como primer argumento funcionaron "bien" Gdx.graphics.getDeltaTime(); o 1/60f
-		ControladorBodies.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-		borrarCuerpos();
-		b2r.render(ControladorBodies.world, cam.combined);
+			update(delta);
+			Render.limpiarPantallaN();
+			
+			// Renderiza el mapa
+			mapa.render();
+			Render.sb.setProjectionMatrix(cam.combined);
 
-		// Dibujamos al personaje y actualizamos la cámara
-		int cantVivos = 0;
-		Render.sb.begin();
-			for(Cliente c : Render.app.getSv().getClientes()) {
-				if(c.getPj().getEstadoActual() != Estado.MUERTO) {
-					c.getPj().update(delta);
-					System.out.println(c.getPj().getPosition());
-					cantVivos++;
+			// Como "pasa" el tiempo y el render del Box2D
+			// Como primer argumento funcionaron "bien" Gdx.graphics.getDeltaTime(); o 1/60f
+			ControladorBodies.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+			borrarCuerpos();
+			b2r.render(ControladorBodies.world, cam.combined);
+
+			// Dibujamos al personaje y actualizamos la cámara
+			int cantVivos = 0;
+			Render.sb.begin();
+				for(Cliente c : Render.app.getSv().getClientes()) {
+					if(c.getPj().getEstadoActual() != Estado.MUERTO) {
+						c.getPj().update(delta);
+						cantVivos++;
+					}
 				}
+				Render.dibujarSprites();
+			Render.sb.end();
+			
+			if(cantVivos <= 1) {
+				Render.app.setScreen(Render.app.pasarNivel());
 			}
-			Render.dibujarSprites();
-		Render.sb.end();
-		
-		if(cantVivos <= 1) {
-			Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
+			
+			int cantBalas = 0;
+			for(Bala b : ControladorBalas.balasActivas) {
+				b.update(cantBalas);
+				cantBalas++;
+			}
+			
+			if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+				Gdx.app.exit();
+			}
 		}
-		
-		int cantBalas = 0;
-		for(Bala b : ControladorBalas.balasActivas) {
-			b.update(cantBalas);
-			cantBalas++;
-		}
-		
-		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-			Gdx.app.exit();
-		}
-		
-		
-	}
+	
 	
 	public void update(float delta) {
 		tiempoEntreSpawn += delta;

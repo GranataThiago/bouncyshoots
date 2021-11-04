@@ -32,13 +32,13 @@ public enum Powerups {
 		return clase;
 	}
 
-	public Powerup getPowerup() {
+	public Powerup getPowerup(int posicion) {
 		String clase = "com.granata.bserver.powerups." + this.clase;
 
 		Powerup p = null;
 		try {
-			
-			p = (Powerup) Class.forName(clase).getDeclaredConstructor().newInstance();
+
+			p = (Powerup) Class.forName(clase).getDeclaredConstructor(int.class).newInstance(posicion);
 			
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | ClassNotFoundException e) {

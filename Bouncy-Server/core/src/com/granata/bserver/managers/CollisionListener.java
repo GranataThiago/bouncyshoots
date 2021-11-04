@@ -31,7 +31,7 @@ public class CollisionListener implements ContactListener{
 			Body bala = ((oA.getClass() == Bala.class) ? cuerpoA : cuerpoB);
 			Bala b = (Bala) bala.getUserData();
 			Personaje pj =  (Personaje) ((oA.getClass() == Personaje.class) ? oA : oB);
-			pj.recibirDaño(b.getDaño());
+			pj.recibirDaño(b.getDaño(), b.getIdTirador());
 			b.destruir();
 
 				
