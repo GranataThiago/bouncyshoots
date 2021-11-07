@@ -4,9 +4,9 @@ import java.net.InetAddress;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.granata.bserver.elementos.Personaje;
 import com.granata.bserver.elementos.Personajes;
-import com.granata.bserver.utiles.Render;
 import com.granata.bserver.utiles.Utiles;
 
 public class Cliente {
@@ -50,9 +50,9 @@ public class Cliente {
 		return posTxt;
 	}
 	
-	public void crearPersonaje(OrthographicCamera cam) {
+	public void crearPersonaje(OrthographicCamera cam, Vector2 spawn) {
 		this.pj = new Personaje(new Sprite(Personajes.values()[posTxt].getSprite()), posTxt);
-		this.pj.inicializarPersonaje(cam);
+		this.pj.inicializarPersonaje(cam, spawn);
 		Utiles.jugadores.add(pj);
 	}
 	

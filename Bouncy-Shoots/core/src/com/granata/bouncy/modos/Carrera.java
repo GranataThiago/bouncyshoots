@@ -18,8 +18,8 @@ public class Carrera extends JuegoBase{
 
 	
 	@Override
-	public void start(String rutaMapa, Vector2[] spawners) {
-		super.start(rutaMapa, spawners);
+	public void start(String rutaMapa) {
+		super.start(rutaMapa);
 		System.out.println("Iniciando carrera...");
 	}
 	
@@ -34,24 +34,16 @@ public class Carrera extends JuegoBase{
 	public void render(float delta) {
 		super.render(delta);
 		Render.sb.setProjectionMatrix(Global.cam.combined);
-//		if(!this.cam.frustum.pointInFrustum(p.getPosition().x, p.getPosition().y, 0) && p.getEstadoActual() != Estado.MUERTO) {
-//			
-//			tiempoParaMorir += delta;
-//			if(tiempoParaMorir > 0.5f) {
-//				p.destruir();
-//			}
-//			
-//		}else tiempoParaMorir = 0f;
 	}
 
 
 
 	@Override
 	public void spawnPickup(int nroPowerup, int posPowerup) {
-		if(posPowerup < spawners.length) {
+		if(posPowerup < spawners.size()) {
 			Powerup p = new OneShot();
 			powerups.add(p);
-			Vector2 coords = spawners[posPowerup];
+			Vector2 coords = spawners.get(posPowerup);
 			
 			Render.spritesADibujar.add(p.getSprite());
 			p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
@@ -60,26 +52,32 @@ public class Carrera extends JuegoBase{
 
 	@Override
 	public void borrarPickup(int posicion) {
-		Vector2 coords = spawners[posicion];
+		Vector2 coords = spawners.get(posicion);
 		int i = 0;
 		boolean borrado = false;
 		
 		do {
 			
-			if(coords.x / Config.PPM - (powerups.get(i).getSprite().getWidth() / 2) == powerups.get(i).getSprite().getX() && coords.y / Config.PPM - (powerups.get(i).getSprite().getHeight() / 2) == powerups.get(i).getSprite().getY()) {
+			if(powerups.size() > posicion && coords.x / Config.PPM - (powerups.get(i).getSprite().getWidth() / 2) == powerups.get(i).getSprite().getX() && coords.y / Config.PPM - (powerups.get(i).getSprite().getHeight() / 2) == powerups.get(i).getSprite().getY()) {
 				powerups.get(i).destruir();
 				powerups.remove(i);
 				borrado = true;
 			}
 			
 			i++;
-		}while(!borrado && i < spawners.length);
+		}while(!borrado && i < spawners.size());
 		
 	}
 
 	@Override
 	public void cambiarMapa(int mapa) {
 		Render.app.setScreen(new ScreenJuego(mapa));
+		
+	}
+
+	@Override
+	public void moverCamaraX(float x) {
+		Global.cam.position.x = x;
 		
 	}
 

@@ -1,5 +1,7 @@
 package com.granata.bouncy.modos;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,24 +38,24 @@ public abstract class JuegoBase implements JuegoEventListener{
 	
 	// Mapa
 	private MapaTiled mapa;
-	protected Vector2[] spawners;
+	protected ArrayList<Vector2> spawners;
 	
 	// Cosas del nivel en si
 	protected float tiempoEntreSpawn = 0f;
 	
-	public void start(String rutaMapa, Vector2[] spawners) {
-		this.spawners = spawners;
+	public void start(String rutaMapa) {
+		mapa = new MapaTiled(rutaMapa);
+		spawners = mapa.getSpawners();
+		for(Jugador j : Render.app.getCliente().getClientes()) {
+			j.crearPersonaje();
+		}
+		p = Render.app.getCliente().getClientes().get(Render.app.getCliente().getId()).getPj();
+
 		Utiles.juegoListener = this;
 		
 		Global.cam = new OrthographicCamera();
 		vp = new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM);
 
-		
-		for(Jugador j : Render.app.getCliente().getClientes()) {
-			j.crearPersonaje();
-		}
-		p = Render.app.getCliente().getClientes().get(Render.app.getCliente().getId()).getPj();
-		mapa = new MapaTiled(rutaMapa);
 		Global.cam.setToOrtho(false, vp.getWorldWidth(), vp.getWorldHeight());
 
 	}

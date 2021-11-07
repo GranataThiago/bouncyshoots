@@ -20,19 +20,20 @@ public class HiloCliente extends Thread{
 	private DatagramSocket socket;
 	private InetAddress ipServer;
 	private int puerto = 6767;
-	private boolean fin = false;
+	private boolean fin = false, encuentreServer = false;
 	
 	public HiloCliente() {
+		
+			try {
+				ipServer = InetAddress.getByName("255.255.255.255");
+				socket = new DatagramSocket();
+			} catch (SocketException | UnknownHostException e) {
+				e.printStackTrace();
+			}
+			enviarMensaje("Conexion!" + Nombres.getNombreAleatorio());
 
-		try {
-			ipServer = InetAddress.getByName("255.255.255.255");
-			socket = new DatagramSocket();
-		} catch (SocketException | UnknownHostException e) {
-			e.printStackTrace();
-		}
-		enviarMensaje("Conexion!" + Nombres.getNombreAleatorio());
 	}
-	
+
 	public void enviarMensaje(String msg) {
 		byte[] data = msg.getBytes();
 		DatagramPacket dp = new DatagramPacket(data, data.length, ipServer, puerto);
@@ -43,7 +44,7 @@ public class HiloCliente extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void run() {
 		do {
@@ -54,7 +55,8 @@ public class HiloCliente extends Thread{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			procesarMensaje(dp);
+
+			procesarMensaje(dp);			
 		}while(!fin);
 	}
 	
@@ -68,12 +70,16 @@ public class HiloCliente extends Thread{
 				boolean esCliente = (Render.app.getCliente().getId() == Integer.valueOf(comando[1]) ? true : false);
 				Render.app.getCliente().getClientes().add(new Jugador(comando[2], Integer.valueOf(comando[3]), esCliente));
 			}else if(comando[0].equals("OK")) {
+				System.out.println("El server respondió");
 				ipServer = dp.getAddress();
 				Render.app.getCliente().setId(Integer.valueOf(comando[1]));
 			}else if(comando[0].equals("ModificarPosicion")) {
-				if(Utiles.jugadores != null) {
+				// TO-DO: Arreglar esta linea.
+				if(Utiles.jugadores.size() > Integer.valueOf(comando[1])) {
 					Utiles.jugadores.get(Integer.valueOf(comando[1])).actualizarPosicion(Float.parseFloat(comando[2]), Float.parseFloat(comando[3]));
 				}
+			}else if(comando[0].equals("ModificarDireccion")){
+				Utiles.jugadores.get(Integer.valueOf(comando[1])).cambiarDireccion(Boolean.parseBoolean(comando[2]));
 			}else if(comando[0].equals("Disparo")) {
 				if(Utiles.jugadores != null) {
 					System.out.println("Disparó");
@@ -89,9 +95,9 @@ public class HiloCliente extends Thread{
 				Render.app.getCliente().getClientes().get(Integer.valueOf(comando[1])).getPj().destruir();
 			}else if(comando[0].equals("SpawnPowerup")) {
 				System.out.println("Se recibió un powerup");
-				if(comando.length > 2) {
+				if(comando.length > 2 && Utiles.juegoListener != null) {
 					Utiles.juegoListener.spawnPickup(Integer.valueOf(comando[1]), Integer.valueOf(comando[2]));
-				}else {
+				}else if(Utiles.juegoListener != null){
 					// TO-DO: Arreglar esto más adelante
 					Utiles.juegoListener.spawnPickup(0, Integer.valueOf(comando[1]));
 				}
@@ -100,12 +106,20 @@ public class HiloCliente extends Thread{
 			}else if(comando[0].equals("CambiarMapa")) {
 				Utiles.juegoListener.cambiarMapa(Integer.valueOf(comando[1]));
 			}else if(comando[0].equals("comenzar")) {
+				// TO-DO: Cambiar el diseño de esta funcionalidad
 				Global.partidaIniciada = true;
 				Global.nroMapaInicial = Integer.valueOf(comando[1]);
+			}else if(comando[0].equals("MostrarResultados")) {
+				Render.app.mostrarResultados(Integer.valueOf(comando[1]));
+			}else if(comando[0].equals("MoverCamaraX")) {
+				Utiles.juegoListener.moverCamaraX(Float.valueOf(comando[1]));
 			}
 		}else {
 			if(msg.equals("puedeComenzar")) {
 				Global.puedeIniciar = true;
+			}else if(msg.equals("terminarPartida")) {
+				Global.partidaIniciada = false;
+				Render.app.getCliente().getClientes().removeAll(Render.app.getCliente().getClientes());
 			}
 		}
 		

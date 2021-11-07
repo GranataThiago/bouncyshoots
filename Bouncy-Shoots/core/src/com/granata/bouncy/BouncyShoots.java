@@ -1,15 +1,16 @@
 package com.granata.bouncy;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.granata.bouncy.managers.ControladorNiveles;
 import com.granata.bouncy.red.Cliente;
 import com.granata.bouncy.screens.ScreenMenu;
+import com.granata.bouncy.screens.ScreenResultados;
 import com.granata.bouncy.utiles.Render;
 
 public class BouncyShoots extends Game {
 	
-	private int mapaActual = 0;
 	private Cliente cliente;
 	
 	@Override
@@ -17,15 +18,24 @@ public class BouncyShoots extends Game {
 		cliente = new Cliente();
 		Render.app = this;
 		Render.sb = new SpriteBatch();
-		ControladorNiveles.generarMapas();
 		this.setScreen(new ScreenMenu());
 	}
 
-	public int cambiarMapa() {
-		if(mapaActual == ControladorNiveles.niveles.size() - 1) mapaActual = 0;
-		else mapaActual++;
-
-		return mapaActual;
+	public void mostrarResultados(final int ganador) {
+		Gdx.app.postRunnable(new Runnable() {
+			@Override
+			public void run() {
+				setScreen(new ScreenResultados(ganador));
+			}
+		});
+//		this.setScreen(new ScreenResultados(ganador));
+	}
+	
+	public void volverAlMenu() {
+		cliente.getHc().enviarMensaje("DesconectarCliente!" + cliente.getId());
+		ControladorNiveles.niveles.removeAll(ControladorNiveles.niveles);
+		Render.sb = new SpriteBatch();
+		this.setScreen(new ScreenMenu());
 	}
 
 	@Override

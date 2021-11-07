@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.granata.bserver.elementos.Arma;
 import com.granata.bserver.elementos.Bala;
 import com.granata.bserver.elementos.Personaje;
+import com.granata.bserver.mapas.BloqueInteractivo;
 import com.granata.bserver.powerups.Pickupable;
 
 public class CollisionListener implements ContactListener{
@@ -24,7 +25,6 @@ public class CollisionListener implements ContactListener{
 
 		Object oA = cuerpoA.getUserData();
 		Object oB = cuerpoB.getUserData();
-		
 
 		if(oA.getClass() == Bala.class && oB.getClass() == Personaje.class || oA.getClass() == Personaje.class  && oB.getClass() == Bala.class) {
 			
@@ -46,26 +46,45 @@ public class CollisionListener implements ContactListener{
 			Personaje pj = (Personaje) ((oA.getClass() == Personaje.class) ? oA : oB);
 			p.onPickup(pj);
 			ControladorBodies.cuerposAEliminar.add(objeto);
+		}else if(oA.getClass() == Personaje.class && BloqueInteractivo.class.isAssignableFrom(oB.getClass()) || BloqueInteractivo.class.isAssignableFrom(oA.getClass())  && oB.getClass() == Personaje.class) {
+			// Código para detectar colisión con bloque interactivo
+			System.out.println("Colisionando con colina");
+			Personaje pj = (Personaje) ((oA.getClass() == Personaje.class) ? oA : oB);
+			Body bloque = (BloqueInteractivo.class.isAssignableFrom(oA.getClass())) ? cuerpoA : cuerpoB;
+			BloqueInteractivo b = (BloqueInteractivo) bloque.getUserData();
+			b.onEntrar(pj.getId());
 		}
 	}
 
 	@Override
 	public void endContact(Contact contact) {
-		// TODO Auto-generated method stub
+
+		Fixture fixA = contact.getFixtureA();
+		Fixture fixB = contact.getFixtureB();
 		
+		Body cuerpoA = fixA.getBody();
+		Body cuerpoB = fixB.getBody();
+
+		Object oA = cuerpoA.getUserData();
+		Object oB = cuerpoB.getUserData();
 		
+		if(oA.getClass() == Personaje.class && BloqueInteractivo.class.isAssignableFrom(oB.getClass()) || BloqueInteractivo.class.isAssignableFrom(oA.getClass())  && oB.getClass() == Personaje.class) {
+			// Código para detectar colisión con la colina
+			Personaje pj = (Personaje) ((oA.getClass() == Personaje.class) ? oA : oB);
+			Body bloque = (BloqueInteractivo.class.isAssignableFrom(oA.getClass())) ? cuerpoA : cuerpoB;
+			BloqueInteractivo b = (BloqueInteractivo) bloque.getUserData();
+			b.onSalir();
+		}
 	}
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.granata.bserver.mapas.BloqueColina;
 import com.granata.bserver.utiles.Config;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -93,6 +94,34 @@ public class ControladorBodies {
 		
 		fDef.shape = shape;
 		fDef.isSensor = true;
+		body.createFixture(fDef);
+		shape.dispose();
+		
+		return body;
+	}
+	
+	public static Body crearBloqueInteractivo(float posX, float posY, float width, float height, BodyType tipo, Object instancia, boolean esSensor) {
+		Body body;
+		BodyDef bDef = new BodyDef();
+		FixtureDef fDef = new FixtureDef();
+		
+		if(tipo == BodyType.StaticBody) {
+			bDef.type = BodyType.StaticBody;
+		}else if(tipo == BodyType.DynamicBody){
+			bDef.type = BodyType.DynamicBody;
+		}else if(tipo == BodyType.KinematicBody) {
+			bDef.type = BodyType.KinematicBody;
+		}
+		
+		bDef.position.set(posX / Config.PPM, posY / Config.PPM);
+		body = world.createBody(bDef);
+		if(instancia != null) body.setUserData(instancia);
+
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(width / 2 / Config.PPM, height / 2 / Config.PPM);
+		
+		fDef.shape = shape;
+		fDef.isSensor = esSensor;
 		body.createFixture(fDef);
 		shape.dispose();
 		

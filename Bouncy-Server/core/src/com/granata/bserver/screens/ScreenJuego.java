@@ -17,7 +17,7 @@ public class ScreenJuego implements Screen{
 	
 	@Override
 	public void show() {
-		juego.start(mapa.getRuta(), mapa.getSpawners());
+		juego.start(mapa.getRuta());
 	}
 	
 	public void update(float delta) {

@@ -2,6 +2,8 @@ package com.granata.bserver.red;
 
 import java.util.ArrayList;
 
+import com.granata.bserver.utiles.Utiles;
+
 public class Servidor {
 
 	private ArrayList<Cliente> clientes = new ArrayList<Cliente>();
@@ -19,6 +21,12 @@ public class Servidor {
 	
 	public HiloServidor getHs() {
 		return this.hs;
+	}
+	
+	public void limpiarServidor() {
+		Utiles.jugadores.removeAll(Utiles.jugadores);
+		clientes.removeAll(clientes);
+		Utiles.partidaIniciada = false;
 	}
 	
 }

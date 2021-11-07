@@ -14,6 +14,7 @@ public abstract class Render {
 	public static SpriteBatch sb;
 	public static BouncyServer app;
 	public static ArrayList<Sprite> spritesADibujar = new ArrayList<Sprite>();
+	private static ArrayList<Sprite> spritesDibujandose = new ArrayList<Sprite>();
 	public static Texture bala = new Texture("Sin-título-2.png");
 	
 	public static void limpiarPantallaB() {
@@ -28,9 +29,13 @@ public abstract class Render {
 	
 	
 	public static void dibujarSprites() {
-		for(Sprite s : spritesADibujar) {
+		// Hecho de esta manera para evitar excepciones
+		for(Sprite s : spritesDibujandose) {
 			s.draw(sb);
 		}
+		// No es la mejor forma, pero borro todos y le agrego solo los que se tienen que dibujar.
+		spritesDibujandose.clear();
+		spritesDibujandose.addAll(spritesADibujar);
 	}
 	
 

@@ -7,5 +7,6 @@ public interface JuegoEventListener extends EventListener{
 	public void spawnPickup(int nroPowerup, int posPowerup);
 	public void borrarPickup(int posicion);
 	public void cambiarMapa(int mapa);
+	public void moverCamaraX(float x);
 	
 }

@@ -122,6 +122,12 @@ public class Personaje implements JugadorEventListener{
 		}
 	}
 
+	@Override
+	public void cambiarDireccion(boolean estadoFlip) {
+		sprite.flip(estadoFlip, false);
+		
+	}
+
 	
 
 

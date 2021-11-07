@@ -16,14 +16,14 @@ import com.granata.bserver.utiles.Render;
 public class Carrera extends JuegoBase{
 	
 	private float puntoFinal = 28f;
-	private float velCamara = 4f, tiempoParaMorir = 0f, tiempoParaEmpezar = 0f;
+	private float velCamara = 3f, tiempoParaMorir = 0f, tiempoParaEmpezar = 0f;
 	private int cantPu = 0;
 	
 	@Override
-	public void start(String rutaMapa, Vector2[] spawners) {
-		super.start(rutaMapa, spawners);
+	public void start(String rutaMapa) {
+		super.start(rutaMapa);
 		for(Cliente c : Render.app.getSv().getClientes()) {
-			c.getPj().getArma().setBalas(0);;
+			c.getPj().getArma().setBalas(0);
 		}
 		spawnPickup();
 	}
@@ -42,7 +42,7 @@ public class Carrera extends JuegoBase{
 		for(Cliente c : Render.app.getSv().getClientes()) {
 			if(c.getPj().chequearFueraDeCamara(cam)) {
 				tiempoParaMorir += delta;
-				if(tiempoParaMorir > 0.5f) {
+				if(tiempoParaMorir > 3f) {
 					c.getPj().destruir();
 				}
 			};

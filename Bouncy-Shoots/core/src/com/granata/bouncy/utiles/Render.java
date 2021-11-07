@@ -1,6 +1,7 @@
 package com.granata.bouncy.utiles;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -15,6 +16,7 @@ public abstract class Render {
 	public static SpriteBatch sb;
 	public static BouncyShoots app;
 	public static ArrayList<Sprite> spritesADibujar = new ArrayList<Sprite>();
+	private static ArrayList<Sprite> spritesDibujandose = new ArrayList<Sprite>();
 	public static Texture bala = new Texture("Sin-título-2.png");
 	public static TextureRegion sPowerups = new TextureRegion(new Texture("powerups.png"));
 	
@@ -30,9 +32,13 @@ public abstract class Render {
 	
 	
 	public static void dibujarSprites() {
-		for(Sprite s : spritesADibujar) {
+		// Hecho de esta manera para evitar excepciones
+		for(Sprite s : spritesDibujandose) {
 			s.draw(sb);
 		}
+		// No es la mejor forma, pero borro todos y le agrego solo los que se tienen que dibujar.
+		spritesDibujandose.clear();
+		spritesDibujandose.addAll(spritesADibujar);
 	}
 	
 

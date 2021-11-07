@@ -10,8 +10,8 @@ import com.granata.bouncy.screens.ScreenJuego;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Render;
 
-public class Combate extends JuegoBase{
-
+public class Estatua extends JuegoBase{
+	
 	private ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 	
 	@Override
@@ -22,24 +22,17 @@ public class Combate extends JuegoBase{
 	@Override
 	public void update(float delta) {
 		super.update(delta);
-//		
-//		if(tiempoEntreSpawn > 0.75f && ((comprobarEspaciosVacios() == -1) ? false : true)) {
-//			tiempoEntreSpawn = 0f;
-//		}
-		
 
+		
 	}
 	
 	@Override
 	public void render(float delta) {
 		super.render(delta);
 	}
-	
-
 
 	@Override
 	public void spawnPickup(int nroPowerup, int posPowerup) {
-
 		Powerup p = Powerups.values()[nroPowerup].getPowerup();
 		powerups.add(p);
 		Vector2 coords = spawners.get(posPowerup);
@@ -64,15 +57,14 @@ public class Combate extends JuegoBase{
 			}
 			
 			i++;
-		}while(!borrado && i < spawners.size());
-		
-		
+		}while(!borrado && i < spawners.size());		
 	}
 
 	@Override
 	public void cambiarMapa(int mapa) {
 		Render.app.setScreen(new ScreenJuego(mapa));
 		System.out.println("Cambiando mapa..." + Mapas.values()[mapa].getRuta());
+		
 	}
 
 	@Override
@@ -81,9 +73,5 @@ public class Combate extends JuegoBase{
 		
 	}
 
-	
 
-
-	
-	
 }

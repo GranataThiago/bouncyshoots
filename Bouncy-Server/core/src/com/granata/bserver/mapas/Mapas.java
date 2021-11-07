@@ -7,24 +7,21 @@ import com.granata.bserver.modos.JuegoBase;
 
 public enum Mapas {
 
-	MAPA2("Carrera", "maps/Carrera_1.tmx", new Vector2[] {new Vector2(900f,215f), new Vector2(2000f,150f), new Vector2(2300f,605f)}),
-	PRUEBA("Combate", "maps/Pruebares.tmx",  new Vector2[] {new Vector2(400f,420f), new Vector2(960f,670f), new Vector2(1490f,420f), new Vector2(960f,100f)}),
-	PRUEBA3("Combate", "maps/Pruebares.tmx",  new Vector2[] {new Vector2(400f,420f), new Vector2(960f,670f), new Vector2(1490f,420f), new Vector2(960f,100f)}),
-	PRUEBA4("Combate", "maps/Pruebares.tmx",  new Vector2[] {new Vector2(400f,420f), new Vector2(960f,670f), new Vector2(1490f,420f), new Vector2(960f,100f)});
+	CA1("Carrera", "maps/Carrera_1.tmx"),
+	CO1("Combate", "maps/Combate_1.tmx"),
+	CO2("Combate", "maps/Combate_2.tmx"),
+	CA2("Carrera", "maps/Carrera_2.tmx"),
+	ES1("Estatua", "maps/Estatua_1.tmx"),
+	COL1("Colina", "maps/Colina_1.tmx");
 
-	
+
 	private String modo;
 	private String ruta;
-	private Vector2[] spawners;
 	
-	private Mapas(String modo, String ruta, Vector2[] spawners) {
+	
+	private Mapas(String modo, String ruta) {
 		this.modo = modo;
 		this.ruta = ruta;
-		this.spawners = spawners;
-	}
-
-	public Vector2[] getSpawners() {
-		return spawners;
 	}
 
 	public JuegoBase getModo() {
@@ -32,9 +29,12 @@ public enum Mapas {
 		
 		JuegoBase m = null;
 		try {
+			System.out.println(clase + modo + ruta);
 			m = (JuegoBase) Class.forName(clase).getDeclaredConstructor().newInstance();
+			System.out.println("Se inició: " + modo);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 		
 		return m;

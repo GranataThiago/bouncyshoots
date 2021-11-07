@@ -108,7 +108,7 @@ public class ScreenMenu implements Screen{
 		Render.limpiarPantallaB();
 
 		Render.sb.begin();
-		Render.sb.draw(txtBg, 0, 0, Config.ANCHO, Config.ALTO);
+			Render.sb.draw(txtBg, 0, 0, Config.ANCHO, Config.ALTO);
 		Render.sb.end();
 		
         stage.act();
@@ -122,27 +122,22 @@ public class ScreenMenu implements Screen{
 	}
 
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
+	public void pause() {		
 	}
 
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
+	public void resume() {		
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
 		dispose();
 	}
 
 	@Override
 	public void dispose() {
         stage.dispose();
-		txtBg.dispose();
+        txtBg.dispose();
 		txtJugar.dispose();
 		txtSalir.dispose();
 	}

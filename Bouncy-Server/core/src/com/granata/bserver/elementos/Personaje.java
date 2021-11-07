@@ -29,15 +29,15 @@ public class Personaje implements JugadorEventListener{
 
 	// Movimiento
 	private boolean mueveDerecha = false, mueveIzquierda = false;
-	private boolean usaSalto = false, ejecutoDisparo = false;
+	private boolean usaSalto = false, ejecutoDisparo = false, direccion = false;
 	
 	public Personaje(Sprite sprite, int id) {
 		this.sprite = sprite;
 		this.idJugador = id;
 	}
 	
-	public void inicializarPersonaje(OrthographicCamera cam) {
-		pj = ControladorBodies.crearEsfera(64, 64, 24.14f, false, 0.5f, 1f);
+	public void inicializarPersonaje(OrthographicCamera cam, Vector2 spawn) {
+		pj = ControladorBodies.crearEsfera(spawn.x, spawn.y, 24.14f, false, 0.5f, 1f);
 		pj.setUserData(this);
 		pj.setAngularDamping(0);
 		pj.setLinearDamping(0);
@@ -54,7 +54,9 @@ public class Personaje implements JugadorEventListener{
 		arma.update(dt);
 		
 		if((pj.getLinearVelocity().y != 0 || pj.getLinearVelocity().x != 0) && getEstadoActual() != Estado.MUERTO) {
+			System.out.println("Se está moviendoooooo");
 			sprite.setPosition(pj.getPosition().x - (sprite.getWidth() / 2), pj.getPosition().y - ( sprite.getHeight() / 2f));
+			System.out.println("Se modificó la posición J" + idJugador);
 			Render.app.getSv().getHs().enviarMensajeGeneral("ModificarPosicion!" + idJugador + "!" + (pj.getPosition().x - (sprite.getWidth() / 2)) + "!" + (pj.getPosition().y - ( sprite.getHeight() / 2f)));
 		}
 
@@ -69,15 +71,23 @@ public class Personaje implements JugadorEventListener{
 	private void controlarMovimiento() {
 		if(mueveDerecha && pj.getLinearVelocity().x <= 2) {
 			pj.applyLinearImpulse(new Vector2(vel, 0), pj.getWorldCenter(), true);
-			System.out.println("Se está moviendo");
+			flip(false);
 		}else if(mueveIzquierda && pj.getLinearVelocity().x >= -2) {
 			pj.applyLinearImpulse(new Vector2(-vel, 0), pj.getWorldCenter(), true);
-			System.out.println("Se está moviendo");
+			flip(true);
 		}else if(usaSalto && puedeSaltar()) {
 			pj.applyLinearImpulse(new Vector2(0, salto), pj.getWorldCenter(), true);
-			System.out.println("Se está moviendo");
 		}
 	}
+	
+	public void flip (boolean x) {
+		  boolean estadoFlip = false;
+		  if (sprite.isFlipX() != x) {
+			  estadoFlip = true;
+		  }
+		  sprite.flip(estadoFlip, false);
+		  Render.app.getSv().getHs().enviarMensajeGeneral("ModificarDireccion!" + idJugador + "!" + estadoFlip);
+		}
 	
 	private void disparar(Vector2 target) {
 		if(ejecutoDisparo && arma.getBalas() > 0) {
@@ -96,7 +106,12 @@ public class Personaje implements JugadorEventListener{
 
 		muerto = true;
 		Render.app.getSv().getHs().enviarMensajeGeneral("BorrarJugador!" + idJugador);
-		Render.app.getSv().getClientes().get(tirador).setScore(100);
+		if(idJugador != tirador) {
+			Render.app.getSv().getClientes().get(tirador).setScore(100);
+		}else {
+			Render.app.getSv().getClientes().get(tirador).setScore(-100);
+		}
+
 		Render.spritesADibujar.remove(this.sprite);
 		ControladorBodies.cuerposAEliminar.add(getBody());
 
@@ -137,6 +152,10 @@ public class Personaje implements JugadorEventListener{
 	
 	public Sprite getSprite() {
 		return sprite;
+	}
+	
+	public int getId() {
+		return idJugador;
 	}
 	
 	public void setArma(Arma arma) {
@@ -201,7 +220,6 @@ public class Personaje implements JugadorEventListener{
 	public void dejarDisparar() {
 		ejecutoDisparo = false;
 	}
-
 
 
 	

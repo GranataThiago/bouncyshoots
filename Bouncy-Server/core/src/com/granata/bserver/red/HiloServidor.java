@@ -23,7 +23,6 @@ public class HiloServidor extends Thread{
 
 		try {
 			socket = new DatagramSocket(6767);
-
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
@@ -47,6 +46,7 @@ public class HiloServidor extends Thread{
 			byte[] data = new byte[1024];
 			DatagramPacket dp = new DatagramPacket(data, data.length);
 			try {
+				System.out.println("es");
 				socket.receive(dp);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -64,7 +64,7 @@ public class HiloServidor extends Thread{
 		if(comando.length>1) {
 			if(comando[0].equals("Conexion")) {
 				// Si todavia no esta "llena" la lobby, permitimos que se sigan conectando clientes
-				if(cantClientes <= 4) {
+				if(cantClientes < 4) {
 					sv.getClientes().add(new Cliente(dp.getAddress(), dp.getPort(), comando[1], Personajes.values()[cantClientes].getPosicion()));
 					enviarMensaje("OK!" + cantClientes, sv.getClientes().get(cantClientes).getIp(), sv.getClientes().get(cantClientes).getPuerto());
 					actualizarClientes(cantClientes);
@@ -99,6 +99,9 @@ public class HiloServidor extends Thread{
 				}else if(comando[1].equals("Disparo")) {
 					Utiles.jugadores.get(Integer.valueOf(comando[2])).dejarDisparar();
 				}
+			}else if(comando[0].equals("DesconectarCliente")) {
+				enviarMensaje("terminarPartida", sv.getClientes().get(Integer.valueOf(comando[1])).getIp(), sv.getClientes().get(Integer.valueOf(comando[1])).getPuerto());
+				cantClientes--;
 			}
 		}else {
 			
@@ -124,6 +127,10 @@ public class HiloServidor extends Thread{
 		for(int i = 0; i < cantClientes; i++) {
 			enviarMensaje(msj, sv.getClientes().get(i).getIp(), sv.getClientes().get(i).getPuerto());
 		}
+	}
+	
+	public void cerrarHilo() {
+		fin = true;
 	}
 	
 }

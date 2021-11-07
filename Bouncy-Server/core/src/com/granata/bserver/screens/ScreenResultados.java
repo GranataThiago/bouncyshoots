@@ -49,7 +49,7 @@ public class ScreenResultados implements Screen{
 		generador = new FreeTypeFontGenerator(Gdx.files.internal("fuentes/Acme-Regular.ttf"));
 		parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parametros.shadowColor = Color.BLACK;
-		parametros.size = 32;
+		parametros.size = 48;
 		fuente = generador.generateFont(parametros);
 	}
 	
@@ -64,7 +64,7 @@ public class ScreenResultados implements Screen{
 
 	private void crearInterfaz() {
 		btnSalir = new Button(new TextureRegionDrawable(new TextureRegion(txtSalir)));
-		btnSalir.setPosition(775 / Config.PPM, 150 / Config.PPM);
+		btnSalir.setPosition(( (Config.ANCHO / 2) - 140) / Config.PPM, 150 / Config.PPM);
 		btnSalir.setSize(280 / Config.PPM, 80 / Config.PPM);
 		btnSalir.setOrigin(Align.center);
 		btnSalir.setTransform(true);
@@ -85,11 +85,11 @@ public class ScreenResultados implements Screen{
 			
         	@Override
         	public void clicked(InputEvent e, float x, float y) {
-        		Render.app.setScreen(new ScreenMenu());
+        		Render.app.volverAlMenu();
         	}
         });
 		
-		logo.setPosition((Config.ANCHO / 2 - 150) / Config.PPM, (Config.ALTO - 200) / Config.PPM);
+		logo.setPosition(( (Config.ANCHO / 2) - 140) / Config.PPM, (Config.ALTO - 200) / Config.PPM);
 		logo.setSize(280 / Config.PPM, 130 / Config.PPM);
 		
 		stage.addActor(btnSalir);
@@ -104,8 +104,8 @@ public class ScreenResultados implements Screen{
 		
 
 		sb.begin();
-			fuente.draw(sb, "GANÓ: " + Render.app.getSv().getClientes().get(ganador).getNombre() + "!!!", Config.ANCHO / 2, (Config.ALTO / 2) + 200);
-			sb.draw(spriteGanador, Config.ANCHO / 2, Config.ALTO / 2, 128, 128);
+			fuente.draw(sb, "El ganador es:  " + Render.app.getSv().getClientes().get(ganador).getNombre() + "!!!", ( Config.ANCHO / 2 ) - spriteGanador.getWidth() - 100, (Config.ALTO  / 2) + 200);
+			sb.draw(spriteGanador, ( Config.ANCHO / 2 ) - spriteGanador.getWidth(), Config.ALTO / 2, 128, 128);
 		sb.end();
 		
         stage.act();

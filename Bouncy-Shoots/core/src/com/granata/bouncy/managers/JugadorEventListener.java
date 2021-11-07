@@ -9,5 +9,6 @@ public interface JugadorEventListener extends EventListener{
 
 	public void actualizarPosicion(float x, float y);
 	public void disparar(Vector2 posDisparo, Vector3 target);
+	public void cambiarDireccion(boolean estadoFlip);
 	
 }

@@ -28,12 +28,15 @@ public class BouncyServer extends Game {
 	public Screen pasarNivel() {
 		if(mapaActual < ControladorNiveles.niveles.size()) {
 			int mapa = ControladorNiveles.niveles.get(mapaActual);
-			System.out.println("Se le envia al cliente el nro mapa " + ControladorNiveles.niveles.get(mapa) + " y el servidor carga la pos mapa: " + ControladorNiveles.niveles.get(mapaActual));
 			sv.getHs().enviarMensajeGeneral("CambiarMapa!" + mapa);
 			return new ScreenJuego(ControladorNiveles.niveles.get(mapaActual++));
+		}else {
+			int ganador = calcularGanador();
+			sv.getHs().enviarMensajeGeneral("MostrarResultados!" + ganador);
+			return new ScreenResultados(ganador);
 		}
 		
-		return new ScreenResultados(calcularGanador());
+
 	}
 	
 	public int calcularGanador() {
@@ -52,6 +55,15 @@ public class BouncyServer extends Game {
 		return ganador;
 	}
 
+	public void volverAlMenu() {
+		sv.limpiarServidor();
+		ControladorNiveles.niveles.removeAll(ControladorNiveles.niveles);
+		mapaActual = 1;
+		Render.sb = new SpriteBatch();
+		ControladorNiveles.generarMapas(4);
+		this.setScreen(new ScreenMenu());
+	}
+	
 	@Override
 	public void render () {
 		super.render();
