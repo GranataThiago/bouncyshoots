@@ -1,11 +1,14 @@
 package com.granata.bouncy.modos;
 
-import com.granata.bouncy.mapas.Mapas;
-import com.granata.bouncy.screens.ScreenJuego;
+import com.badlogic.gdx.math.Vector2;
+import com.granata.bouncy.powerups.Bullet;
+import com.granata.bouncy.powerups.Powerup;
+import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Render;
 
 public class Colina extends JuegoBase{
 
+	
 	@Override
 	public void start(String rutaMapa) {
 		super.start(rutaMapa);
@@ -31,26 +34,16 @@ public class Colina extends JuegoBase{
 
 	@Override
 	public void spawnPickup(int nroPowerup, int posPowerup) {
-		// TODO Auto-generated method stub
+		if(posPowerup < spawners.size()) {
+			Powerup p = new Bullet();
+			powerups.add(p);
+			Vector2 coords = spawners.get(posPowerup);
+			
+			Render.spritesADibujar.add(p.getSprite());
+			p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
+		}
 		
 	}
 
-	@Override
-	public void borrarPickup(int posicion) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cambiarMapa(int mapa) {
-		Render.app.setScreen(new ScreenJuego(mapa));
-		System.out.println("Cambiando mapa..." + Mapas.values()[mapa].getRuta());
-	}
-
-	@Override
-	public void moverCamaraX(float x) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

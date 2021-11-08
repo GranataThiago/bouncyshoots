@@ -19,6 +19,7 @@ import com.granata.bouncy.managers.ControladorBodies;
 import com.granata.bouncy.managers.JuegoEventListener;
 import com.granata.bouncy.managers.JugadorEventListener;
 import com.granata.bouncy.mapas.MapaTiled;
+import com.granata.bouncy.powerups.OneShot;
 import com.granata.bouncy.powerups.Powerup;
 import com.granata.bouncy.powerups.Powerups;
 import com.granata.bouncy.red.Jugador;
@@ -28,7 +29,7 @@ import com.granata.bouncy.utiles.Global;
 import com.granata.bouncy.utiles.Render;
 import com.granata.bouncy.utiles.Utiles;
 
-public abstract class JuegoBase implements JuegoEventListener{
+public class JuegoBase implements JuegoEventListener{
 	
 	// Personaje
 	protected Personaje p;
@@ -42,6 +43,10 @@ public abstract class JuegoBase implements JuegoEventListener{
 	
 	// Cosas del nivel en si
 	protected float tiempoEntreSpawn = 0f;
+	protected boolean fin = false;
+	protected int mapaSiguiente;
+	protected ArrayList<Powerup> powerups = new ArrayList<Powerup>();
+	
 	
 	public void start(String rutaMapa) {
 		mapa = new MapaTiled(rutaMapa);
@@ -76,14 +81,6 @@ public abstract class JuegoBase implements JuegoEventListener{
 			Render.dibujarSprites();
 		Render.sb.end();
 		
-//		for(Bala b : ControladorBalas.balasActivas) {
-//			b.update();
-//		}
-
-//		if(p.getEstadoActual() == Estado.MUERTO) {
-//			Render.app.setScreen(new ScreenJuego(Render.app.cambiarMapa()));
-//		}
-		
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 			Gdx.app.exit();
 		}
@@ -91,7 +88,12 @@ public abstract class JuegoBase implements JuegoEventListener{
 		
 	}
 	
+	private void terminarNivel() {
+		Render.app.setScreen(new ScreenJuego(mapaSiguiente));
+	}
+
 	public void update(float delta) {
+		if(fin) terminarNivel();
 		tiempoEntreSpawn += delta;
 		mapa.update(delta, Global.cam);
 	}
@@ -108,6 +110,55 @@ public abstract class JuegoBase implements JuegoEventListener{
 		for(Jugador j : Render.app.getCliente().getClientes()) {
 			j.getPj().getArma().dispose();
 		}
+	}
+
+	@Override
+	public void spawnPickup(int nroPowerup, int posPowerup) {
+		Powerup p = Powerups.values()[nroPowerup].getPowerup();
+		powerups.add(p);
+		Vector2 coords = spawners.get(posPowerup);
+		
+		Render.spritesADibujar.add(p.getSprite());
+		p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
+		
+	}
+
+	@Override
+	public void borrarPickup(int posicion) {
+		Vector2 coords = spawners.get(posicion);
+		int i = 0;
+		boolean borrado = false;
+		
+		do {
+			
+			if(powerups.size() > posicion && coords.x / Config.PPM - (powerups.get(i).getSprite().getWidth() / 2) == powerups.get(i).getSprite().getX() && coords.y / Config.PPM - (powerups.get(i).getSprite().getHeight() / 2) == powerups.get(i).getSprite().getY()) {
+				powerups.get(i).destruir();
+				powerups.remove(i);
+				borrado = true;
+			}
+			
+			i++;
+		}while(!borrado && i < spawners.size());
+		
+	}
+
+	@Override
+	public void cambiarMapa(int mapa) {
+		fin = true;
+		mapaSiguiente = mapa;
+		
+	}
+
+	@Override
+	public void moverCamaraX(float x) {
+		Global.cam.position.x = x;
+		
+	}
+
+	@Override
+	public void cambiarEstado(String estado) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

@@ -16,7 +16,7 @@ import com.granata.bserver.utiles.Render;
 public class Carrera extends JuegoBase{
 	
 	private float puntoFinal = 28f;
-	private float velCamara = 3f, tiempoParaMorir = 0f, tiempoParaEmpezar = 0f;
+	private float velCamara = 3f, tiempoParaEmpezar = 0f;
 	private int cantPu = 0;
 	
 	@Override
@@ -39,16 +39,6 @@ public class Carrera extends JuegoBase{
 		}
 		else tiempoParaEmpezar++;
 
-		for(Cliente c : Render.app.getSv().getClientes()) {
-			if(c.getPj().chequearFueraDeCamara(cam)) {
-				tiempoParaMorir += delta;
-				if(tiempoParaMorir > 3f) {
-					c.getPj().destruir();
-				}
-			};
-		}
-
-		
 		this.cam.update();
 	}
 	

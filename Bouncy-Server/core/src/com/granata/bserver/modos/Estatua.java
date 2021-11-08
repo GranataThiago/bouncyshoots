@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.granata.bserver.managers.ControladorBodies;
+import com.granata.bserver.powerups.Bullet;
 import com.granata.bserver.powerups.Powerup;
 import com.granata.bserver.powerups.Powerups;
 import com.granata.bserver.red.Cliente;
@@ -62,6 +63,7 @@ public class Estatua extends JuegoBase{
 
 		if(tiempoAcumulado > tiempoEntreCambio) {
 			estadoActual = (estadoActual == Modos.MOVIMIENTO) ? Modos.ESTATUA : Modos.MOVIMIENTO;
+			Render.app.getSv().getHs().enviarMensajeGeneral("CambiarEstado!" + estadoActual);
 			tiempoAcumulado = 0;
 		}
 		
@@ -73,10 +75,10 @@ public class Estatua extends JuegoBase{
 		
 		Render.sb.begin();
 			if(estadoActual == Modos.ESTATUA) {
-				luzRoja.setAlpha(0.8f);
+				luzRoja.setAlpha(1f);
 				luzRoja.draw(Render.sb);
 			}else {
-				luzVerde.setAlpha(0.8f);
+				luzVerde.setAlpha(1f);
 				luzVerde.draw(Render.sb);
 			}
 		Render.sb.end();
@@ -121,10 +123,9 @@ public class Estatua extends JuegoBase{
 	protected void spawnPickup() {
 		int posicion = comprobarEspaciosVacios();
 		
-		int nroPowerup = Utiles.r.nextInt(Powerups.values().length);
-		Powerup p = Powerups.values()[nroPowerup].getPowerup(posicion);
+		Powerup p = new Bullet(posicion);
 				
-		Render.app.getSv().getHs().enviarMensajeGeneral("SpawnPowerup!" + nroPowerup + "!" + posicion);
+		Render.app.getSv().getHs().enviarMensajeGeneral("SpawnPowerup!" + posicion);
 		
 		Vector2 coords = spawners.get(posicion);
 		ocupado[posicion] = true;

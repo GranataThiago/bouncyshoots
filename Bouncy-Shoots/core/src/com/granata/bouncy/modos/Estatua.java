@@ -1,22 +1,26 @@
 package com.granata.bouncy.modos;
 
-import java.util.ArrayList;
-
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.granata.bouncy.mapas.Mapas;
+import com.granata.bouncy.powerups.Bullet;
 import com.granata.bouncy.powerups.Powerup;
-import com.granata.bouncy.powerups.Powerups;
-import com.granata.bouncy.screens.ScreenJuego;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Render;
 
 public class Estatua extends JuegoBase{
 	
-	private ArrayList<Powerup> powerups = new ArrayList<Powerup>();
+	private enum Modos { ESTATUA, MOVIMIENTO } 
+	private Modos estadoActual = Modos.MOVIMIENTO;
+	
+	
+	private Sprite luzRoja = new Sprite(new Texture("images/luzRoja.png"));
+	private Sprite luzVerde = new Sprite(new Texture("images/luzVerde.png"));
 	
 	@Override
 	public void start(String rutaMapa) {
 		super.start(rutaMapa);
+		System.out.println("Iniciando estatua");
 	}
 	
 	@Override
@@ -29,49 +33,45 @@ public class Estatua extends JuegoBase{
 	@Override
 	public void render(float delta) {
 		super.render(delta);
+		
+		Render.sb.begin();
+			if(estadoActual == Modos.ESTATUA) {
+				luzRoja.setAlpha(1f);
+				luzRoja.draw(Render.sb);
+			}else {
+				luzVerde.setAlpha(1f);
+				luzVerde.draw(Render.sb);
+			}
+		Render.sb.end();
+		
+	}
+
+	@Override
+	public void cambiarEstado(String estado) {
+		if(estado.equals("MOVIMIENTO")) {
+			estadoActual = Modos.MOVIMIENTO;
+		}else if(estado.equals("ESTATUA")) {
+			estadoActual = Modos.ESTATUA;
+		}
 	}
 
 	@Override
 	public void spawnPickup(int nroPowerup, int posPowerup) {
-		Powerup p = Powerups.values()[nroPowerup].getPowerup();
-		powerups.add(p);
-		Vector2 coords = spawners.get(posPowerup);
-		
-		Render.spritesADibujar.add(p.getSprite());
-		p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
-		
-	}
-
-	@Override
-	public void borrarPickup(int posicion) {
-		Vector2 coords = spawners.get(posicion);
-		int i = 0;
-		boolean borrado = false;
-		
-		do {
+		if(posPowerup < spawners.size()) {
+			Powerup p = new Bullet();
+			powerups.add(p);
+			Vector2 coords = spawners.get(posPowerup);
 			
-			if(coords.x / Config.PPM - (powerups.get(i).getSprite().getWidth() / 2) == powerups.get(i).getSprite().getX() && coords.y / Config.PPM - (powerups.get(i).getSprite().getHeight() / 2) == powerups.get(i).getSprite().getY()) {
-				powerups.get(i).destruir();
-				powerups.remove(i);
-				borrado = true;
-			}
-			
-			i++;
-		}while(!borrado && i < spawners.size());		
-	}
-
-	@Override
-	public void cambiarMapa(int mapa) {
-		Render.app.setScreen(new ScreenJuego(mapa));
-		System.out.println("Cambiando mapa..." + Mapas.values()[mapa].getRuta());
+			Render.spritesADibujar.add(p.getSprite());
+			p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
+		}
 		
 	}
-
-	@Override
-	public void moverCamaraX(float x) {
-		// TODO Auto-generated method stub
-		
+	
+	public void dispose() {
+		super.dispose();
+		luzVerde.getTexture().dispose();
+		luzRoja.getTexture().dispose();
 	}
-
 
 }

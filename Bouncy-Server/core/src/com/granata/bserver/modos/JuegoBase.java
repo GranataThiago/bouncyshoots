@@ -34,7 +34,6 @@ public abstract class JuegoBase {
 	// Box2D
 	private Box2DDebugRenderer b2r;
 	
-
 	// Camara
 	protected OrthographicCamera cam;
 	private Viewport vp;
@@ -46,7 +45,7 @@ public abstract class JuegoBase {
 	
 	// Cosas del nivel en si
 	protected float tiempoEntreSpawn = 0f; 
-	private float tiempoTotal = 10f, tiempoTranscurrido = 0;
+	private float tiempoTotal = 70f, tiempoTranscurrido = 0, tiempoParaMorir = 0f;
 	private int jugadoresMuertos = 0;
 
 	
@@ -59,7 +58,8 @@ public abstract class JuegoBase {
 		ControladorBodies.world.setContactListener(new CollisionListener());
 
 		mapa = new MapaTiled(rutaMapa);
-		spawners = mapa.getSpawners();
+		if(mapa.getSpawners() != null ) spawners = mapa.getSpawners();
+
 		
 		b2r = new Box2DDebugRenderer();
 		for(int i = 0; i < Render.app.getSv().getClientes().size(); i++) {
@@ -89,7 +89,6 @@ public abstract class JuegoBase {
 					if(c.getPj().getEstadoActual() == Estado.MUERTO) {
 						jugadoresMuertos++;
 					}else {
-						System.out.println(fin + " " + mapa.getNombre());
 						if(!fin) c.getPj().update(delta);
 					}
 				}
@@ -113,7 +112,15 @@ public abstract class JuegoBase {
 	
 	public void update(float delta) {
 		chequearFinNivel();
-		
+		for(Cliente c : Render.app.getSv().getClientes()) {
+			if(c.getPj().chequearFueraDeCamara(cam)) {
+				tiempoParaMorir += delta;
+				if(tiempoParaMorir > 3f) {
+					c.getPj().destruir();
+					tiempoParaMorir = 0;
+				}
+			};
+		}
 		jugadoresMuertos = 0;
 		tiempoEntreSpawn += delta;
 		tiempoTranscurrido += delta;

@@ -60,8 +60,10 @@ public class MapaTiled{
 			System.out.println("hay spawnpoints");
 			spawnpoints = new ArrayList<Vector2>();
 			for(MapObject object : lvl.getLayers().get("Spawnpoint").getObjects().getByType(RectangleMapObject.class)) {
+				System.out.println("Spawnpoint " + object);
 				Rectangle rect = ((RectangleMapObject) object).getRectangle();
 				spawnpoints.add(new Vector2((rect.getX() + rect.getWidth() / 2), (rect.getY() + rect.getHeight() / 2)));
+				System.out.println(spawnpoints.get(0));
 			}
 		}
 		

@@ -20,7 +20,7 @@ public class HiloCliente extends Thread{
 	private DatagramSocket socket;
 	private InetAddress ipServer;
 	private int puerto = 6767;
-	private boolean fin = false, encuentreServer = false;
+	private boolean fin = false;
 	
 	public HiloCliente() {
 		
@@ -113,6 +113,8 @@ public class HiloCliente extends Thread{
 				Render.app.mostrarResultados(Integer.valueOf(comando[1]));
 			}else if(comando[0].equals("MoverCamaraX")) {
 				Utiles.juegoListener.moverCamaraX(Float.valueOf(comando[1]));
+			}else if(comando[0].equals("CambiarEstado")) {
+				Utiles.juegoListener.cambiarEstado(comando[1]);
 			}
 		}else {
 			if(msg.equals("puedeComenzar")) {
