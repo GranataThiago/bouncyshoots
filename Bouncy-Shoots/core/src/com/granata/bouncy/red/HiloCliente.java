@@ -124,6 +124,8 @@ public class HiloCliente extends Thread{
 			}else if(msg.equals("terminarPartida")) {
 				Global.partidaIniciada = false;
 				Render.app.getCliente().getClientes().removeAll(Render.app.getCliente().getClientes());
+			}else if(msg.equals("terminoContador")) {
+				Utiles.juegoListener.puedeEmpezar();
 			}
 		}
 		

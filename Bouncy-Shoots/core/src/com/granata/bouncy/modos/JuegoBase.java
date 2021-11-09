@@ -41,18 +41,13 @@ public class JuegoBase implements JuegoEventListener{
 	protected ArrayList<Vector2> spawners;
 	
 	// Cosas del nivel en si
-	protected float tiempoEntreSpawn = 0f, tiempoParaEmpezar = 5f, contador = 0f;
-	protected boolean fin = false;
+	protected float tiempoEntreSpawn = 0f, tiempoPasado = 0f;
+	protected boolean fin = false, empezo = false;
 	protected int mapaSiguiente;
 	protected ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 	
 	
 	public void start(String rutaMapa) {
-		
-		generador = new FreeTypeFontGenerator(Gdx.files.internal("fuentes/Acme-Regular.ttf"));
-		parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parametros.shadowColor = Color.BLACK;
-		fuente = generador.generateFont(parametros);
 		
 		mapa = new MapaTiled(rutaMapa);
 		spawners = mapa.getSpawners();
@@ -72,26 +67,31 @@ public class JuegoBase implements JuegoEventListener{
 	
 	public void render(float delta) {
 		Render.limpiarPantallaN();
+		if(empezo) {
+			update(delta);
+			
+			// Renderiza el mapa
+			mapa.render();
+			Render.sb.setProjectionMatrix(Global.cam.combined);
 
-		update(delta);
-		
-		// Renderiza el mapa
-		mapa.render();
-		Render.sb.setProjectionMatrix(Global.cam.combined);
-
-		// Dibujamos al personaje y actualizamos la cámara
-		Render.sb.begin();
-			for(Jugador j : Render.app.getCliente().getClientes()) {
-				j.getPj().update(delta);
+			// Dibujamos al personaje y actualizamos la cámara
+			Render.sb.begin();
+				for(Jugador j : Render.app.getCliente().getClientes()) {
+					j.getPj().update(delta);
+				}
+				Render.dibujarSprites();
+			Render.sb.end();
+			
+			if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+				Gdx.app.exit();
 			}
-			Render.dibujarSprites();
-		Render.sb.end();
-		
-		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-			Gdx.app.exit();
+			
+		}else {
+			Render.sb.begin();
+				fuente.draw(Render.sb, Float.toString(tiempoPasado), Config.ANCHO / 2, Config.ALTO / 2);
+			Render.sb.end();
+			tiempoPasado += delta;
 		}
-		
-
 		
 		
 	}
@@ -112,9 +112,9 @@ public class JuegoBase implements JuegoEventListener{
 	}
 	
 	public void dispose() {
-		Utiles.jugadores.removeAll(Utiles.jugadores);
+		Utiles.jugadores.clear();
 		mapa.dispose();
-		Render.spritesADibujar.removeAll(Render.spritesADibujar);
+		Render.spritesADibujar.clear();
 		for(Jugador j : Render.app.getCliente().getClientes()) {
 			j.getPj().getArma().dispose();
 		}
@@ -170,8 +170,8 @@ public class JuegoBase implements JuegoEventListener{
 	}
 
 	@Override
-	public void contar(float tiempo) {
-		contador += tiempo;
+	public void puedeEmpezar() {
+		empezo = true;
 		
 	}
 	

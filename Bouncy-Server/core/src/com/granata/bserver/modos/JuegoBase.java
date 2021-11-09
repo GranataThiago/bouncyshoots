@@ -49,10 +49,10 @@ public abstract class JuegoBase {
 	// Mapa
 	protected MapaTiled mapa;
 	protected ArrayList<Vector2> spawners = new ArrayList<Vector2>();
-	protected boolean fin = false;
+	protected boolean fin = false, empezo = false;
 	
 	// Cosas del nivel en si
-	protected float tiempoEntreSpawn = 0f, tiempoParaEmpezar = 5f, contador = 0f; 
+	protected float tiempoEntreSpawn = 0f, tiempoParaEmpezar = 3f, contador = 0f; 
 	private float tiempoTotal = 70f, tiempoTranscurrido = 0, tiempoParaMorir = 0f;
 	private int jugadoresMuertos = 0;
 
@@ -89,6 +89,10 @@ public abstract class JuegoBase {
 			Render.limpiarPantallaN();
 
 			if(contador > tiempoParaEmpezar) {
+				if (!empezo) {
+					empezo = true;
+					Render.app.getSv().getHs().enviarMensajeGeneral("terminoContador");
+				}
 				update(delta);
 				
 				mapa.render();

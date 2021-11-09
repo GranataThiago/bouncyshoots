@@ -9,6 +9,6 @@ public interface JuegoEventListener extends EventListener{
 	public void cambiarMapa(int mapa);
 	public void moverCamaraX(float x);
 	public void cambiarEstado(String estado);
-	public void contar(float tiempo);
+	public void puedeEmpezar();
 	
 }
