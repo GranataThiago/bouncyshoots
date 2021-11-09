@@ -25,7 +25,7 @@ public class Colina extends JuegoBase{
 	public void update(float delta) {
 		super.update(delta);
 		
-		if(tiempoEntreSpawn > 1f && ((comprobarEspaciosVacios() == -1) ? false : true)) {
+		if(tiempoEntreSpawn > 1f && ((comprobarEspaciosVacios() == -1) ? false : true)  && !fin) {
 			tiempoEntreSpawn = 0f;
 			spawnPickup();
 		}

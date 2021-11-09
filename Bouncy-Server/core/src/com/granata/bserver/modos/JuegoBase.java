@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.granata.bserver.elementos.Bala;
@@ -38,6 +40,7 @@ public abstract class JuegoBase {
 	private FreeTypeFontGenerator generador;
 	private FreeTypeFontParameter parametros;
 	private BitmapFont fuente = new BitmapFont();
+	
 	
 	// Box2D
 	private Box2DDebugRenderer b2r;
@@ -88,8 +91,9 @@ public abstract class JuegoBase {
 	public void render(float delta) {
 			Render.limpiarPantallaN();
 
-			if(contador > tiempoParaEmpezar) {
+			if(contador > tiempoParaEmpezar && !fin) {
 				if (!empezo) {
+					System.out.println("Arrancó el juego en el server");
 					empezo = true;
 					Render.app.getSv().getHs().enviarMensajeGeneral("terminoContador");
 				}
@@ -186,7 +190,16 @@ public abstract class JuegoBase {
 	
 	
 	public void terminarNivel() {
-		if(fin)	Render.app.setScreen(Render.app.pasarNivel());
+		Timer terminar = new Timer();
+		if(fin) {
+			terminar.scheduleTask(new Task(){
+			    @Override
+			    public void run() {
+					Render.app.setScreen(Render.app.pasarNivel());
+			    }
+			}, 3);
+
+		}
 	}
 	
 	protected void borrarCuerpos() {

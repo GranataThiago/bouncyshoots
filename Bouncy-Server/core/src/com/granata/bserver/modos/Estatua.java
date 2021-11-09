@@ -49,7 +49,7 @@ public class Estatua extends JuegoBase{
 		
 		manejarEstados(delta);
 
-		if(tiempoEntreSpawn > 1f && ((comprobarEspaciosVacios() == -1) ? false : true)) {
+		if(tiempoEntreSpawn > 1f && ((comprobarEspaciosVacios() == -1) ? false : true) && !fin) {
 			tiempoEntreSpawn = 0f;
 			spawnPickup();
 		}

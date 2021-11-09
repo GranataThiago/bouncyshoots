@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Vector2;
@@ -29,6 +30,7 @@ public class JuegoBase implements JuegoEventListener{
 	private FreeTypeFontGenerator generador;
 	private FreeTypeFontParameter parametros;
 	private BitmapFont fuente = new BitmapFont();
+	private SpriteBatch sb = new SpriteBatch();
 	
 	// Personaje
 	protected Personaje p;
@@ -87,9 +89,9 @@ public class JuegoBase implements JuegoEventListener{
 			}
 			
 		}else {
-			Render.sb.begin();
-				fuente.draw(Render.sb, Float.toString(tiempoPasado), Config.ANCHO / 2, Config.ALTO / 2);
-			Render.sb.end();
+			sb.begin();
+				fuente.draw(sb, Float.toString(tiempoPasado), Config.ANCHO / 2, Config.ALTO / 2);
+			sb.end();
 			tiempoPasado += delta;
 		}
 		
@@ -172,7 +174,7 @@ public class JuegoBase implements JuegoEventListener{
 	@Override
 	public void puedeEmpezar() {
 		empezo = true;
-		
+		System.out.println("Arrancó el juego en el server");
 	}
 	
 	

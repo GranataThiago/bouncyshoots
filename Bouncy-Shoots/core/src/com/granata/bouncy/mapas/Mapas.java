@@ -12,6 +12,7 @@ public enum Mapas {
 	CO3("Combate", "maps/Combate_3.tmx"),
 	CA1("Carrera", "maps/Carrera_1.tmx"),
 	CA2("Carrera", "maps/Carrera_2.tmx"),
+	CA3("Carrera", "maps/Carrera_3.tmx"),
 	ES1("Estatua", "maps/Estatua_1.tmx"),
 	ES2("Estatua", "maps/Estatua_2.tmx"),
 	COL1("Colina", "maps/Colina_1.tmx"),
