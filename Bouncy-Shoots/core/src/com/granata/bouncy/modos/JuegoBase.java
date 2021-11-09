@@ -4,22 +4,17 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.granata.bouncy.elementos.Bala;
 import com.granata.bouncy.elementos.Personaje;
-import com.granata.bouncy.elementos.Personaje.Estado;
-import com.granata.bouncy.managers.CollisionListener;
-import com.granata.bouncy.managers.ControladorBalas;
-import com.granata.bouncy.managers.ControladorBodies;
 import com.granata.bouncy.managers.JuegoEventListener;
-import com.granata.bouncy.managers.JugadorEventListener;
 import com.granata.bouncy.mapas.MapaTiled;
-import com.granata.bouncy.powerups.OneShot;
 import com.granata.bouncy.powerups.Powerup;
 import com.granata.bouncy.powerups.Powerups;
 import com.granata.bouncy.red.Jugador;
@@ -30,6 +25,10 @@ import com.granata.bouncy.utiles.Render;
 import com.granata.bouncy.utiles.Utiles;
 
 public class JuegoBase implements JuegoEventListener{
+	
+	private FreeTypeFontGenerator generador;
+	private FreeTypeFontParameter parametros;
+	private BitmapFont fuente = new BitmapFont();
 	
 	// Personaje
 	protected Personaje p;
@@ -42,13 +41,19 @@ public class JuegoBase implements JuegoEventListener{
 	protected ArrayList<Vector2> spawners;
 	
 	// Cosas del nivel en si
-	protected float tiempoEntreSpawn = 0f;
+	protected float tiempoEntreSpawn = 0f, tiempoParaEmpezar = 5f, contador = 0f;
 	protected boolean fin = false;
 	protected int mapaSiguiente;
 	protected ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 	
 	
 	public void start(String rutaMapa) {
+		
+		generador = new FreeTypeFontGenerator(Gdx.files.internal("fuentes/Acme-Regular.ttf"));
+		parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parametros.shadowColor = Color.BLACK;
+		fuente = generador.generateFont(parametros);
+		
 		mapa = new MapaTiled(rutaMapa);
 		spawners = mapa.getSpawners();
 		for(Jugador j : Render.app.getCliente().getClientes()) {
@@ -66,8 +71,9 @@ public class JuegoBase implements JuegoEventListener{
 	}
 	
 	public void render(float delta) {
-		update(delta);
 		Render.limpiarPantallaN();
+
+		update(delta);
 		
 		// Renderiza el mapa
 		mapa.render();
@@ -84,6 +90,8 @@ public class JuegoBase implements JuegoEventListener{
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 			Gdx.app.exit();
 		}
+		
+
 		
 		
 	}
@@ -158,6 +166,12 @@ public class JuegoBase implements JuegoEventListener{
 	@Override
 	public void cambiarEstado(String estado) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void contar(float tiempo) {
+		contador += tiempo;
 		
 	}
 	

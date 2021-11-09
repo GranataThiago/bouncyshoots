@@ -9,7 +9,10 @@ public enum Nombres {
 	BKCC("Bkcc"),
 	VERMI("Vermi"),
 	FORTI("Forti"),
-	JUANCHI("Juanchi");
+	JUANCHI("Juanchi"),
+	MARTO("Marto"),
+	LEO("Leo"),
+	SK("SkilledPlayer");
 	
 	private String nombre;
 	

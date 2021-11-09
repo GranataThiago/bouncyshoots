@@ -16,7 +16,7 @@ import com.granata.bserver.utiles.Render;
 public class Carrera extends JuegoBase{
 	
 	private float puntoFinal = 28f;
-	private float velCamara = 3f, tiempoParaEmpezar = 0f;
+	private float velCamara = 3f;
 	private int cantPu = 0;
 	
 	@Override
@@ -33,11 +33,10 @@ public class Carrera extends JuegoBase{
 		super.update(delta);
 
 		// A -------------- B (Final)
-		if(tiempoParaEmpezar > 15f && this.cam.position.x <= puntoFinal) {
+		if(this.cam.position.x <= puntoFinal) {
 			this.cam.position.x += velCamara * delta;
 			Render.app.getSv().getHs().enviarMensajeGeneral("MoverCamaraX!" + this.cam.position.x);
 		}
-		else tiempoParaEmpezar++;
 
 		this.cam.update();
 	}

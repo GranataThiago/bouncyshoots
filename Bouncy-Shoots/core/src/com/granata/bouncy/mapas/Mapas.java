@@ -16,7 +16,10 @@ public enum Mapas {
 	ES2("Estatua", "maps/Estatua_2.tmx"),
 	COL1("Colina", "maps/Colina_1.tmx"),
 	COL2("Colina", "maps/Colina_2.tmx"),
-	COL3("Colina", "maps/Colina_3.tmx");
+	COL3("Colina", "maps/Colina_3.tmx"),
+	EST1("Estrella", "maps/Estrella_1.tmx"),
+	EST2("Estrella", "maps/Estrella_2.tmx"),
+	EST3("Estrella", "maps/Estrella_3.tmx");
 
 	
 	private String modo;

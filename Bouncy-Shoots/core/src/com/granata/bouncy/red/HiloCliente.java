@@ -22,7 +22,7 @@ public class HiloCliente extends Thread{
 	private int puerto = 6767;
 	private boolean fin = false;
 	
-	public HiloCliente() {
+	public HiloCliente(String nombre) {
 		
 			try {
 				ipServer = InetAddress.getByName("255.255.255.255");
@@ -30,7 +30,7 @@ public class HiloCliente extends Thread{
 			} catch (SocketException | UnknownHostException e) {
 				e.printStackTrace();
 			}
-			enviarMensaje("Conexion!" + Nombres.getNombreAleatorio());
+			enviarMensaje("Conexion!" + nombre);
 
 	}
 
@@ -115,6 +115,8 @@ public class HiloCliente extends Thread{
 				Utiles.juegoListener.moverCamaraX(Float.valueOf(comando[1]));
 			}else if(comando[0].equals("CambiarEstado")) {
 				Utiles.juegoListener.cambiarEstado(comando[1]);
+			}else if(comando[0].equals("MoverEstrella")) {
+				Utiles.eListener.moverEstrella(Float.parseFloat(comando[1]), Float.parseFloat(comando[2]));
 			}
 		}else {
 			if(msg.equals("puedeComenzar")) {

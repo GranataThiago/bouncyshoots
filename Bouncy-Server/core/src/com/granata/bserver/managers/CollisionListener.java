@@ -11,6 +11,7 @@ import com.granata.bserver.elementos.Bala;
 import com.granata.bserver.elementos.Personaje;
 import com.granata.bserver.mapas.BloqueInteractivo;
 import com.granata.bserver.powerups.Pickupable;
+import com.granata.bserver.utiles.Utiles;
 
 public class CollisionListener implements ContactListener{
 	
@@ -53,6 +54,15 @@ public class CollisionListener implements ContactListener{
 			Body bloque = (BloqueInteractivo.class.isAssignableFrom(oA.getClass())) ? cuerpoA : cuerpoB;
 			BloqueInteractivo b = (BloqueInteractivo) bloque.getUserData();
 			b.onEntrar(pj.getId());
+		}else if(oA.getClass() == Personaje.class && oB.getClass() == Personaje.class) {
+			Personaje pj1 = (Personaje) oA;
+			Personaje pj2 = (Personaje) oB;
+			int estrellado = (pj1.getCorona()) ? pj1.getId() : pj2.getId();
+			if(pj1.getCorona() || pj2.getCorona()) {
+				pj1.asignarCorona();
+				pj2.asignarCorona();
+				Utiles.eListener.cambiarEstrellado(estrellado);
+			}
 		}
 	}
 

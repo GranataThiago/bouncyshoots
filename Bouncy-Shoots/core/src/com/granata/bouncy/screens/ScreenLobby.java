@@ -17,10 +17,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.granata.bouncy.io.TextInput;
 import com.granata.bouncy.red.HiloCliente;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Global;
@@ -42,12 +45,13 @@ public class ScreenLobby implements Screen{
 	private Image logo = new Image(new TextureRegionDrawable(new TextureRegion(new Texture("bs-logo.png"))));
 	private Vector2[] secciones = {new Vector2(100, Config.ALTO - 300), new Vector2(600, Config.ALTO - 300), new Vector2(1100, Config.ALTO - 300), new Vector2(1600, Config.ALTO - 300)};
 
-	public ScreenLobby() {
-		Render.app.getCliente().crearHilo();
+	public ScreenLobby(String nombre) {
+		Render.app.getCliente().crearHilo(nombre);
 		hc = Render.app.getCliente().getHc();
 		
 		this.stage = new Stage(new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM));
 		txtJugar = new Texture("playbtn.png");
+
 		
 		generador = new FreeTypeFontGenerator(Gdx.files.internal("fuentes/Acme-Regular.ttf"));
 		parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();

@@ -3,7 +3,6 @@ package com.granata.bouncy;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.granata.bouncy.managers.ControladorNiveles;
 import com.granata.bouncy.red.Cliente;
 import com.granata.bouncy.screens.ScreenMenu;
 import com.granata.bouncy.screens.ScreenResultados;
@@ -33,7 +32,6 @@ public class BouncyShoots extends Game {
 	
 	public void volverAlMenu() {
 		cliente.getHc().enviarMensaje("DesconectarCliente!" + cliente.getId());
-		ControladorNiveles.niveles.removeAll(ControladorNiveles.niveles);
 		Render.sb = new SpriteBatch();
 		this.setScreen(new ScreenMenu());
 	}

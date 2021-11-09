@@ -5,14 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import com.granata.bouncy.managers.ControladorBodies;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Render;
 
 public class Bala extends Sprite implements Movible, Poolable{
-
-	// Objetos del mundo
-	private Body bala;
 
 	// Movimiento de la bala
 	Vector2 direccion;

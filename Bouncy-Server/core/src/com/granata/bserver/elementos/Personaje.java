@@ -23,6 +23,7 @@ public class Personaje implements JugadorEventListener{
 	private Arma arma;
 	private boolean muerto;
 	private int idJugador;
+	private boolean tieneCorona = false;
 	
 	// Box2D
 	private Body pj;
@@ -30,6 +31,7 @@ public class Personaje implements JugadorEventListener{
 	// Movimiento
 	private boolean mueveDerecha = false, mueveIzquierda = false;
 	private boolean usaSalto = false, ejecutoDisparo = false, direccion = false;
+
 	
 	public Personaje(Sprite sprite, int id) {
 		this.sprite = sprite;
@@ -146,6 +148,15 @@ public class Personaje implements JugadorEventListener{
 		this.vida += vida;
 	}
 
+	
+	public void asignarCorona() {
+		tieneCorona = !tieneCorona;
+	}
+	
+	public boolean getCorona() {
+		return tieneCorona;
+	}
+	
 	public Arma getArma() {
 		return arma;
 	}
@@ -161,7 +172,6 @@ public class Personaje implements JugadorEventListener{
 	public void setArma(Arma arma) {
 		this.arma = arma;
 	}
-
 
 	private void comprobarEstados() {
 		if(muerto) estadoActual = Estado.MUERTO;

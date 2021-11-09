@@ -2,14 +2,17 @@
 
 import java.util.ArrayList;
 
+import com.granata.bouncy.utiles.Nombres;
+
 public class Cliente {
 
 	private ArrayList<Jugador> clientes = new ArrayList<Jugador>();
 	private HiloCliente hc;
 	private int id;
 	
-	public void crearHilo() {
-		hc = new HiloCliente();
+	public void crearHilo(String nombre) {
+		if(nombre == null) nombre = Nombres.getNombreAleatorio();
+		hc = new HiloCliente(nombre);
 		hc.start();
 	}
 	

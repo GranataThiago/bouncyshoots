@@ -16,6 +16,7 @@ public abstract class Render {
 	public static ArrayList<Sprite> spritesADibujar = new ArrayList<Sprite>();
 	private static ArrayList<Sprite> spritesDibujandose = new ArrayList<Sprite>();
 	public static Texture bala = new Texture("Sin-título-2.png");
+	public static Texture estrella = new Texture("estrella.png");
 	
 	public static void limpiarPantallaB() {
 		Gdx.gl.glClearColor(.5f, 0f, 0.2f, 1);

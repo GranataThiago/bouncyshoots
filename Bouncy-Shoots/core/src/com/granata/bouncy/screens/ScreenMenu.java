@@ -9,40 +9,44 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.granata.bouncy.io.TextInput;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Render;
 
 public class ScreenMenu implements Screen{
 
 	private Stage stage;
-	
+	private TextInput textListener = new TextInput();
 	private Texture txtBg;
 	
 	private Texture txtJugar;
 	private Button btnJugar;
-	
+
 	private Texture txtSalir;
 	private Button btnSalir;
 	
 	public ScreenMenu() {
+		Gdx.input.getTextInput(textListener, "Ingrese nombre de Usuario", "skilledplayer", "");
 		this.stage = new Stage(new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM));
         
 		txtBg = new Texture("bg_menu.png");
-	
 		txtJugar = new Texture("playbtn.png");
 		txtSalir = new Texture("exitbtn.png");
 	}
 	
 	@Override
 	public void show() {
+
         Gdx.input.setInputProcessor(stage);
         stage.clear();
-        
         crearBotones();
+
 	}
 
 	private void crearBotones() {
@@ -68,7 +72,7 @@ public class ScreenMenu implements Screen{
 			
         	@Override
         	public void clicked(InputEvent e, float x, float y) {
-        		Render.app.setScreen(new ScreenLobby());
+        		Render.app.setScreen(new ScreenLobby(textListener.getNombreUsuario()));
         	}
         });
 		

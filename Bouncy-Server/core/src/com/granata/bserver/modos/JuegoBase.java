@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -31,6 +35,10 @@ public abstract class JuegoBase {
 	// Alguien llegó a la meta / -> en carrera
 	// Pasó 1 minuto / -> en colina o estatua
 	
+	private FreeTypeFontGenerator generador;
+	private FreeTypeFontParameter parametros;
+	private BitmapFont fuente = new BitmapFont();
+	
 	// Box2D
 	private Box2DDebugRenderer b2r;
 	
@@ -44,12 +52,18 @@ public abstract class JuegoBase {
 	protected boolean fin = false;
 	
 	// Cosas del nivel en si
-	protected float tiempoEntreSpawn = 0f; 
+	protected float tiempoEntreSpawn = 0f, tiempoParaEmpezar = 5f, contador = 0f; 
 	private float tiempoTotal = 70f, tiempoTranscurrido = 0, tiempoParaMorir = 0f;
 	private int jugadoresMuertos = 0;
 
 	
 	public void start(String rutaMapa) {	
+		
+		generador = new FreeTypeFontGenerator(Gdx.files.internal("fuentes/Acme-Regular.ttf"));
+		parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parametros.shadowColor = Color.BLACK;
+		fuente = generador.generateFont(parametros);
+		
 		cam = new OrthographicCamera();
 		vp = new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM);
 		
@@ -73,45 +87,54 @@ public abstract class JuegoBase {
 	
 	public void render(float delta) {
 			Render.limpiarPantallaN();
-			update(delta);
-			
-			// Renderiza el mapa
-			mapa.render();
-			Render.sb.setProjectionMatrix(cam.combined);
 
-			ControladorBodies.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-			borrarCuerpos();
-//			b2r.render(ControladorBodies.world, cam.combined);
+			if(contador > tiempoParaEmpezar) {
+				update(delta);
+				
+				mapa.render();
+				Render.sb.setProjectionMatrix(cam.combined);
 
-			// Dibujamos al personaje y actualizamos la cámara
-			Render.sb.begin();
-				for(Cliente c : Render.app.getSv().getClientes()) {
-					if(c.getPj().getEstadoActual() == Estado.MUERTO) {
-						jugadoresMuertos++;
-					}else {
-						if(!fin) c.getPj().update(delta);
+				ControladorBodies.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+				borrarCuerpos();
+
+				Render.sb.begin();
+					for(Cliente c : Render.app.getSv().getClientes()) {
+						if(c.getPj().getEstadoActual() == Estado.MUERTO) {
+							jugadoresMuertos++;
+						}else {
+							if(!fin) c.getPj().update(delta);
+						}
 					}
-				}
-				Render.dibujarSprites();
-			Render.sb.end();
-			
-			int cantBalas = 0;
-			for(Bala b : ControladorBalas.balasActivas) {
-				b.update(cantBalas);
-				cantBalas++;
+					Render.dibujarSprites();
+				Render.sb.end();
+				
+
+				
+				if(fin) terminarNivel();
+			}else {
+				Render.sb.begin();
+					fuente.draw(Render.sb, Float.toString(contador), Config.ANCHO / 2, Config.ALTO / 2);
+				Render.sb.end();
+				contador += delta;
 			}
 			
-			if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-				Gdx.app.exit();
-			}
-			
-			if(fin) terminarNivel();
+
 			
 		}
 	
 	
 	public void update(float delta) {
 		chequearFinNivel();
+		actualizarBalas();
+		verificarSiEnCamara(delta);
+		
+		jugadoresMuertos = 0;
+		tiempoEntreSpawn += delta;
+		tiempoTranscurrido += delta;
+		mapa.update(delta, cam);
+	}
+	
+	private void verificarSiEnCamara(float delta) {
 		for(Cliente c : Render.app.getSv().getClientes()) {
 			if(c.getPj().chequearFueraDeCamara(cam)) {
 				tiempoParaMorir += delta;
@@ -121,12 +144,18 @@ public abstract class JuegoBase {
 				}
 			};
 		}
-		jugadoresMuertos = 0;
-		tiempoEntreSpawn += delta;
-		tiempoTranscurrido += delta;
-		mapa.update(delta, cam);
+		
 	}
-	
+
+	private void actualizarBalas() {
+		int cantBalas = 0;
+		for(Bala b : ControladorBalas.balasActivas) {
+			b.update(cantBalas);
+			cantBalas++;
+		}
+		
+	}
+
 	protected abstract void spawnPickup();
 	
 	public void resize(int width, int height) {

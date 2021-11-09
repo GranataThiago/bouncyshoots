@@ -11,14 +11,11 @@ import com.granata.bouncy.utiles.Render;
 
 public class Personaje implements JugadorEventListener{
 	
-	public enum Estado { QUIETO, CORRIENDO, MUERTO, SALTANDO, CAYENDO } 
-	private Estado estadoActual = Estado.QUIETO;
 	
 	// Relativo al personaje 
 	private Sprite sprite;
-	private float vel = 8f, salto = 12f, vida = 100;
 	private Arma arma;
-	private boolean muerto;
+//	private boolean muerto;
 	
 	// Box2D
 //	private Body pj;
@@ -48,67 +45,24 @@ public class Personaje implements JugadorEventListener{
 	}
 
 	
-	public void recibirDaño(float daño) {
-		this.vida -= daño;
-		if(this.vida <= 0) {
-			destruir();
-		}
-	}
-
-//	public Vector2 getPosition() {
-//		return pj.getPosition();
+//	public void recibirDaño(float daño) {
+//		this.vida -= daño;
+//		if(this.vida <= 0) {
+//			destruir();
+//		}
 //	}
-//	
-//	public Body getBody() {
-//		return pj;
-//	}
-
 
 	public Arma getArma() {
 		return arma;
 	}
 
-
-//	private void comprobarEstados() {
-//		if(muerto) estadoActual = Estado.MUERTO;
-//		else if(pj.getLinearVelocity().y > 0) {
-//			estadoActual = Estado.SALTANDO;
-//		}else if(pj.getLinearVelocity().y < 0) {
-//			estadoActual = Estado.CAYENDO;
-//		}else if(pj.getLinearVelocity().x != 0) {
-//			estadoActual = Estado.CORRIENDO;
-//		}else {
-//			estadoActual = Estado.QUIETO;
-//		}
-//		
-//	}
-	
-//	public boolean puedeSaltar() {
-//		return (getEstadoActual() != Estado.CAYENDO && getEstadoActual() != Estado.SALTANDO);
-//	}
-//
-//	
-//	public Estado getEstadoActual() {
-//		return estadoActual;
-//	}
-//
-//	
-//	public void aumentarVel(float vel) {
-//		this.vel += vel;
-//	}
-//
-//	public void aumentarSalto(float salto) {
-//		this.salto += salto;
-//	}
-//
-//	public void aumentarVida(float vida) {
-//		this.vida += vida;
-//	}
-	
 	public void destruir() {
-		muerto = true;
+//		muerto = true;
 		Render.spritesADibujar.remove(this.sprite);
 }
+	public Vector2 getSpritePos() {
+		return new Vector2(sprite.getX(), sprite.getY());
+	}
 	
 	@Override
 	public void actualizarPosicion(float x, float y) {
@@ -117,9 +71,7 @@ public class Personaje implements JugadorEventListener{
 
 	@Override
 	public void disparar(Vector2 posDisparo, Vector3 target) {
-		if(arma.getBalas() > 0) {
-			arma.disparar(posDisparo, target);
-		}
+		arma.disparar(posDisparo, target);
 	}
 
 	@Override
