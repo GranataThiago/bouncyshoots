@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,14 +22,14 @@ import com.granata.bouncy.screens.ScreenJuego;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Global;
 import com.granata.bouncy.utiles.Render;
+import com.granata.bouncy.utiles.Texto;
 import com.granata.bouncy.utiles.Utiles;
 
 public class JuegoBase implements JuegoEventListener{
 	
-	private FreeTypeFontGenerator generador;
-	private FreeTypeFontParameter parametros;
-	private BitmapFont fuente = new BitmapFont();
 	private SpriteBatch sb = new SpriteBatch();
+	
+	private Texto contador = new Texto();
 	
 	// Personaje
 	protected Personaje p;
@@ -89,9 +88,9 @@ public class JuegoBase implements JuegoEventListener{
 			}
 			
 		}else {
-			sb.begin();
-				fuente.draw(sb, Float.toString(tiempoPasado), Config.ANCHO / 2, Config.ALTO / 2);
-			sb.end();
+			Render.sb.begin();
+				contador.dibujar(Float.toString(tiempoPasado), Config.ANCHO / 2, Config.ALTO / 2);
+			Render.sb.end();
 			tiempoPasado += delta;
 		}
 		
@@ -112,22 +111,13 @@ public class JuegoBase implements JuegoEventListener{
 	public void resize(int width, int height) {
 		vp = new FitViewport(width, height);
 	}
-	
-	public void dispose() {
-		Utiles.jugadores.clear();
-		mapa.dispose();
-		Render.spritesADibujar.clear();
-		for(Jugador j : Render.app.getCliente().getClientes()) {
-			j.getPj().getArma().dispose();
-		}
-	}
 
 	@Override
 	public void spawnPickup(int nroPowerup, int posPowerup) {
 		Powerup p = Powerups.values()[nroPowerup].getPowerup();
 		powerups.add(p);
 		Vector2 coords = spawners.get(posPowerup);
-		
+		System.out.println("Se agregó un powerup en la posición" + posPowerup);
 		Render.spritesADibujar.add(p.getSprite());
 		p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
 		
@@ -135,21 +125,25 @@ public class JuegoBase implements JuegoEventListener{
 
 	@Override
 	public void borrarPickup(int posicion) {
+		System.out.println("Pos server: " + posicion);
+		System.out.println("Cant powerups: " + powerups.size());
+		System.out.println("-----------------------------------");
 		Vector2 coords = spawners.get(posicion);
 		int i = 0;
 		boolean borrado = false;
 		
 		do {
-			
-			if(powerups.size() > posicion && coords.x / Config.PPM - (powerups.get(i).getSprite().getWidth() / 2) == powerups.get(i).getSprite().getX() && coords.y / Config.PPM - (powerups.get(i).getSprite().getHeight() / 2) == powerups.get(i).getSprite().getY()) {
+			if(coords.x / Config.PPM - (powerups.get(i).getSprite().getWidth() / 2) == powerups.get(i).getSprite().getX() && coords.y / Config.PPM - (powerups.get(i).getSprite().getHeight() / 2) == powerups.get(i).getSprite().getY()) {
 				powerups.get(i).destruir();
 				powerups.remove(i);
 				borrado = true;
 			}
 			
 			i++;
-		}while(!borrado && i < spawners.size());
+		}while(!borrado && i < powerups.size());
 		
+		System.out.println("Pos server: " + posicion);
+		System.out.println("Cant powerups: " + powerups.size());
 	}
 
 	@Override
@@ -162,7 +156,6 @@ public class JuegoBase implements JuegoEventListener{
 	@Override
 	public void moverCamaraX(float x) {
 		Global.cam.position.x = x;
-		
 	}
 
 	@Override
@@ -177,6 +170,16 @@ public class JuegoBase implements JuegoEventListener{
 		System.out.println("Arrancó el juego en el server");
 	}
 	
+	
+	public void dispose() {
+		Utiles.jugadores.clear();
+		mapa.dispose();
+		Render.spritesADibujar.clear();
+		for(Jugador j : Render.app.getCliente().getClientes()) {
+			j.getPj().getArma().dispose();
+		}
+	}
+
 	
 	
 

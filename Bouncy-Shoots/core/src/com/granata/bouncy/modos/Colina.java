@@ -38,7 +38,7 @@ public class Colina extends JuegoBase{
 			Powerup p = new Bullet();
 			powerups.add(p);
 			Vector2 coords = spawners.get(posPowerup);
-			
+			System.out.println("Se agregó un powerup en la posición" + posPowerup);
 			Render.spritesADibujar.add(p.getSprite());
 			p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
 		}

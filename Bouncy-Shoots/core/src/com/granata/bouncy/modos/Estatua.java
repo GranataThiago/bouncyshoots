@@ -3,6 +3,7 @@ package com.granata.bouncy.modos;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.granata.bouncy.managers.Assets;
 import com.granata.bouncy.powerups.Bullet;
 import com.granata.bouncy.powerups.Powerup;
 import com.granata.bouncy.utiles.Config;
@@ -14,8 +15,8 @@ public class Estatua extends JuegoBase{
 	private Modos estadoActual = Modos.MOVIMIENTO;
 	
 	
-	private Sprite luzRoja = new Sprite(new Texture("images/luzRoja.png"));
-	private Sprite luzVerde = new Sprite(new Texture("images/luzVerde.png"));
+	private Sprite luzRoja = new Sprite(Assets.manager.get(Assets.luzRoja, Texture.class));
+	private Sprite luzVerde = new Sprite(Assets.manager.get(Assets.luzVerde, Texture.class));
 	
 	@Override
 	public void start(String rutaMapa) {

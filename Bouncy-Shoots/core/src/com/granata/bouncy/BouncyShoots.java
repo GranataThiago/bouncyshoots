@@ -3,6 +3,7 @@ package com.granata.bouncy;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.granata.bouncy.managers.Assets;
 import com.granata.bouncy.red.Cliente;
 import com.granata.bouncy.screens.ScreenMenu;
 import com.granata.bouncy.screens.ScreenResultados;
@@ -14,6 +15,14 @@ public class BouncyShoots extends Game {
 	
 	@Override
 	public void create () {
+		// Cargamos las texturas necesarias
+		Assets.load();
+		// Se bloquea hasta terminar de cargarlos
+		Assets.manager.finishLoading();
+		inicializarJuego();
+	}
+
+	private void inicializarJuego() {
 		cliente = new Cliente();
 		Render.app = this;
 		Render.sb = new SpriteBatch();
@@ -43,6 +52,7 @@ public class BouncyShoots extends Game {
 	
 	@Override
 	public void dispose () {
+		Assets.dispose();
 		Render.sb.dispose();
 	}
 	

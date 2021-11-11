@@ -15,6 +15,7 @@ public class Colina extends JuegoBase{
 
 	private boolean[] ocupado;
 
+	
 	@Override
 	public void start(String rutaMapa) {
 		super.start(rutaMapa);
@@ -80,7 +81,6 @@ public class Colina extends JuegoBase{
 		
 		Render.spritesADibujar.add(p.getSprite());
 		p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
-		
 	}
 
 }

@@ -1,15 +1,17 @@
 package com.granata.bouncy.powerups;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.granata.bouncy.elementos.Personaje;
+import com.granata.bouncy.managers.Assets;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Render;
 
 public abstract class Powerup {
 
 	// Sprites powerups
-	private TextureRegion sPowerups = Render.sPowerups;
+	private TextureRegion sPowerups = new TextureRegion(Assets.manager.get(Assets.powerups, Texture.class));
 	
 	// Todo está en unidades
 	// Incrementos relativos al personaje

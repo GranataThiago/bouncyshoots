@@ -15,10 +15,6 @@ public class Personaje implements JugadorEventListener{
 	// Relativo al personaje 
 	private Sprite sprite;
 	private Arma arma;
-//	private boolean muerto;
-	
-	// Box2D
-//	private Body pj;
 	
 	// Inputs
 	public KeyInput e = new KeyInput();

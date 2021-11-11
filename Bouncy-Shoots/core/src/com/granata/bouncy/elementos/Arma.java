@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.granata.bouncy.managers.Assets;
 import com.granata.bouncy.managers.ControladorBalas;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Global;
@@ -14,7 +15,7 @@ public class Arma{
 	
 	// Crosshair
 	private Vector3 posMouse;
-	private Sprite sprite = new Sprite(new Texture("Crosshair.png")); 
+	private Sprite sprite = new Sprite(Assets.manager.get(Assets.crosshair, Texture.class)); 
 
 	
 	public Arma() {

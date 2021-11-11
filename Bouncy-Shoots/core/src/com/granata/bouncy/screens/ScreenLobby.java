@@ -3,13 +3,9 @@ package com.granata.bouncy.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -17,17 +13,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.granata.bouncy.io.TextInput;
 import com.granata.bouncy.red.HiloCliente;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Global;
 import com.granata.bouncy.utiles.Render;
+import com.granata.bouncy.utiles.Texto;
 
 public class ScreenLobby implements Screen{
 	
@@ -38,10 +32,8 @@ public class ScreenLobby implements Screen{
 	private Texture txtJugar;
 	private Button btnJugar;
 
-	private FreeTypeFontGenerator generador;
-	private FreeTypeFontParameter parametros;
-	private BitmapFont fuente = new BitmapFont();
-
+	private Texto nombreJugador = new Texto();
+	
 	private Image logo = new Image(new TextureRegionDrawable(new TextureRegion(new Texture("bs-logo.png"))));
 	private Vector2[] secciones = {new Vector2(100, Config.ALTO - 300), new Vector2(600, Config.ALTO - 300), new Vector2(1100, Config.ALTO - 300), new Vector2(1600, Config.ALTO - 300)};
 
@@ -51,12 +43,6 @@ public class ScreenLobby implements Screen{
 		
 		this.stage = new Stage(new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM));
 		txtJugar = new Texture("playbtn.png");
-
-		
-		generador = new FreeTypeFontGenerator(Gdx.files.internal("fuentes/Acme-Regular.ttf"));
-		parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parametros.shadowColor = Color.BLACK;
-		fuente = generador.generateFont(parametros);
 	}
 	
 	@Override
@@ -115,7 +101,7 @@ public class ScreenLobby implements Screen{
 		Render.sb.begin();
 			for(int i = 0; i < Render.app.getCliente().getClientes().size(); i++) {
 					Render.sb.draw(Render.app.getCliente().getClientes().get(i).getSprite(), secciones[i].x - 20, secciones[i].y - 250, 128, 128);
-					fuente.draw(Render.sb, Render.app.getCliente().getClientes().get(i).getNombre(), secciones[i].x, secciones[i].y);
+					nombreJugador.dibujar(Render.app.getCliente().getClientes().get(i).getNombre(), secciones[i].x, secciones[i].y);
 			}
 		Render.sb.end();
 		
@@ -154,9 +140,7 @@ public class ScreenLobby implements Screen{
 	@Override
 	public void dispose() {
 		stage.dispose();
-		fuente.dispose();
-		txtJugar.dispose();
-		generador.dispose();		
+		txtJugar.dispose();	
 	}
 
 }

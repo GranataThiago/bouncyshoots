@@ -32,13 +32,19 @@ public abstract class Render {
 	
 	
 	public static void dibujarSprites() {
-		// Hecho de esta manera para evitar excepciones
-		for(Sprite s : spritesDibujandose) {
+//		// Hecho de esta manera para evitar excepciones
+//		for(Sprite s : spritesDibujandose) {
+//			s.draw(sb);
+//		}
+//		// No es la mejor forma, pero borro todos y le agrego solo los que se tienen que dibujar.
+//		spritesDibujandose.clear();
+//		spritesDibujandose.addAll(spritesADibujar);
+		
+		Iterator<Sprite> sprites = spritesADibujar.iterator();
+		while(sprites.hasNext()) {
+			Sprite s = sprites.next();
 			s.draw(sb);
 		}
-		// No es la mejor forma, pero borro todos y le agrego solo los que se tienen que dibujar.
-		spritesDibujandose.clear();
-		spritesDibujandose.addAll(spritesADibujar);
 	}
 	
 

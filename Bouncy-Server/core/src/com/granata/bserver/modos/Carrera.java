@@ -12,16 +12,17 @@ import com.granata.bserver.powerups.Powerup;
 import com.granata.bserver.red.Cliente;
 import com.granata.bserver.utiles.Config;
 import com.granata.bserver.utiles.Render;
+import com.granata.bserver.utiles.Utiles;
 
-public class Carrera extends JuegoBase{
+public class Carrera extends JuegoBase implements CarreraEventListener{
 	
 	private float puntoFinal = 28f;
 	private float velCamara = 3f;
-	private int cantPu = 0;
 	
 	@Override
 	public void start(String rutaMapa) {
 		super.start(rutaMapa);
+		Utiles.cListener = this;
 		for(Cliente c : Render.app.getSv().getClientes()) {
 			c.getPj().getArma().setBalas(0);
 		}
@@ -60,6 +61,11 @@ public class Carrera extends JuegoBase{
 			p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
 		}
 		
+	}
+
+	@Override
+	public void onTerminar() {
+		fin = true;
 	}
 	
 

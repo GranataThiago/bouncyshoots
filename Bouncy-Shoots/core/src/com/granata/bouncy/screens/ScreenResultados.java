@@ -5,12 +5,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,14 +22,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Global;
 import com.granata.bouncy.utiles.Render;
+import com.granata.bouncy.utiles.Texto;
 
 public class ScreenResultados implements Screen{
 
 	private SpriteBatch sb;
 	private Stage stage;
-	private FreeTypeFontGenerator generador;
-	private FreeTypeFontParameter parametros;
-	private BitmapFont fuente = new BitmapFont();
+	private Texto txtGanador = new Texto();
 	
 	private Image logo = new Image(new TextureRegionDrawable(new TextureRegion(new Texture("bs-logo.png"))));
 	private Texture txtSalir;
@@ -46,12 +43,6 @@ public class ScreenResultados implements Screen{
 		txtSalir = new Texture("exitbtn.png");
 		sb = new SpriteBatch();
 		this.ganador = ganador;
-		
-		generador = new FreeTypeFontGenerator(Gdx.files.internal("fuentes/Acme-Regular.ttf"));
-		parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parametros.shadowColor = Color.BLACK;
-		parametros.size = 48;
-		fuente = generador.generateFont(parametros);
 	}
 	
 	@Override
@@ -104,10 +95,10 @@ public class ScreenResultados implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		if(Global.partidaIniciada) {
-			sb.begin();
-				fuente.draw(sb, "El ganador es:  " + Render.app.getCliente().getClientes().get(ganador).getNombre() + "!!!", ( Config.ANCHO / 2 ) - spriteGanador.getWidth() - 100, (Config.ALTO  / 2) + 200);
-				sb.draw(spriteGanador, ( Config.ANCHO / 2 ) - spriteGanador.getWidth(), Config.ALTO / 2, 128, 128);
-			sb.end();
+			Render.sb.begin();
+				txtGanador.dibujar("El ganador es:  " + Render.app.getCliente().getClientes().get(ganador).getNombre() + "!!!", ( Config.ANCHO / 2 ) - spriteGanador.getWidth() - 100, (Config.ALTO  / 2) + 200);
+				Render.sb.draw(spriteGanador, ( Config.ANCHO / 2 ) - spriteGanador.getWidth(), Config.ALTO / 2, 128, 128);
+			Render.sb.end();
 		}
 		
         stage.act();

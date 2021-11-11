@@ -17,13 +17,13 @@ import com.granata.bserver.utiles.Utiles;
 
 public class Combate extends JuegoBase{
 
-	private boolean[] ocupado;
+	private Powerup[] ocupado;
 	private int cantPu = 0;
 	
 	@Override
 	public void start(String rutaMapa) {
 		super.start(rutaMapa);
-		ocupado = new boolean[spawners.size()];
+		ocupado = new Powerup[spawners.size()];
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class Combate extends JuegoBase{
 		int posicion = -1;
 		
 		do {
-			if(ocupado[i] == false) {
+			if(ocupado[i] == null) {
 				libre = true;
 				posicion = i;
 			}
@@ -58,19 +58,19 @@ public class Combate extends JuegoBase{
 		
 		return posicion;
 	}
-	
-	private int comprobarEspaciosOcupados(Vector2 pos) {
-		boolean eOcupado = false;
+
+	private int indiceABorrar(Powerup p) {
+		
+		boolean encontro = false;
 		int i = 0;
-		int posicion = 0;
+		int posicion = -1;
 		
 		do {
-			if(Math.round(pos.x * Config.PPM) == spawners.get(i).x && Math.round(pos.y * Config.PPM) == spawners.get(i).y) {
-				eOcupado = true;
+			if(ocupado[i] == p) {
 				posicion = i;
 			}
 			i++;
-		}while(!eOcupado && i < spawners.size());
+		}while(!encontro && i < spawners.size());
 		
 		return posicion;
 	}
@@ -85,7 +85,7 @@ public class Combate extends JuegoBase{
 		Render.app.getSv().getHs().enviarMensajeGeneral("SpawnPowerup!" + nroPowerup + "!" + posicion);
 		
 		Vector2 coords = spawners.get(posicion);
-		ocupado[posicion] = true;
+		ocupado[posicion] = p;
 		
 		Body pu = ControladorBodies.crearPickup(coords.x, coords.y, 32, 32, BodyType.StaticBody, null);
 		pu.setUserData(p);
@@ -101,9 +101,10 @@ public class Combate extends JuegoBase{
 			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
 
 				if(Pickupable.class.isAssignableFrom(ControladorBodies.cuerposAEliminar.get(i).getUserData().getClass())) {
-					ocupado[comprobarEspaciosOcupados(ControladorBodies.cuerposAEliminar.get(i).getPosition())] = false;
+					ocupado[indiceABorrar((Powerup) ControladorBodies.cuerposAEliminar.get(i).getUserData())] = null;
 				}
 				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
+				System.out.println("cuerpo a eliminar: " + ControladorBodies.cuerposAEliminar.get(i));
 				ControladorBodies.cuerposAEliminar.remove(i);
 			}
 		}

@@ -3,7 +3,6 @@ package com.granata.bserver.modos;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -17,15 +16,12 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.granata.bserver.elementos.Bala;
-import com.granata.bserver.elementos.Personaje;
 import com.granata.bserver.elementos.Personaje.Estado;
 import com.granata.bserver.managers.CollisionListener;
 import com.granata.bserver.managers.ControladorBalas;
 import com.granata.bserver.managers.ControladorBodies;
-import com.granata.bserver.managers.JugadorEventListener;
 import com.granata.bserver.mapas.MapaTiled;
 import com.granata.bserver.red.Cliente;
-import com.granata.bserver.screens.ScreenJuego;
 import com.granata.bserver.utiles.Config;
 import com.granata.bserver.utiles.Render;
 import com.granata.bserver.utiles.Utiles;
@@ -40,7 +36,6 @@ public abstract class JuegoBase {
 	private FreeTypeFontGenerator generador;
 	private FreeTypeFontParameter parametros;
 	private BitmapFont fuente = new BitmapFont();
-	
 	
 	// Box2D
 	private Box2DDebugRenderer b2r;
@@ -57,7 +52,8 @@ public abstract class JuegoBase {
 	// Cosas del nivel en si
 	protected float tiempoEntreSpawn = 0f, tiempoParaEmpezar = 3f, contador = 0f; 
 	private float tiempoTotal = 70f, tiempoTranscurrido = 0, tiempoParaMorir = 0f;
-	private int jugadoresMuertos = 0;
+	protected int jugadoresMuertos = 0, cantPu = 0;
+	
 
 	
 	public void start(String rutaMapa) {	
@@ -110,7 +106,9 @@ public abstract class JuegoBase {
 						if(c.getPj().getEstadoActual() == Estado.MUERTO) {
 							jugadoresMuertos++;
 						}else {
-							if(!fin) c.getPj().update(delta);
+							if(!fin) {
+								c.getPj().update(delta);
+							}
 						}
 					}
 					Render.dibujarSprites();

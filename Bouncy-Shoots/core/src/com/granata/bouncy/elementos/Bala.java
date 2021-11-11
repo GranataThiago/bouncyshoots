@@ -1,17 +1,18 @@
 package com.granata.bouncy.elementos;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.granata.bouncy.managers.Assets;
 import com.granata.bouncy.utiles.Config;
 import com.granata.bouncy.utiles.Render;
 
-public class Bala extends Sprite implements Movible, Poolable{
+public class Bala extends Sprite implements Poolable{
 
 	// Movimiento de la bala
-	Vector2 direccion;
+	private Vector2 direccion;
 
 	// Configuración Balas
 	private float vel = 10f, daño, incDañoRebotes;
@@ -23,11 +24,11 @@ public class Bala extends Sprite implements Movible, Poolable{
 		this.rebotes = 10;
 		this.incDañoRebotes = 0;
 		this.daño = 30;
-
+		
 	}
 	
 	public void crearBala(Vector2 curPos, Vector3 target) {
-		sprite = new Sprite(Render.bala);
+		sprite = new Sprite(Assets.manager.get(Assets.bala, Texture.class));
 		sprite.setSize(16 / Config.PPM, 16 / Config.PPM);
 		Render.spritesADibujar.add(sprite);
 
@@ -59,12 +60,6 @@ public class Bala extends Sprite implements Movible, Poolable{
 		Render.spritesADibujar.remove(sprite);
 	}
 	
-	@Override
-	public void onDibujar() {
-		System.out.println("dibujando bala");
-	    Render.spritesADibujar.add(sprite);
-	}
-
 	@Override
 	public void reset() {
 		this.direccion.set(0, 0);
