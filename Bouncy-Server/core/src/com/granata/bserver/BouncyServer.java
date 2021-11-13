@@ -21,7 +21,7 @@ public class BouncyServer extends Game {
 		Render.app = this;
 		sv = new Servidor();
 		Render.sb = new SpriteBatch();
-		ControladorNiveles.generarMapas(4);
+		ControladorNiveles.generarMapas(5);
 		this.setScreen(new ScreenMenu());
 	}
 	

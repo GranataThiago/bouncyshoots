@@ -27,15 +27,15 @@ public class ScreenJuego implements Screen{
 
 	}
 	
-	public void update(float delta) {
-		juego.update(delta);
-	}
 	
 	@Override
 	public void render(float delta) {
 		juego.render(delta);
 	}
-
+	
+	public void update(float delta) {
+		juego.update(delta);
+	}
 	
 	@Override
 	public void resize(int width, int height) {

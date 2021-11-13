@@ -19,7 +19,7 @@ public class Personaje implements JugadorEventListener{
 	
 	// Relativo al personaje 
 	private Sprite sprite;
-	private float vel = 8f, salto = 12f, vida = 100;
+	private float vel = 6f, salto = 12f, vida = 100;
 	private Arma arma;
 	private boolean muerto;
 	private int idJugador;
@@ -65,7 +65,6 @@ public class Personaje implements JugadorEventListener{
 	}
 	
 	public boolean chequearFueraDeCamara(OrthographicCamera cam) {
-		System.out.println("chequeando");
 		if(!cam.frustum.pointInFrustum(getPosition().x, getPosition().y, 0) && getEstadoActual() != Estado.MUERTO) return true;	
 		else return false;
 	}

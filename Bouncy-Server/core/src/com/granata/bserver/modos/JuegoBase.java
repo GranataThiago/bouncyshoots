@@ -118,16 +118,18 @@ public abstract class JuegoBase {
 				
 				if(fin) terminarNivel();
 			}else {
-				Render.sb.begin();
-					fuente.draw(Render.sb, Float.toString(contador), Config.ANCHO / 2, Config.ALTO / 2);
-				Render.sb.end();
+				dibujarContador();
 				contador += delta;
 			}
-			
 
 			
 		}
 	
+	private void dibujarContador() {
+		Render.sb.begin();
+			fuente.draw(Render.sb, Float.toString(contador), Config.ANCHO / 2, Config.ALTO / 2);
+		Render.sb.end();
+	};
 	
 	public void update(float delta) {
 		chequearFinNivel();
@@ -203,6 +205,7 @@ public abstract class JuegoBase {
 	protected void borrarCuerpos() {
 		if(!ControladorBodies.world.isLocked()){
 			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
+				System.out.println("cuerpo a eliminar: " + ControladorBodies.cuerposAEliminar.get(i));
 				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
 				ControladorBodies.cuerposAEliminar.remove(i);
 			}

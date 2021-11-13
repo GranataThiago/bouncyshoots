@@ -111,9 +111,9 @@ public class ScreenMenu implements Screen{
 	public void render(float delta) {
 		Render.limpiarPantallaB();
 
-		Render.sb.begin();
-		Render.sb.draw(txtBg, 0, 0, Config.ANCHO, Config.ALTO);
-		Render.sb.end();
+		Render.begin();
+			Render.sb.draw(txtBg, 0, 0, Config.ANCHO, Config.ALTO);
+		Render.end();
 		
         stage.act();
         stage.draw();

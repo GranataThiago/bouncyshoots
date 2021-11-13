@@ -25,7 +25,7 @@ public class HiloCliente extends Thread{
 	public HiloCliente(String nombre) {
 		
 			try {
-				ipServer = InetAddress.getByName("255.255.255.255");
+				ipServer = InetAddress.getByName("26.33.181.120");
 				socket = new DatagramSocket();
 			} catch (SocketException | UnknownHostException e) {
 				e.printStackTrace();

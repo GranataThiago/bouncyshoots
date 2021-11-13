@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.granata.bouncy.elementos.Personaje;
@@ -61,13 +59,13 @@ public class JuegoBase implements JuegoEventListener{
 		
 		Global.cam = new OrthographicCamera();
 		vp = new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM);
-
 		Global.cam.setToOrtho(false, vp.getWorldWidth(), vp.getWorldHeight());
 
 	}
 	
 	public void render(float delta) {
 		Render.limpiarPantallaN();
+
 		if(empezo) {
 			update(delta);
 			
@@ -76,21 +74,21 @@ public class JuegoBase implements JuegoEventListener{
 			Render.sb.setProjectionMatrix(Global.cam.combined);
 
 			// Dibujamos al personaje y actualizamos la cámara
-			Render.sb.begin();
+			Render.begin();
 				for(Jugador j : Render.app.getCliente().getClientes()) {
 					j.getPj().update(delta);
 				}
 				Render.dibujarSprites();
-			Render.sb.end();
+			Render.end();
 			
 			if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 				Gdx.app.exit();
 			}
 			
 		}else {
-			Render.sb.begin();
+			Render.begin();
 				contador.dibujar(Float.toString(tiempoPasado), Config.ANCHO / 2, Config.ALTO / 2);
-			Render.sb.end();
+			Render.end();
 			tiempoPasado += delta;
 		}
 		
@@ -114,13 +112,14 @@ public class JuegoBase implements JuegoEventListener{
 
 	@Override
 	public void spawnPickup(int nroPowerup, int posPowerup) {
-		Powerup p = Powerups.values()[nroPowerup].getPowerup();
-		powerups.add(p);
-		Vector2 coords = spawners.get(posPowerup);
-		System.out.println("Se agregó un powerup en la posición" + posPowerup);
-		Render.spritesADibujar.add(p.getSprite());
-		p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
-		
+		if(spawners != null && spawners.get(posPowerup) != null) {
+			Powerup p = Powerups.values()[nroPowerup].getPowerup();
+			powerups.add(p);
+			Vector2 coords = spawners.get(posPowerup);
+			System.out.println("Se agregó un powerup en la posición" + posPowerup);
+			Render.spritesADibujar.add(p.getSprite());
+			p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
+		}
 	}
 
 	@Override
@@ -132,7 +131,17 @@ public class JuegoBase implements JuegoEventListener{
 		int i = 0;
 		boolean borrado = false;
 		
-		do {
+//		do {
+//			if(powerups.get(i) != null && coords.x / Config.PPM - (powerups.get(i).getSprite().getWidth() / 2) == powerups.get(i).getSprite().getX() && coords.y / Config.PPM - (powerups.get(i).getSprite().getHeight() / 2) == powerups.get(i).getSprite().getY()) {
+//				powerups.get(i).destruir();
+//				powerups.remove(i);
+//				borrado = true;
+//			}
+//			
+//			i++;
+//		}while(!borrado && i < powerups.size());
+		
+		while(!borrado && i < powerups.size()){
 			if(coords.x / Config.PPM - (powerups.get(i).getSprite().getWidth() / 2) == powerups.get(i).getSprite().getX() && coords.y / Config.PPM - (powerups.get(i).getSprite().getHeight() / 2) == powerups.get(i).getSprite().getY()) {
 				powerups.get(i).destruir();
 				powerups.remove(i);
@@ -140,7 +149,8 @@ public class JuegoBase implements JuegoEventListener{
 			}
 			
 			i++;
-		}while(!borrado && i < powerups.size());
+		}
+		
 		
 		System.out.println("Pos server: " + posicion);
 		System.out.println("Cant powerups: " + powerups.size());
@@ -150,7 +160,6 @@ public class JuegoBase implements JuegoEventListener{
 	public void cambiarMapa(int mapa) {
 		fin = true;
 		mapaSiguiente = mapa;
-		
 	}
 
 	@Override
@@ -173,8 +182,8 @@ public class JuegoBase implements JuegoEventListener{
 	
 	public void dispose() {
 		Utiles.jugadores.clear();
-		mapa.dispose();
 		Render.spritesADibujar.clear();
+		mapa.dispose();
 		for(Jugador j : Render.app.getCliente().getClientes()) {
 			j.getPj().getArma().dispose();
 		}

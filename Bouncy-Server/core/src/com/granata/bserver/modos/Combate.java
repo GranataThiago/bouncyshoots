@@ -99,12 +99,12 @@ public class Combate extends JuegoBase{
 	protected void borrarCuerpos() {
 		if(!ControladorBodies.world.isLocked()){
 			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
+				System.out.println("cuerpo a eliminar: " + ControladorBodies.cuerposAEliminar.get(i));
 
 				if(Pickupable.class.isAssignableFrom(ControladorBodies.cuerposAEliminar.get(i).getUserData().getClass())) {
 					ocupado[indiceABorrar((Powerup) ControladorBodies.cuerposAEliminar.get(i).getUserData())] = null;
 				}
 				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
-				System.out.println("cuerpo a eliminar: " + ControladorBodies.cuerposAEliminar.get(i));
 				ControladorBodies.cuerposAEliminar.remove(i);
 			}
 		}

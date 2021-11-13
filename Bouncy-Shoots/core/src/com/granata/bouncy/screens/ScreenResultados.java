@@ -91,18 +91,20 @@ public class ScreenResultados implements Screen{
 
 	@Override
 	public void render(float delta) {
+		Render.limpiarPantallaB();
+		
 		Gdx.gl.glClearColor(0.2f, 0.25f, 0.29f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-		if(Global.partidaIniciada) {
-			Render.sb.begin();
-				txtGanador.dibujar("El ganador es:  " + Render.app.getCliente().getClientes().get(ganador).getNombre() + "!!!", ( Config.ANCHO / 2 ) - spriteGanador.getWidth() - 100, (Config.ALTO  / 2) + 200);
-				Render.sb.draw(spriteGanador, ( Config.ANCHO / 2 ) - spriteGanador.getWidth(), Config.ALTO / 2, 128, 128);
-			Render.sb.end();
-		}
-		
         stage.act();
         stage.draw();
+		
+		Render.begin();
+			if(Global.partidaIniciada) {
+				txtGanador.dibujar("El ganador es:  " + Render.app.getCliente().getClientes().get(ganador).getNombre() + "!!!", ( Config.ANCHO / 2 ) - spriteGanador.getWidth() - 100, (Config.ALTO  / 2) + 200);
+				Render.sb.draw(spriteGanador, ( Config.ANCHO / 2 ) - spriteGanador.getWidth(), Config.ALTO / 2, 128, 128);
+			}
+		Render.end();
+
 		
 		
 	}

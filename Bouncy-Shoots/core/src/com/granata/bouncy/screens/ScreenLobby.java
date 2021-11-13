@@ -97,7 +97,7 @@ public class ScreenLobby implements Screen{
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.2f, 0.25f, 0.29f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
 		Render.sb.begin();
 			for(int i = 0; i < Render.app.getCliente().getClientes().size(); i++) {
 					Render.sb.draw(Render.app.getCliente().getClientes().get(i).getSprite(), secciones[i].x - 20, secciones[i].y - 250, 128, 128);

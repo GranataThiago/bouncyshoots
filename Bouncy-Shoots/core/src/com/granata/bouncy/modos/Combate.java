@@ -1,5 +1,7 @@
 package com.granata.bouncy.modos;
 
+import com.granata.bouncy.utiles.Render;
+
 public class Combate extends JuegoBase{
 
 	
