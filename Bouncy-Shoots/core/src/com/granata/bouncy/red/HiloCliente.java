@@ -88,9 +88,13 @@ public class HiloCliente extends Thread{
 					Utiles.jugadores.get(Integer.valueOf(comando[1])).disparar(new Vector2(Float.parseFloat(posDisparo[0]), Float.parseFloat(posDisparo[1])), new Vector3(Float.parseFloat(target[0]), Float.parseFloat(target[1]), 0));
 				}
 			}else if(comando[0].equals("ModificarPosBala")) {
-				ControladorBalas.balasActivas.get(Integer.valueOf(comando[1])).actualizarPosicion(Float.parseFloat(comando[2]), Float.parseFloat(comando[3]));
+				if(ControladorBalas.balasActivas.size > Integer.valueOf(comando[1])) {
+					ControladorBalas.balasActivas.get(Integer.valueOf(comando[1])).actualizarPosicion(Float.parseFloat(comando[2]), Float.parseFloat(comando[3]));
+				}
 			}else if(comando[0].equals("BorrarBala")) {
-				ControladorBalas.balasActivas.get(Integer.valueOf(comando[1])).destruir();
+				if(ControladorBalas.balasActivas.size > Integer.valueOf(comando[1])) {
+					ControladorBalas.balasActivas.get(Integer.valueOf(comando[1])).destruir();
+				}
 			}else if(comando[0].equals("BorrarJugador")) {
 				Render.app.getCliente().getClientes().get(Integer.valueOf(comando[1])).getPj().destruir();
 			}else if(comando[0].equals("SpawnPowerup")) {

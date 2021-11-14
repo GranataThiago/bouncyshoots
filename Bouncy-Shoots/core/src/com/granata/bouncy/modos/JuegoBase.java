@@ -58,26 +58,24 @@ public class JuegoBase implements JuegoEventListener{
 		Global.cam = new OrthographicCamera();
 		vp = new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM);
 		Global.cam.setToOrtho(false, vp.getWorldWidth(), vp.getWorldHeight());
-		contador.setSize(0.1f, 0.1f);
+		contador.setSize(0.2f, 0.2f);
 	}
 	
 	public void render(float delta) {
 		Render.limpiarPantallaN();
 		Render.sb.setProjectionMatrix(Global.cam.combined);
+
 		if(!empezo) {
 				Render.begin();
-					contador.dibujar(Float.toString(tiempoPasado), (Config.ANCHO / 2) / Config.PPM,  (Config.ALTO / 2) / Config.PPM );
+					contador.dibujar(Integer.toString((int) tiempoPasado+1), ((Config.ANCHO / 2) - 50) / Config.PPM,  ((Config.ALTO / 2) + 50) / Config.PPM );
 				Render.end();
 				tiempoPasado += delta;
 		}else {
-				
 			update(delta);
 			
 			// Renderiza el mapa
 			mapa.render();
 
-
-			
 			// Dibujamos al personaje y actualizamos la cámara
 			Render.begin();
 				for(Jugador j : Render.app.getCliente().getClientes()) {
@@ -88,7 +86,7 @@ public class JuegoBase implements JuegoEventListener{
 			
 		}
 
-		
+
 	}
 	
 	private void terminarNivel() {

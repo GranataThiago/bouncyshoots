@@ -26,7 +26,6 @@ import com.granata.bouncy.utiles.Texto;
 
 public class ScreenResultados implements Screen{
 
-	private SpriteBatch sb;
 	private Stage stage;
 	private Texto txtGanador = new Texto();
 	
@@ -41,8 +40,8 @@ public class ScreenResultados implements Screen{
 	public ScreenResultados(int ganador) {
 		this.stage = new Stage(new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM));
 		txtSalir = new Texture("exitbtn.png");
-		sb = new SpriteBatch();
 		this.ganador = ganador;
+		txtGanador.setSize(0.1f, 0.1f);
 	}
 	
 	@Override
@@ -100,8 +99,8 @@ public class ScreenResultados implements Screen{
 		
 		Render.begin();
 			if(Global.partidaIniciada) {
-				txtGanador.dibujar("El ganador es:  " + Render.app.getCliente().getClientes().get(ganador).getNombre() + "!!!", ( Config.ANCHO / 2 ) - spriteGanador.getWidth() - 100, (Config.ALTO  / 2) + 200);
-				Render.sb.draw(spriteGanador, ( Config.ANCHO / 2 ) - spriteGanador.getWidth(), Config.ALTO / 2, 128, 128);
+				txtGanador.dibujar(Render.app.getCliente().getClientes().get(ganador).getNombre() + "!!!", ((( Config.ANCHO / 2 ) - spriteGanador.getWidth()) - 100)  / Config.PPM , ((Config.ALTO / 2) + 200) / Config.PPM);
+				Render.sb.draw(spriteGanador, (( Config.ANCHO / 2 ) - spriteGanador.getWidth()) / Config.PPM, (Config.ALTO / 2) / Config.PPM, 128 / Config.PPM, 128 / Config.PPM);
 			}
 		Render.end();
 
