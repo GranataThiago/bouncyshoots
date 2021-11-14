@@ -164,8 +164,12 @@ public abstract class JuegoBase {
 		}
 		
 	}
-
-	protected abstract void spawnPickup();
+	
+	protected void sacarBalas() {
+		for(Cliente c : Render.app.getSv().getClientes()) {
+			c.getPj().getArma().setBalas(0);
+		}
+	}
 	
 	public void resize(int width, int height) {
 		vp = new FitViewport(width, height);
@@ -179,6 +183,8 @@ public abstract class JuegoBase {
 		mapa.dispose();
 		Render.spritesADibujar.clear();
 	}
+
+	protected abstract void spawnPickup();
 
 	
 	public void chequearFinNivel() {

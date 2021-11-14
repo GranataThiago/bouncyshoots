@@ -43,7 +43,7 @@ public class Personaje implements JugadorEventListener{
 		pj.setUserData(this);
 		pj.setAngularDamping(0);
 		pj.setLinearDamping(0);
-
+		
 		this.sprite.setSize(64 / Config.PPM, 64 / Config.PPM);
 		Render.spritesADibujar.add(this.sprite);
 		arma = new Arma();
@@ -70,10 +70,10 @@ public class Personaje implements JugadorEventListener{
 	}
 
 	private void controlarMovimiento() {
-		if(mueveDerecha && pj.getLinearVelocity().x <= 2) {
+		if(mueveDerecha && pj.getLinearVelocity().x <= 3) {
 			pj.applyLinearImpulse(new Vector2(vel, 0), pj.getWorldCenter(), true);
 			flip(false);
-		}else if(mueveIzquierda && pj.getLinearVelocity().x >= -2) {
+		}else if(mueveIzquierda && pj.getLinearVelocity().x >= -3) {
 			pj.applyLinearImpulse(new Vector2(-vel, 0), pj.getWorldCenter(), true);
 			flip(true);
 		}else if(usaSalto && puedeSaltar()) {

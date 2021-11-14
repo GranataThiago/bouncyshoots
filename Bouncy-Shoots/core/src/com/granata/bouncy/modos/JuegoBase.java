@@ -106,7 +106,7 @@ public class JuegoBase implements JuegoEventListener{
 
 	@Override
 	public void spawnPickup(int nroPowerup, int posPowerup) {
-		if(spawners != null && spawners.get(posPowerup) != null) {
+		if(spawners != null && posPowerup < spawners.size()) {
 			Powerup p = Powerups.values()[nroPowerup].getPowerup();
 			powerups.add(p);
 			Vector2 coords = spawners.get(posPowerup);

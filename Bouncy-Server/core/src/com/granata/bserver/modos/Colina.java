@@ -19,6 +19,7 @@ public class Colina extends JuegoBase{
 	@Override
 	public void start(String rutaMapa) {
 		super.start(rutaMapa);
+		sacarBalas();
 		ocupado = new boolean[spawners.size()];
 	}
 	

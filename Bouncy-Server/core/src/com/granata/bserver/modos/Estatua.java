@@ -31,6 +31,7 @@ public class Estatua extends JuegoBase{
 		System.out.println("Iniciando Estatua...");
 		super.start(rutaMapa);
 		ocupado = new boolean[spawners.size()];
+		sacarBalas();
 	}
 	
 	@Override

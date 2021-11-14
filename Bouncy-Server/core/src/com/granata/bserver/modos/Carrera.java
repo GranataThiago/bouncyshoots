@@ -23,9 +23,7 @@ public class Carrera extends JuegoBase implements CarreraEventListener{
 	public void start(String rutaMapa) {
 		super.start(rutaMapa);
 		Utiles.cListener = this;
-		for(Cliente c : Render.app.getSv().getClientes()) {
-			c.getPj().getArma().setBalas(0);
-		}
+		sacarBalas();
 		spawnPickup();
 	}
 	

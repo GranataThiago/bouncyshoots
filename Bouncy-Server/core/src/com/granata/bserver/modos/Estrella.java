@@ -24,7 +24,7 @@ public class Estrella extends JuegoBase implements EstrellaEventListener{
 		Render.spritesADibujar.add(this.estrella);
 //		ocupado = new boolean[spawners.size()];
 		Render.app.getSv().getHs().enviarMensajeGeneral("AsignarEstrella!" + estrellado);
-		System.out.println("Termino sv Estrella");
+		sacarBalas();
 	}
 	
 	@Override
