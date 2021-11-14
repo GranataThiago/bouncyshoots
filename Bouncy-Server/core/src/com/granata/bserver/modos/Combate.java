@@ -30,7 +30,7 @@ public class Combate extends JuegoBase{
 	public void update(float delta) {
 		super.update(delta);
 		
-		if(tiempoEntreSpawn > 1f && ((comprobarEspaciosVacios() == -1) ? false : true) && !fin) {
+		if(tiempoEntreSpawn > 1f && ((comprobarEspaciosVacios() == -1) ? false : true) && !Utiles.fin) {
 			tiempoEntreSpawn = 0f;
 			spawnPickup();
 		}

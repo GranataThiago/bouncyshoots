@@ -24,9 +24,7 @@ import com.granata.bouncy.utiles.Texto;
 import com.granata.bouncy.utiles.Utiles;
 
 public class JuegoBase implements JuegoEventListener{
-	
-	private SpriteBatch sb = new SpriteBatch();
-	
+		
 	private Texto contador = new Texto();
 	
 	// Personaje
@@ -60,19 +58,26 @@ public class JuegoBase implements JuegoEventListener{
 		Global.cam = new OrthographicCamera();
 		vp = new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM);
 		Global.cam.setToOrtho(false, vp.getWorldWidth(), vp.getWorldHeight());
-
+		contador.setSize(0.1f, 0.1f);
 	}
 	
 	public void render(float delta) {
 		Render.limpiarPantallaN();
-
-		if(empezo) {
+		Render.sb.setProjectionMatrix(Global.cam.combined);
+		if(!empezo) {
+				Render.begin();
+					contador.dibujar(Float.toString(tiempoPasado), (Config.ANCHO / 2) / Config.PPM,  (Config.ALTO / 2) / Config.PPM );
+				Render.end();
+				tiempoPasado += delta;
+		}else {
+				
 			update(delta);
 			
 			// Renderiza el mapa
 			mapa.render();
-			Render.sb.setProjectionMatrix(Global.cam.combined);
 
+
+			
 			// Dibujamos al personaje y actualizamos la cámara
 			Render.begin();
 				for(Jugador j : Render.app.getCliente().getClientes()) {
@@ -81,17 +86,8 @@ public class JuegoBase implements JuegoEventListener{
 				Render.dibujarSprites();
 			Render.end();
 			
-			if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-				Gdx.app.exit();
-			}
-			
-		}else {
-			Render.begin();
-				contador.dibujar(Float.toString(tiempoPasado), Config.ANCHO / 2, Config.ALTO / 2);
-			Render.end();
-			tiempoPasado += delta;
 		}
-		
+
 		
 	}
 	

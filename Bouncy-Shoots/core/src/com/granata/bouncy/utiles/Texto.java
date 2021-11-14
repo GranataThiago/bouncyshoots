@@ -30,6 +30,10 @@ public class Texto {
 		fuente.draw(Render.sb, texto, x, y);
 	}
 	
+	public void setSize(float x, float y) {
+		fuente.getData().setScale(x, y);
+	}
+	
 	public void setTexto(String texto) {
 		this.texto = texto;
 	}

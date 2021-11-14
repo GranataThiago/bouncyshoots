@@ -65,7 +65,7 @@ public class Carrera extends JuegoBase implements CarreraEventListener{
 
 	@Override
 	public void onTerminar() {
-		fin = true;
+		Utiles.fin = true;
 	}
 	
 

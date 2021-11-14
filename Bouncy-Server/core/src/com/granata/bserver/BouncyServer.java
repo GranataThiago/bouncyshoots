@@ -10,6 +10,7 @@ import com.granata.bserver.screens.ScreenJuego;
 import com.granata.bserver.screens.ScreenMenu;
 import com.granata.bserver.screens.ScreenResultados;
 import com.granata.bserver.utiles.Render;
+import com.granata.bserver.utiles.Utiles;
 
 public class BouncyServer extends Game {
 	
@@ -26,6 +27,7 @@ public class BouncyServer extends Game {
 	}
 	
 	public Screen pasarNivel() {
+		Utiles.fin = false;
 		if(mapaActual < ControladorNiveles.niveles.size()) {
 			int mapa = ControladorNiveles.niveles.get(mapaActual);
 			sv.getHs().enviarMensajeGeneral("CambiarMapa!" + mapa);

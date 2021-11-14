@@ -47,7 +47,8 @@ public abstract class JuegoBase {
 	// Mapa
 	protected MapaTiled mapa;
 	protected ArrayList<Vector2> spawners = new ArrayList<Vector2>();
-	protected boolean fin = false, empezo = false;
+//	protected boolean fin = false, empezo = false;
+	protected boolean empezo = false;
 	
 	// Cosas del nivel en si
 	protected float tiempoEntreSpawn = 0f, tiempoParaEmpezar = 3f, contador = 0f; 
@@ -57,7 +58,7 @@ public abstract class JuegoBase {
 
 	
 	public void start(String rutaMapa) {	
-		
+
 		generador = new FreeTypeFontGenerator(Gdx.files.internal("fuentes/Acme-Regular.ttf"));
 		parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parametros.shadowColor = Color.BLACK;
@@ -87,7 +88,7 @@ public abstract class JuegoBase {
 	public void render(float delta) {
 			Render.limpiarPantallaN();
 
-			if(contador > tiempoParaEmpezar && !fin) {
+			if(contador > tiempoParaEmpezar && !Utiles.fin) {
 				if (!empezo) {
 					System.out.println("Arrancó el juego en el server");
 					empezo = true;
@@ -106,7 +107,7 @@ public abstract class JuegoBase {
 						if(c.getPj().getEstadoActual() == Estado.MUERTO) {
 							jugadoresMuertos++;
 						}else {
-							if(!fin) {
+							if(!Utiles.fin) {
 								c.getPj().update(delta);
 							}
 						}
@@ -116,7 +117,7 @@ public abstract class JuegoBase {
 				
 
 				
-				if(fin) terminarNivel();
+				if(Utiles.fin) terminarNivel();
 			}else {
 				dibujarContador();
 				contador += delta;
@@ -181,17 +182,17 @@ public abstract class JuegoBase {
 
 	
 	public void chequearFinNivel() {
-		if(jugadoresMuertos >= (Render.app.getSv().getClientes().size()-1) && !fin || tiempoTranscurrido > tiempoTotal && !fin) {
+		if(jugadoresMuertos >= (Render.app.getSv().getClientes().size()-1) && !Utiles.fin || tiempoTranscurrido > tiempoTotal && !Utiles.fin) {
 			System.out.println(jugadoresMuertos + " " + tiempoTranscurrido);
 			System.out.println("SE terminó el nivel");
-			fin = true;
+			Utiles.fin = true;
 		}
 	}
 	
 	
 	public void terminarNivel() {
 		Timer terminar = new Timer();
-		if(fin) {
+		if(Utiles.fin) {
 			terminar.scheduleTask(new Task(){
 			    @Override
 			    public void run() {

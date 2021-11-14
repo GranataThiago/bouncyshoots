@@ -14,6 +14,7 @@ public class Utiles {
 	public static CarreraEventListener cListener;
 	public static ArrayList<JugadorEventListener> jugadores = new ArrayList<JugadorEventListener>();
 	public static boolean partidaIniciada = false;
+	public static boolean fin = false;
 }
 
 

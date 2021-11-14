@@ -30,13 +30,15 @@ public class HiloServidor extends Thread{
 	}
 	
 	private void enviarMensaje(String msg, InetAddress ip, int puerto) {
-		byte[] data = msg.getBytes();
-		DatagramPacket dp = new DatagramPacket(data, data.length, ip, puerto);
-		
-		try {
-			socket.send(dp);
-		} catch (IOException e) {	
-			e.printStackTrace();
+		if(!Utiles.fin) {
+			byte[] data = msg.getBytes();
+			DatagramPacket dp = new DatagramPacket(data, data.length, ip, puerto);
+			
+			try {
+				socket.send(dp);
+			} catch (IOException e) {	
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -124,8 +126,10 @@ public class HiloServidor extends Thread{
 	}
 
 	public void enviarMensajeGeneral(String msj) {
-		for(int i = 0; i < cantClientes; i++) {
-			enviarMensaje(msj, sv.getClientes().get(i).getIp(), sv.getClientes().get(i).getPuerto());
+		if(!Utiles.fin) {
+			for(int i = 0; i < cantClientes; i++) {
+				enviarMensaje(msj, sv.getClientes().get(i).getIp(), sv.getClientes().get(i).getPuerto());
+			}
 		}
 	}
 	
