@@ -136,4 +136,8 @@ public class HiloCliente extends Thread{
 		
 	}
 	
+	public void terminar() {
+		fin = true;
+	}
+	
 }

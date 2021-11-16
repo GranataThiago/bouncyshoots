@@ -32,4 +32,8 @@ public class Cliente {
 		this.id = id;
 		System.out.println("Se seteo id");
 	}
+	
+	public void cerrarHilo() {
+		if(hc != null) hc.terminar();
+	}
 }
