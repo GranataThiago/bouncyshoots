@@ -62,7 +62,6 @@ public class Cliente {
 
 	public void setScore(float score) {
 		this.score += score;
-		System.out.println("Cliente: " + posTxt + " score: " + this.score);
 	}
 
 	public Personaje getPj() {

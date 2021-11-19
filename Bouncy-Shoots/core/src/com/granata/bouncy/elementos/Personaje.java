@@ -20,6 +20,9 @@ public class Personaje implements JugadorEventListener{
 	public KeyInput e = new KeyInput();
 	private boolean controlable = false;
 	
+	//
+	float speed = 0, accel = 0, maxAccel = 0f, maxSpeed = 0.2f, maxDeceleration = 1f;
+	
 	public Personaje(Sprite s, boolean controlable) {
 		this.sprite = s;
 		this.controlable = controlable;
@@ -37,16 +40,39 @@ public class Personaje implements JugadorEventListener{
 	public void update(float dt) {
 		
 		arma.update(dt);
+		controlarMovimiento(dt);
 		
+
 	}
 
 	
-//	public void recibirDaño(float daño) {
-//		this.vida -= daño;
-//		if(this.vida <= 0) {
-//			destruir();
-//		}
-//	}
+	private void controlarMovimiento(float delta) {
+		if(e.isRight() || e.isLeft())
+	        accel += 0.1f;
+	    else
+	        accel -= 0.1f;
+
+	    if(accel > maxAccel)
+	        accel = maxAccel;
+
+	    if(speed == 0.0f && accel < 0.0f)
+	        accel = 0.0f;
+	    else if(speed > 0.0f && accel < -maxDeceleration)
+	        accel = -maxDeceleration;
+	    
+	    speed += accel;
+	    
+	    if(e.isRight()) {
+	    	sprite.setPosition(sprite.getX() + speed, sprite.getY());
+	    }else if(e.isLeft()) {
+	    	sprite.setPosition(sprite.getX() - speed, sprite.getY());
+	    }
+
+	    if(speed >= maxSpeed)
+	        speed = maxSpeed;
+	    else if(speed < 0.0f)
+	        speed = 0.0f;
+	}
 
 	public Arma getArma() {
 		return arma;

@@ -12,15 +12,11 @@ import com.granata.bserver.utiles.Render;
 import com.granata.bserver.utiles.Utiles;
 
 public class Colina extends JuegoBase{
-
-	private boolean[] ocupado;
-
 	
 	@Override
 	public void start(String rutaMapa) {
 		super.start(rutaMapa);
 		sacarBalas();
-		ocupado = new boolean[spawners.size()];
 	}
 	
 	@Override
@@ -32,23 +28,7 @@ public class Colina extends JuegoBase{
 			spawnPickup();
 		}
 	}
-	
-	
-	private int comprobarEspaciosVacios() {
-		boolean libre = false;
-		int i = 0;
-		int posicion = -1;
-		
-		do {
-			if(ocupado[i] == false) {
-				libre = true;
-				posicion = i;
-			}
-			i++;
-		}while(!libre && i < ocupado.length);
-		
-		return posicion;
-	}
+
 	
 	private int comprobarEspaciosOcupados(Vector2 pos) {
 		boolean eOcupado = false;
@@ -75,7 +55,7 @@ public class Colina extends JuegoBase{
 		Render.app.getSv().getHs().enviarMensajeGeneral("SpawnPowerup!" + posicion);
 		
 		Vector2 coords = spawners.get(posicion);
-		ocupado[posicion] = true;
+		ocupado[posicion] = p;
 		
 		Body pu = ControladorBodies.crearPickup(coords.x, coords.y, 32, 32, BodyType.StaticBody, null);
 		pu.setUserData(p);

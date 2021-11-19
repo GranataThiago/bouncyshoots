@@ -23,7 +23,9 @@ public class BloqueColina implements BloqueInteractivo{
 		cronometro.scheduleTask(new Task(){
 		    @Override
 		    public void run() {
-		        Render.app.getSv().getClientes().get(idJugador).setScore(10);
+		    	if(idJugador < Render.app.getSv().getClientes().size()) {
+			        Render.app.getSv().getClientes().get(idJugador).setScore(10);
+		    	}
 		    }
 		}, 0, tiempoEntreAumento);
 	}

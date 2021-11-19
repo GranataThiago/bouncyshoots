@@ -20,9 +20,7 @@ public class Estatua extends JuegoBase{
 	private Modos estadoActual = Modos.MOVIMIENTO;
 	private float tiempoEntreCambio = Utiles.r.nextInt(5)+5;
 	private float tiempoAcumulado = 0;
-	
-	private boolean[] ocupado;
-	
+		
 	private Sprite luzRoja = new Sprite(new Texture("images/luzRoja.png"));
 	private Sprite luzVerde = new Sprite(new Texture("images/luzVerde.png"));
 
@@ -30,7 +28,6 @@ public class Estatua extends JuegoBase{
 	public void start(String rutaMapa) {
 		System.out.println("Iniciando Estatua...");
 		super.start(rutaMapa);
-		ocupado = new boolean[spawners.size()];
 		sacarBalas();
 	}
 	
@@ -85,39 +82,7 @@ public class Estatua extends JuegoBase{
 		Render.sb.end();
 
 	}
-	
-	
-	private int comprobarEspaciosVacios() {
-		boolean libre = false;
-		int i = 0;
-		int posicion = -1;
-		
-		do {
-			if(ocupado[i] == false) {
-				libre = true;
-				posicion = i;
-			}
-			i++;
-		}while(!libre && i < ocupado.length);
-		
-		return posicion;
-	}
-	
-	private int comprobarEspaciosOcupados(Vector2 pos) {
-		boolean eOcupado = false;
-		int i = 0;
-		int posicion = 0;
-		
-		do {
-			if(Math.round(pos.x * Config.PPM) == spawners.get(i).x && Math.round(pos.y * Config.PPM) == spawners.get(i).y) {
-				eOcupado = true;
-				posicion = i;
-			}
-			i++;
-		}while(!eOcupado && i < spawners.size());
-		
-		return posicion;
-	}
+
 	
 
 	@Override
@@ -129,7 +94,7 @@ public class Estatua extends JuegoBase{
 		Render.app.getSv().getHs().enviarMensajeGeneral("SpawnPowerup!" + posicion);
 		
 		Vector2 coords = spawners.get(posicion);
-		ocupado[posicion] = true;
+		ocupado[posicion] = p;
 		
 		Body pu = ControladorBodies.crearPickup(coords.x, coords.y, 32, 32, BodyType.StaticBody, null);
 		pu.setUserData(p);

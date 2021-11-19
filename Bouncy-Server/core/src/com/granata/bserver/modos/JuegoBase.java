@@ -21,6 +21,8 @@ import com.granata.bserver.managers.CollisionListener;
 import com.granata.bserver.managers.ControladorBalas;
 import com.granata.bserver.managers.ControladorBodies;
 import com.granata.bserver.mapas.MapaTiled;
+import com.granata.bserver.powerups.Pickupable;
+import com.granata.bserver.powerups.Powerup;
 import com.granata.bserver.red.Cliente;
 import com.granata.bserver.utiles.Config;
 import com.granata.bserver.utiles.Render;
@@ -47,12 +49,13 @@ public abstract class JuegoBase {
 	// Mapa
 	protected MapaTiled mapa;
 	protected ArrayList<Vector2> spawners = new ArrayList<Vector2>();
+	protected Powerup[] ocupado;
 //	protected boolean fin = false, empezo = false;
 	protected boolean empezo = false;
 	
 	// Cosas del nivel en si
 	protected float tiempoEntreSpawn = 0f, tiempoParaEmpezar = 3f, contador = 0f; 
-	private float tiempoTotal = 70f, tiempoTranscurrido = 0, tiempoParaMorir = 0f;
+	private float tiempoTotal = 40f, tiempoTranscurrido = 0, tiempoParaMorir = 0f;
 	protected int jugadoresMuertos = 0, cantPu = 0;
 	
 
@@ -73,7 +76,7 @@ public abstract class JuegoBase {
 
 		mapa = new MapaTiled(rutaMapa);
 		if(mapa.getSpawners() != null ) spawners = mapa.getSpawners();
-
+		ocupado = new Powerup[spawners.size()];
 		
 		b2r = new Box2DDebugRenderer();
 		for(int i = 0; i < Render.app.getSv().getClientes().size(); i++) {
@@ -186,6 +189,39 @@ public abstract class JuegoBase {
 
 	protected abstract void spawnPickup();
 
+	protected int comprobarEspaciosVacios() {
+		System.out.println();
+		boolean libre = false;
+		int i = 0;
+		int posicion = -1;
+		
+		do {
+			if(ocupado[i] == null) {
+				libre = true;
+				posicion = i;
+			}
+			i++;
+		}while(!libre && i < spawners.size());
+		
+		return posicion;
+	}
+
+	
+	private int indiceABorrar(Powerup p) {
+		
+		boolean encontro = false;
+		int i = 0;
+		int posicion = -1;
+		
+		do {
+			if(ocupado[i] == p) {
+				posicion = i;
+			}
+			i++;
+		}while(!encontro && i < spawners.size());
+		
+		return posicion;
+	}
 	
 	public void chequearFinNivel() {
 		if(jugadoresMuertos >= (Render.app.getSv().getClientes().size()-1) && !Utiles.fin || tiempoTranscurrido > tiempoTotal && !Utiles.fin) {
@@ -212,6 +248,13 @@ public abstract class JuegoBase {
 	protected void borrarCuerpos() {
 		if(!ControladorBodies.world.isLocked()){
 			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
+				
+
+				if(Pickupable.class.isAssignableFrom(ControladorBodies.cuerposAEliminar.get(i).getUserData().getClass())) {
+					int indice = indiceABorrar((Powerup) ControladorBodies.cuerposAEliminar.get(i).getUserData());
+					if(indice != -1) ocupado[indice] = null;
+				}
+				
 				System.out.println("cuerpo a eliminar: " + ControladorBodies.cuerposAEliminar.get(i));
 				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
 				ControladorBodies.cuerposAEliminar.remove(i);

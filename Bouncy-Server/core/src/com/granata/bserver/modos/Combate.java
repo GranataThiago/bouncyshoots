@@ -17,20 +17,18 @@ import com.granata.bserver.utiles.Utiles;
 
 public class Combate extends JuegoBase{
 
-	private Powerup[] ocupado;
 	private int cantPu = 0;
 	
 	@Override
 	public void start(String rutaMapa) {
 		super.start(rutaMapa);
-		ocupado = new Powerup[spawners.size()];
 	}
 	
 	@Override
 	public void update(float delta) {
 		super.update(delta);
 		
-		if(tiempoEntreSpawn > 1f && ((comprobarEspaciosVacios() == -1) ? false : true) && !Utiles.fin) {
+		if(tiempoEntreSpawn > 2f && ((comprobarEspaciosVacios() == -1) ? false : true) && !Utiles.fin) {
 			tiempoEntreSpawn = 0f;
 			spawnPickup();
 		}
@@ -42,38 +40,8 @@ public class Combate extends JuegoBase{
 	public void render(float delta) {
 		super.render(delta);
 	}
-	
-	private int comprobarEspaciosVacios() {
-		boolean libre = false;
-		int i = 0;
-		int posicion = -1;
-		
-		do {
-			if(ocupado[i] == null) {
-				libre = true;
-				posicion = i;
-			}
-			i++;
-		}while(!libre && i < ocupado.length);
-		
-		return posicion;
-	}
 
-	private int indiceABorrar(Powerup p) {
-		
-		boolean encontro = false;
-		int i = 0;
-		int posicion = -1;
-		
-		do {
-			if(ocupado[i] == p) {
-				posicion = i;
-			}
-			i++;
-		}while(!encontro && i < spawners.size());
-		
-		return posicion;
-	}
+
 	
 	@Override
 	protected void spawnPickup() {
@@ -94,21 +62,18 @@ public class Combate extends JuegoBase{
 		p.getSprite().setPosition((coords.x / Config.PPM) - (p.getSprite().getWidth() / 2), (coords.y / Config.PPM)  - (p.getSprite().getHeight() / 2));
 
 	}
-	
-	@Override
-	protected void borrarCuerpos() {
-		if(!ControladorBodies.world.isLocked()){
-			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
-				System.out.println("cuerpo a eliminar: " + ControladorBodies.cuerposAEliminar.get(i));
-
-				if(Pickupable.class.isAssignableFrom(ControladorBodies.cuerposAEliminar.get(i).getUserData().getClass())) {
-					ocupado[indiceABorrar((Powerup) ControladorBodies.cuerposAEliminar.get(i).getUserData())] = null;
-				}
-				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
-				ControladorBodies.cuerposAEliminar.remove(i);
-			}
-		}
-	}
+//	
+//	@Override
+//	protected void borrarCuerpos() {
+//		if(!ControladorBodies.world.isLocked()){
+//			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
+//				System.out.println("cuerpo a eliminar: " + ControladorBodies.cuerposAEliminar.get(i));
+//
+//				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
+//				ControladorBodies.cuerposAEliminar.remove(i);
+//			}
+//		}
+//	}
 	
 	
 }

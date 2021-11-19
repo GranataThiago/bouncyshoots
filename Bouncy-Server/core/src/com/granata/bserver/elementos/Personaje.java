@@ -56,9 +56,7 @@ public class Personaje implements JugadorEventListener{
 		arma.update(dt);
 		
 		if((pj.getLinearVelocity().y != 0 || pj.getLinearVelocity().x != 0) && getEstadoActual() != Estado.MUERTO) {
-			System.out.println("Se está moviendoooooo");
 			sprite.setPosition(pj.getPosition().x - (sprite.getWidth() / 2), pj.getPosition().y - ( sprite.getHeight() / 2f));
-			System.out.println("Se modificó la posición J" + idJugador);
 			Render.app.getSv().getHs().enviarMensajeGeneral("ModificarPosicion!" + idJugador + "!" + (pj.getPosition().x - (sprite.getWidth() / 2)) + "!" + (pj.getPosition().y - ( sprite.getHeight() / 2f)));
 		}
 
