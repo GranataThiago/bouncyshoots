@@ -41,7 +41,6 @@ public class Personaje implements JugadorEventListener{
 		
 		arma.update(dt);
 		controlarMovimiento(dt);
-		
 
 	}
 

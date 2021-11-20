@@ -41,7 +41,7 @@ public class ScreenLobby implements Screen{
 		Render.app.getCliente().crearHilo(nombre);
 		hc = Render.app.getCliente().getHc();
 		
-		this.stage = new Stage(new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM));
+		this.stage = new Stage(new FitViewport(Config.ANCHO, Config.ALTO));
 		txtJugar = new Texture("playbtn.png");
 	}
 	
@@ -61,8 +61,8 @@ public class ScreenLobby implements Screen{
 		stage.addActor(logo);
 		
 		btnJugar = new Button(new TextureRegionDrawable(new TextureRegion(txtJugar)));
-		btnJugar.setPosition((Config.ANCHO / 2 - 150) / Config.PPM, 150 / Config.PPM);
-		btnJugar.setSize(280 / Config.PPM, 80 / Config.PPM);
+		btnJugar.setPosition((Config.ANCHO / 2 - 150), 150);
+		btnJugar.setSize(280, 80 );
 		btnJugar.setOrigin(Align.center);
 		btnJugar.setTransform(true);
 		btnJugar.addListener(new ClickListener() {

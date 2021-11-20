@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Timer;
@@ -248,15 +249,15 @@ public abstract class JuegoBase {
 	protected void borrarCuerpos() {
 		if(!ControladorBodies.world.isLocked()){
 			for(int i = 0; i < ControladorBodies.cuerposAEliminar.size(); i++) {
-				
+				Body b = ControladorBodies.cuerposAEliminar.get(i);
 
-				if(Pickupable.class.isAssignableFrom(ControladorBodies.cuerposAEliminar.get(i).getUserData().getClass())) {
+				if( b.getUserData() != null && Pickupable.class.isAssignableFrom(b.getUserData().getClass())) {
 					int indice = indiceABorrar((Powerup) ControladorBodies.cuerposAEliminar.get(i).getUserData());
 					if(indice != -1) ocupado[indice] = null;
 				}
 				
-				System.out.println("cuerpo a eliminar: " + ControladorBodies.cuerposAEliminar.get(i));
-				ControladorBodies.world.destroyBody(ControladorBodies.cuerposAEliminar.get(i));
+				System.out.println("cuerpo a eliminar: " + b);
+				ControladorBodies.world.destroyBody(b);
 				ControladorBodies.cuerposAEliminar.remove(i);
 			}
 		}

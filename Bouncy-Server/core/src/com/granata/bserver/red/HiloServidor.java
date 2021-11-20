@@ -102,8 +102,15 @@ public class HiloServidor extends Thread{
 					Utiles.jugadores.get(Integer.valueOf(comando[2])).dejarDisparar();
 				}
 			}else if(comando[0].equals("DesconectarCliente")) {
-				enviarMensaje("terminarPartida", sv.getClientes().get(Integer.valueOf(comando[1])).getIp(), sv.getClientes().get(Integer.valueOf(comando[1])).getPuerto());
-				cantClientes--;
+				System.out.println("Se desconectó un cliente: " + comando[1]);
+				int indice = Integer.valueOf(comando[1]);
+				enviarMensaje("terminarPartida", sv.getClientes().get(indice).getIp(), sv.getClientes().get(indice).getPuerto());
+				enviarMensajeGeneral("ClienteDesconectado!" + indice);
+				sv.getClientes().remove(indice);
+				cantClientes--;			
+				if(cantClientes < 2) {
+					enviarMensajeGeneral("noPuedeComenzar");
+				}
 			}
 		}else {
 			
@@ -112,9 +119,7 @@ public class HiloServidor extends Thread{
 				enviarMensajeGeneral("comenzar!" + ControladorNiveles.niveles.get(0));
 				Utiles.partidaIniciada = true;
 			}
-			
 		}
-		
 
 	}
 	

@@ -8,7 +8,9 @@ import com.granata.bouncy.utiles.Global;
 import com.granata.bouncy.utiles.Render;
 
 public class Carrera extends JuegoBase{
-
+	
+	private float puntoFinal = 28f;
+	private float velCamara = 3f;
 	
 	@Override
 	public void start(String rutaMapa) {
@@ -19,7 +21,9 @@ public class Carrera extends JuegoBase{
 	@Override
 	public void update(float delta) {
 		super.update(delta);
-		
+		if(Global.cam.position.x <= puntoFinal) {
+			Global.cam.position.x += velCamara * delta;
+		}
 		Global.cam.update();
 	}
 	

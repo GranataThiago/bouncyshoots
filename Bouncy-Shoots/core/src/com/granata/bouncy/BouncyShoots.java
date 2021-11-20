@@ -54,6 +54,8 @@ public class BouncyShoots extends Game {
 	public void dispose () {
 		Assets.dispose();
 		Render.sb.dispose();
+		cliente.getHc().enviarMensaje("DesconectarCliente!" + cliente.getId());
+		cliente.cerrarHilo();
 	}
 	
 	public Cliente getCliente() {

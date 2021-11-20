@@ -38,10 +38,10 @@ public class ScreenResultados implements Screen{
 
 	
 	public ScreenResultados(int ganador) {
-		this.stage = new Stage(new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM));
+		this.stage = new Stage(new FitViewport(Config.ANCHO, Config.ALTO));
 		txtSalir = new Texture("exitbtn.png");
 		this.ganador = ganador;
-		txtGanador.setSize(0.1f, 0.1f);
+//		txtGanador.setSize(0.1f, 0.1f);
 	}
 	
 	@Override
@@ -55,8 +55,8 @@ public class ScreenResultados implements Screen{
 
 	private void crearInterfaz() {
 		btnSalir = new Button(new TextureRegionDrawable(new TextureRegion(txtSalir)));
-		btnSalir.setPosition(( (Config.ANCHO / 2) - 140) / Config.PPM, 150 / Config.PPM);
-		btnSalir.setSize(280 / Config.PPM, 80 / Config.PPM);
+		btnSalir.setPosition(( (Config.ANCHO / 2) - 140), 150);
+		btnSalir.setSize(280, 80);
 		btnSalir.setOrigin(Align.center);
 		btnSalir.setTransform(true);
 		btnSalir.addListener(new ClickListener() {
@@ -99,7 +99,7 @@ public class ScreenResultados implements Screen{
 		
 		Render.begin();
 			if(Global.partidaIniciada) {
-				txtGanador.dibujar(Render.app.getCliente().getClientes().get(ganador).getNombre() + "!!!", ((( Config.ANCHO / 2 ) - spriteGanador.getWidth()) - 100)  / Config.PPM , ((Config.ALTO / 2) + 200) / Config.PPM);
+				txtGanador.dibujar(Render.app.getCliente().getClientes().get(ganador).getNombre() + "!!!", ((( Config.ANCHO / 2 ) - spriteGanador.getWidth()) - 100), ((Config.ALTO / 2) + 200));
 				Render.sb.draw(spriteGanador, (( Config.ANCHO / 2 ) - spriteGanador.getWidth()) / Config.PPM, (Config.ALTO / 2) / Config.PPM, 128 / Config.PPM, 128 / Config.PPM);
 			}
 		Render.end();

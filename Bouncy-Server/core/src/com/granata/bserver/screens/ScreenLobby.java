@@ -37,14 +37,12 @@ public class ScreenLobby implements Screen{
 	private FreeTypeFontParameter parametros;
 	private BitmapFont fuente = new BitmapFont();
 
-	
 	private Image logo = new Image(new TextureRegionDrawable(new TextureRegion(new Texture("bs-logo.png"))));
 	private Vector2[] secciones = {new Vector2(100, Config.ALTO - 300), new Vector2(600, Config.ALTO - 300), new Vector2(1100, Config.ALTO - 300), new Vector2(1600, Config.ALTO - 300)};
 
 	public ScreenLobby() {
 		this.stage = new Stage(new FitViewport(Config.ANCHO / Config.PPM, Config.ALTO / Config.PPM));
 		txtJugar = new Texture("playbtn.png");
-		
 		
 		generador = new FreeTypeFontGenerator(Gdx.files.internal("fuentes/Acme-Regular.ttf"));
 		parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -56,7 +54,6 @@ public class ScreenLobby implements Screen{
 	public void show() {
         Gdx.input.setInputProcessor(stage);
         stage.clear();
-
 
         crearInterfaz();
 	}
