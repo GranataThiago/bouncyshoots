@@ -99,7 +99,6 @@ public class ScreenResultados implements Screen{
 		
 		Render.begin();
 			if(Global.partidaIniciada) {
-				txtGanador.dibujar(Render.app.getCliente().getClientes().get(ganador).getNombre() + "!!!", ((( Config.ANCHO / 2 ) - spriteGanador.getWidth()) - 100), ((Config.ALTO / 2) + 200));
 				Render.sb.draw(spriteGanador, (( Config.ANCHO / 2 ) - spriteGanador.getWidth()) / Config.PPM, (Config.ALTO / 2) / Config.PPM, 128 / Config.PPM, 128 / Config.PPM);
 			}
 		Render.end();

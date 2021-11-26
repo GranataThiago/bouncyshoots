@@ -256,7 +256,6 @@ public abstract class JuegoBase {
 					if(indice != -1) ocupado[indice] = null;
 				}
 				
-				System.out.println("cuerpo a eliminar: " + b);
 				ControladorBodies.world.destroyBody(b);
 				ControladorBodies.cuerposAEliminar.remove(i);
 			}
